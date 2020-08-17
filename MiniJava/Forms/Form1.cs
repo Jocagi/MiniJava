@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MiniJava.Lexer;
 
 namespace MiniJava
 {
@@ -22,6 +24,23 @@ namespace MiniJava
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 MessageBox.Show("Archivo seleccionado exitosamente");
+
+
+
+                string text = File.ReadAllText(openFileDialog1.FileName);
+                string output = "";
+
+                Lexer.Lexer lex = new Lexer.Lexer();
+
+                var tokens = lex.getTokens(text);
+
+                foreach (var item in tokens)
+                {
+                    output += $"{item.value} >> {item.tokenType} | \r\n";
+                }
+
+                MessageBox.Show(output);
+
             }
             else 
             {

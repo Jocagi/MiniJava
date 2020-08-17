@@ -35,9 +35,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(37, 25);
+            this.button1.Location = new System.Drawing.Point(46, 31);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(143, 29);
+            this.button1.Size = new System.Drawing.Size(179, 36);
             this.button1.TabIndex = 0;
             this.button1.Text = "Ingresar archivo";
             this.button1.UseVisualStyleBackColor = true;
@@ -45,15 +46,16 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "Archivos de texto (*.frag)|*.frag";
+            this.openFileDialog1.Filter = "Archivos de texto (*.frag)|*.frag|All files (*.*)|*.*";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 151);
+            this.ClientSize = new System.Drawing.Size(436, 189);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "MiniJava";
             this.ResumeLayout(false);
