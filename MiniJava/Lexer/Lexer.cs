@@ -16,9 +16,10 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Comparison, "^=|^<|^>|^>=|^<="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Int, "^0|^[1-9][0-9]*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Boolean, "^boolean"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Id, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
             //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^\\r|^\\n|^\\t|^\\v|^\\f"));
             //tokenDescriptions.Add(new TokenDescription(TokenType.Token_Doubles, "[0-9]+[.[0-9]+]?"));
-
+            
         }
 
         /// <summary>

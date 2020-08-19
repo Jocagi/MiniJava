@@ -14,6 +14,7 @@ namespace MiniJava.Lexer
         Token_reservedWord,
         Token_Comparison,
         Token_ComentInBlock,
-        Token_Doubles
+        Token_Doubles,
+        Token_Id
     }
 }
