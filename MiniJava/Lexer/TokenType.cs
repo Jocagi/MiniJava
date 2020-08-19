@@ -10,6 +10,10 @@ namespace MiniJava.Lexer
         Identifier,
         Token_Int,
         Token_Boolean,
-        WhiteSpace
+        WhiteSpace,
+        Token_reservedWord,
+        Token_Comparison,
+        Token_ComentInBlock,
+        Token_Doubles
     }
 }

@@ -21,7 +21,7 @@ namespace MiniJava
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 MessageBox.Show("Archivo seleccionado exitosamente");
 
@@ -36,7 +36,11 @@ namespace MiniJava
 
                 foreach (var item in tokens)
                 {
-                    output += $"{item.value} >> {item.tokenType} | \r\n";
+                    //if (!(item.tokenType.ToString() == "WhiteSpace"))
+                    //{
+                        output += $"{item.value} >> {item.tokenType} | \r\n";
+                    //}
+                    
                 }
 
                 MessageBox.Show(output);

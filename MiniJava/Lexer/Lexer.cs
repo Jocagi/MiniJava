@@ -13,8 +13,12 @@ namespace MiniJava.Lexer
             tokenDescriptions = new List<TokenDescription>();
 
             //tokenDescriptions.Add(new TokenDescription(TokenType.Identifier,  "" ));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Int, "^int"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Comparison, "^=|^<|^>|^>=|^<="));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Int, "^0|^[1-9][0-9]*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Boolean, "^boolean"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^\\r|^\\n|^\\t|^\\v|^\\f"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Token_Doubles, "[0-9]+[.[0-9]+]?"));
+
         }
 
         /// <summary>
@@ -24,7 +28,7 @@ namespace MiniJava.Lexer
         {
             var tokens = new List<Token>();
             string text = sourceCode;
-
+            
             //El texto se va reduciendo cada vez que hay un match, 
             //el ciclo termina cuando ya no haya texto por analizar.
             while (text.Length > 0)
