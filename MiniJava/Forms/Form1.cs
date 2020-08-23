@@ -38,7 +38,7 @@ namespace MiniJava
                 {
                     //if (!(item.tokenType.ToString() == "WhiteSpace"))
                     //{
-                        output += $"{item.value} >> {item.tokenType} | \r\n";
+                        output += $"{item.value} >> {item.tokenType} \r\n";
                     //}
                     
                 }

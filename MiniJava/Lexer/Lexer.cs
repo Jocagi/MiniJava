@@ -12,11 +12,14 @@ namespace MiniJava.Lexer
         {
             tokenDescriptions = new List<TokenDescription>();
 
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Identifier,  "" ));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Test, "^test"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Test, "^[0-9]*x[0-9]*"));
+
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Comparison, "^=|^<|^>|^>=|^<="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Int, "^0|^[1-9][0-9]*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Boolean, "^boolean"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Id, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Token_Id, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
+            
             //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^\\r|^\\n|^\\t|^\\v|^\\f"));
             //tokenDescriptions.Add(new TokenDescription(TokenType.Token_Doubles, "[0-9]+[.[0-9]+]?"));
             
@@ -29,23 +32,43 @@ namespace MiniJava.Lexer
         {
             var tokens = new List<Token>();
             string text = sourceCode;
-            
+            int tokenDescCount = tokenDescriptions.Count;
+
             //El texto se va reduciendo cada vez que hay un match, 
             //el ciclo termina cuando ya no haya texto por analizar.
             while (text.Length > 0)
             {
                 //Evaluar cada una de las expresiones regulares con el texto que queda
-                foreach (var item in tokenDescriptions)
+                for (int i = 0; i < tokenDescCount; i++)
                 {
+                    var item = tokenDescriptions[i];
                     var token = getMatch(text, item.regexDefinition, item.tokenType);
 
                     //Si se ha econtrado una coincidencia, agregarlo a la lista de tokens y seguir
-                    if (token.match) 
+                    if (token.match)
                     {
                         tokens.Add(new Token(token));
                         text = token.remainingText;
 
                         break;
+                    }
+                    //Si se han evaluado todas las expresiones regulares y no hay resultado, es un simbolo no valido
+                    //Error
+                    else if (i == tokenDescCount - 1)
+                    {
+                        //Concatenar varios errores seguidos
+                        if (tokens.Count > 0 && tokens[tokens.Count - 1].tokenType == TokenType.Error)
+                        {
+                            tokens[tokens.Count - 1].value += text[0];
+                        }
+                        //Agregar el error
+                        else
+                        {
+                            tokens.Add(new Token(TokenType.Error, text[0].ToString()));
+                        }
+
+                        //Avanzar un elemento en el texto
+                        text = text.Substring(1);
                     }
                 }
             }

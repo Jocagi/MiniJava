@@ -7,6 +7,8 @@ namespace MiniJava.Lexer
     //Todo agregar todos los tipos de tokens
     public enum TokenType
     {
+        Test,
+        Error,
         Identifier,
         Token_Int,
         Token_Boolean,
