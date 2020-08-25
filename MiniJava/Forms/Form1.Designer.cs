@@ -57,7 +57,7 @@
             this.sourceCodeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(394, 269);
+            this.sourceCodeBox.Size = new System.Drawing.Size(483, 362);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
             // 
@@ -66,7 +66,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(588, 338);
+            this.ClientSize = new System.Drawing.Size(617, 426);
             this.Controls.Add(this.sourceCodeBox);
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
