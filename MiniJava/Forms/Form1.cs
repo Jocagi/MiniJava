@@ -38,7 +38,11 @@ namespace MiniJava
                 {
                     
                         output += $"{item.value} >> {item.tokenType} | \r\n";
+<<<<<<< HEAD
                   
+=======
+                   
+>>>>>>> 5b6a9ddf51ce6bd835e23d0509a820ac6e935e6f
                 }
 
                 MessageBox.Show(output);
