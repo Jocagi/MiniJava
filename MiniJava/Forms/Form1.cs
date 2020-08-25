@@ -35,14 +35,8 @@ namespace MiniJava
                 var tokens = lex.getTokens(text);
 
                 foreach (var item in tokens)
-                {
-                    
-                        output += $"{item.value} >> {item.tokenType} | \r\n";
-<<<<<<< HEAD
-                  
-=======
-                   
->>>>>>> 5b6a9ddf51ce6bd835e23d0509a820ac6e935e6f
+                {                    
+                    output += $"{item.value} >> {item.tokenType} | \r\n";
                 }
 
                 MessageBox.Show(output);

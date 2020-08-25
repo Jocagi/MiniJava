@@ -7,12 +7,9 @@ namespace MiniJava.Lexer
     //Todo agregar todos los tipos de tokens
     public enum TokenType
     {
-<<<<<<< HEAD
 
-
-=======
         Identifier,  
->>>>>>> 5b6a9ddf51ce6bd835e23d0509a820ac6e935e6f
+
         //PALABRAS RESERVADAS
         Token_void,       //YA
         Token_int,        //YA
@@ -36,23 +33,13 @@ namespace MiniJava.Lexer
         Token_System,     //YA
         Token_out,        //YA
         Token_printlnt,   //YA
-<<<<<<< HEAD
         //
-        Identifier,
         Int,
         WhiteSpace,
         Token_Comparison,
         Token_ComentInBlock,
         Token_Doubles,
         Token_Id
-=======
 
-        Int,
-        WhiteSpace,
-        //Token_Comparison,
-        //Token_ComentInBlock,
-        //Token_Doubles,
-        //Token_Id
->>>>>>> 5b6a9ddf51ce6bd835e23d0509a820ac6e935e6f
     }
 }
