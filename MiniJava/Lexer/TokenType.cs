@@ -7,12 +7,6 @@ namespace MiniJava.Lexer
     //Todo agregar todos los tipos de tokens
     public enum TokenType
     {
-        Test,
-        Error,
-
-        Token_Id,
-        Token_Comparison,
-
         //PALABRAS RESERVADAS
         Token_void,        
         Token_int,         
@@ -33,16 +27,52 @@ namespace MiniJava.Lexer
         Token_return,      
         Token_break,       
         Token_New,         
-        Token_System,    
-        Token_out,       
-        Token_printlnt,  
+        Token_System,      
+        Token_out,         
+        Token_printlnt,    
+        //IDENTIFICADORES
+        Identifier,        
+        //CONSTANTES
+        Const_Int,
+        Const_bool,
+        Const_double,
+        Const_String,
+        //OPERADORES
+        Operator_mas,                
+        Operator_menos,              
+        Operator_asterisco,          
+        Operator_div,                
+        Operator_porcentaje,         
+        Operator_menor,              
+        Operator_menorIgual,         
+        Operator_mayor,              
+        Operator_mayorIgual,         
+        Operator_igual,              
+        Operator_comparacionIgual,   
+        Operator_diferente,          
+        Operator_dobleAnd,           
+        Operator_dobleOr,            
+        Operator_negacion,           
+        Operator_puntoComa,          
+        Operator_coma,               
+        Operator_punto,              
+        Operator_corcheteAbre,       
+        Operator_corcheteCierra,     
+        Operator_ParentesisAbre,     
+        Operator_ParentesisCierra,   
+        Operator_llaveAbre,          
+        Operator_llaveCierra,        
+        Operator_corchetes,          
+        Operator_parentesis,         
+        Operator_llaves,             
+        //
+        Test,
+        Error,
+        Enter,
 
-        Int,
         WhiteSpace,
-        Enter
-        //Token_Comparison,
-        //Token_ComentInBlock,
-        //Token_Doubles,
-        //Token_Id
+        Token_Comparison,
+        Token_ComentInBlock,
+        Token_Doubles
     }
 }
