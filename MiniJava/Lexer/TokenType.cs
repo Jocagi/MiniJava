@@ -9,14 +9,38 @@ namespace MiniJava.Lexer
     {
         Test,
         Error,
-        Identifier,
-        Token_Int,
-        Token_Boolean,
+       
+        Identifier,  
+        
+        //PALABRAS RESERVADAS
+        Token_void,        
+        Token_int,         
+        Token_double,      
+        Token_boolean,     
+        Token_string,      
+        Token_class,       
+        Token_const,       
+        Token_interface,   
+        Token_null,        
+        Token_this,        
+        Token_extends,     
+        Token_implements,  
+        Token_for,         
+        Token_while,       
+        Token_if,          
+        Token_else,        
+        Token_return,      
+        Token_break,       
+        Token_New,         
+        Token_System,    
+        Token_out,       
+        Token_printlnt,  
+
+        Int,
         WhiteSpace,
-        Token_reservedWord,
-        Token_Comparison,
-        Token_ComentInBlock,
-        Token_Doubles,
-        Token_Id
+        //Token_Comparison,
+        //Token_ComentInBlock,
+        //Token_Doubles,
+        //Token_Id
     }
 }

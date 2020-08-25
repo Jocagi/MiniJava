@@ -40,7 +40,7 @@ namespace MiniJava
                     //{
                         output += $"{item.value} >> {item.tokenType} \r\n";
                     //}
-                    
+
                 }
 
                 MessageBox.Show(output);
