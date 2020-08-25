@@ -13,12 +13,35 @@ namespace MiniJava.Lexer
             tokenDescriptions = new List<TokenDescription>();
 
             //tokenDescriptions.Add(new TokenDescription(TokenType.Identifier,  "" ));
+            //PALABRAS RESERVADAS
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, "^boolean"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_class, "^class"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_const, "^const"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_double, "^double"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_else, "^else"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_extends, "^extends"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_for, "^for"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_if, "^if"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_implements, "^implements"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_int, "^int"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_interface, "^interface"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, "^New"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, "^null"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, "^out"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_printlnt, "^printInt"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_return, "^return"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_string, "^string"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_System, "^System"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, "^this"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
+            //
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Doubles, "(0|[1-9][0-9]*).([0-9]*[1-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Comparison, "^=|^<|^>|^>=|^<="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Int, "^0|^[1-9][0-9]*"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Boolean, "^boolean"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Int, "^0|^[1-9][0-9]*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_Id, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
             //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^\\r|^\\n|^\\t|^\\v|^\\f"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Token_Doubles, "[0-9]+[.[0-9]+]?"));
             
         }
 

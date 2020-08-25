@@ -36,11 +36,9 @@ namespace MiniJava
 
                 foreach (var item in tokens)
                 {
-                    //if (!(item.tokenType.ToString() == "WhiteSpace"))
-                    //{
-                        output += $"{item.value} >> {item.tokenType} | \r\n";
-                    //}
                     
+                        output += $"{item.value} >> {item.tokenType} | \r\n";
+                  
                 }
 
                 MessageBox.Show(output);
