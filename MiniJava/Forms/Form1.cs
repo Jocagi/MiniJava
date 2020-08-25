@@ -35,17 +35,8 @@ namespace MiniJava
                 var tokens = lex.getTokens(text);
 
                 foreach (var item in tokens)
-<<<<<<< HEAD
                 {                    
                     output += $"{item.value} >> {item.tokenType} | \r\n";
-=======
-                {
-                    //if (!(item.tokenType.ToString() == "WhiteSpace"))
-                    //{
-                        output += $"{item.value} >> {item.tokenType} \r\n";
-                    //}
-                    
->>>>>>> Branch-Jose
                 }
 
                 MessageBox.Show(output);
