@@ -35,6 +35,9 @@ namespace MiniJava.Lexer
         Token_printlnt,   //YA
         //
         Int,
+        Test,
+        Error,
+
         WhiteSpace,
         Token_Comparison,
         Token_ComentInBlock,
