@@ -36,10 +36,11 @@ namespace MiniJava
 
                 foreach (var item in tokens)
                 {
-                    //if (!(item.tokenType.ToString() == "WhiteSpace"))
-                    //{
-                        output += $"{item.value} >> {item.tokenType} \r\n";
-                    //}
+                    if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter)
+                    {
+                        output += 
+                        $"{item.value} >> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                    }
 
                 }
 

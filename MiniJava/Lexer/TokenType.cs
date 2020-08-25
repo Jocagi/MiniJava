@@ -9,9 +9,10 @@ namespace MiniJava.Lexer
     {
         Test,
         Error,
-       
-        Identifier,  
-        
+
+        Token_Id,
+        Token_Comparison,
+
         //PALABRAS RESERVADAS
         Token_void,        
         Token_int,         
@@ -38,6 +39,7 @@ namespace MiniJava.Lexer
 
         Int,
         WhiteSpace,
+        Enter
         //Token_Comparison,
         //Token_ComentInBlock,
         //Token_Doubles,

@@ -20,10 +20,22 @@ namespace MiniJava.Lexer
             this.tokenType = tokenType;
             this.value = value;
         }
+        public Token(TokenType tokenType, string value, TokenLocation location)
+        {
+            this.tokenType = tokenType;
+            this.value = value;
+            this.location = location;
+        }
         public Token(MatchRegex match)
         {
             this.tokenType = match.tokenType;
             this.value = match.value;
+        }
+        public Token(MatchRegex match, TokenLocation location)
+        {
+            this.tokenType = match.tokenType;
+            this.value = match.value;
+            this.location = location;
         }
     }
 }
