@@ -16,6 +16,12 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Enter, "^\n")); 
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
 
+            //COMENTARIOS
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
+            /**/
+
             //PALABRAS RESERVADAS
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, "^boolean"));
@@ -67,12 +73,6 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
 
-            //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
-            /**/
-
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
@@ -80,7 +80,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
 
             //IDENTIFICADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "^([a-z]|[A-Z]|\\$)([a-z]|[A-Z]|\\$|[0-9])*"));
 
             //tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^."));
         }

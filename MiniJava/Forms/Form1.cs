@@ -17,7 +17,6 @@ namespace MiniJava
         public Form1()
         {
             InitializeComponent();
-
             this.AllowDrop = true;
         }
 
@@ -72,7 +71,7 @@ namespace MiniJava
                     else
                     {
                         output +=
-                        $"{item.value} >> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        $"{item.value} \t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                     }
                 }
             }
