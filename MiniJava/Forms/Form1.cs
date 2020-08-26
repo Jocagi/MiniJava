@@ -17,6 +17,8 @@ namespace MiniJava
         public Form1()
         {
             InitializeComponent();
+
+            this.AllowDrop = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -25,27 +27,50 @@ namespace MiniJava
             {
                 MessageBox.Show("Archivo seleccionado exitosamente");
 
-
-
-                string text = File.ReadAllText(openFileDialog1.FileName);
-                string output = "";
-
-                Lexer.Lexer lex = new Lexer.Lexer();
-
-                var tokens = lex.getTokens(text);
-
-                foreach (var item in tokens)
-                {                    
-                    output += $"{item.value} >> {item.tokenType} | \r\n";
-                }
-
-                MessageBox.Show(output);
-
+                ReadFile(openFileDialog1.FileName);
             }
             else 
             {
                 MessageBox.Show("No se ha seleccionado ningún archivo");
             }
+        }
+
+        private void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.All;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            
+            ReadFile(files[0]);
+        }
+
+        private void ReadFile(string path) 
+        {
+            string text = File.ReadAllText(path);
+            string output = "";
+
+            sourceCodeBox.Text = text;
+
+            Lexer.Lexer lex = new Lexer.Lexer();
+
+            var tokens = lex.getTokens(text);
+
+            foreach (var item in tokens)
+            {
+                if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter)
+                {
+                    output +=
+                    $"{item.value} >> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                }
+            }
+
+            MessageBox.Show(output);
         }
     }
 }

@@ -8,36 +8,37 @@ namespace MiniJava.Lexer
     public enum TokenType
     {
         //PALABRAS RESERVADAS
-        Token_void,       //YA
-        Token_int,        //YA
-        Token_double,     //YA
-        Token_boolean,    //YA
-        Token_string,     //YA
-        Token_class,      //YA
-        Token_const,      //YA
-        Token_interface,  //YA
-        Token_null,       //YA
-        Token_this,       //YA
-        Token_extends,    //YA
-        Token_implements, //YA
-        Token_for,        //YA
-        Token_while,      //YA
-        Token_if,         //YA
-        Token_else,       //YA
-        Token_return,     //YA
-        Token_break,      //YA
-        Token_New,        //YA
-        Token_System,     //YA
-        Token_out,        //YA
-        Token_printlnt,   //YA
+        Token_void,        
+        Token_int,         
+        Token_double,      
+        Token_boolean,     
+        Token_string,      
+        Token_class,       
+        Token_const,       
+        Token_interface,   
+        Token_null,        
+        Token_this,        
+        Token_extends,     
+        Token_implements,  
+        Token_for,         
+        Token_while,       
+        Token_if,          
+        Token_else,        
+        Token_return,      
+        Token_break,       
+        Token_New,         
+        Token_System,      
+        Token_out,         
+        Token_printlnt,    
         //IDENTIFICADORES
-        Identifier,       //YA
+        Identifier,        
         //CONSTANTES
         Const_Int,          //YA
         Const_bool,         //YA
         Const_double,
         Const_String,       //YA
         //OPERADORES
+<<<<<<< HEAD
         Operator_mas,               //YA
         Operator_menos,             //YA
         Operator_asterisco,         //YA
@@ -74,8 +75,46 @@ namespace MiniJava.Lexer
         Tab,
 
 
+=======
+        Operator_mas,                
+        Operator_menos,              
+        Operator_asterisco,          
+        Operator_div,                
+        Operator_porcentaje,         
+        Operator_menor,              
+        Operator_menorIgual,         
+        Operator_mayor,              
+        Operator_mayorIgual,         
+        Operator_igual,              
+        Operator_comparacionIgual,   
+        Operator_diferente,          
+        Operator_dobleAnd,           
+        Operator_dobleOr,            
+        Operator_negacion,           
+        Operator_puntoComa,          
+        Operator_coma,               
+        Operator_punto,              
+        Operator_corcheteAbre,       
+        Operator_corcheteCierra,     
+        Operator_ParentesisAbre,     
+        Operator_ParentesisCierra,   
+        Operator_llaveAbre,          
+        Operator_llaveCierra,        
+        Operator_corchetes,          
+        Operator_parentesis,         
+        Operator_llaves,             
+        //
+>>>>>>> Branch-Jose
         Test,
         Error,
+        Enter,
 
+<<<<<<< HEAD
+=======
+        WhiteSpace,
+        Token_Comparison,
+        Token_ComentInBlock,
+        Token_Doubles
+>>>>>>> Branch-Jose
     }
 }
