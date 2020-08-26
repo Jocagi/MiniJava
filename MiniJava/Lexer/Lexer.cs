@@ -8,7 +8,7 @@ namespace MiniJava.Lexer
     public class Lexer
     {
         List<TokenDescription> tokenDescriptions;
-        public Lexer() 
+        public Lexer()
         {
             tokenDescriptions = new List<TokenDescription>();
 
@@ -17,7 +17,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
 
             //PALABRAS RESERVADAS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_break ,  "^break" ));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, "^boolean"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_class, "^class"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_const, "^const"));
@@ -39,39 +39,50 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, "^this"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
-            
             //OPERADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_asterisco , "^\\*"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_coma, "^,"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_comparacionIgual, "^=="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corchetes, "^(\\[\\])"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corcheteAbre, "^\\["));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corcheteCierra, "^\\]"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_diferente, "^!="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_div, "^/"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dobleAnd, "^&&"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dobleOr, "^\\|\\|"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_igual, "^="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaves, "^{}"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaveAbre, "^{"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaveCierra, "^}"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mas, "^\\+"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayor, "^>"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayorIgual, "^>="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menor, "^<"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menos, "^-"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_negacion, "^!"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_parentesis, "^\\(\\)"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, "^\\("));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, "^\\)"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_porcentaje, "^%"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^\\."));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayorIgual, "^>="));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_comparacionIgual, "^=="));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_diferente, "^!="));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayor, "^>"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menor, "^<"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_igual, "^="));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dobleAnd, "^&&"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_puntoComa, "^;"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_porcentaje, "^%"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_negacion, "^!"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menos, "^-"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_coma, "^,"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_asterisco, @"^\*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_div, "^/"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mas, @"^\+"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dobleOr, @"^\|\|"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corchetes, @"^\[\]"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corcheteAbre, @"^\["));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_corcheteCierra, @"^\]"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaves, @"^\{\}"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaveAbre, @"^\{"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_llaveCierra, @"^\}"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_parentesis, @"^\(\)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
+
+            //COMENTARIOS
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
+            /**/
+
+            //CONSTANTES
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F][a-f])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
 
             //IDENTIFICADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "^([a-z]|[A-Z]|\\$)([a-z]|[A-Z]|$|[0-9])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
 
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^."));
         }
 
         /// <summary>

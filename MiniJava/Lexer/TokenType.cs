@@ -64,15 +64,15 @@ namespace MiniJava.Lexer
         Operator_llaveCierra,        
         Operator_corchetes,          
         Operator_parentesis,         
-        Operator_llaves,             
-        //
-        Test,
+        Operator_llaves,     
+
+        //COMENTARIOS
+        Comments,
+        Block_Comments,        
+
+        //SPECIAL TOKENS
         Error,
         Enter,
-
-        WhiteSpace,
-        Token_Comparison,
-        Token_ComentInBlock,
-        Token_Doubles
-    }
+        WhiteSpace
+        }
 }
