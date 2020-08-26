@@ -20,6 +20,8 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));//PENDIENTE
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
+
             //PALABRAS RESERVADAS
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, "^boolean"));
@@ -77,7 +79,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"((^0|^[1-9][0-9]*)\.[0-9]*)(E\+[0-9]+)?"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*)\""));
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "^([a-z]|[A-Z]|\\$)([a-z]|[A-Z]|\\$|[0-9])*"));
@@ -134,6 +136,21 @@ namespace MiniJava.Lexer
                             }
                         }
                         col2 = col1 + token.value.Length - 1;
+
+                        //Comments
+                        if (token.tokenType == TokenType.Block_Comments)
+                        {
+                            string[] lines = token.value.Split('\n');
+                            int countlines =  lines.Length-1;
+
+                            row += countlines;
+
+                            if (countlines > 1)
+                            {
+                                col1 = 1;
+                                col2 = lines[countlines].Length;
+                            }
+                        }
 
                         TokenLocation location = new TokenLocation(row, col1, col2);
 
