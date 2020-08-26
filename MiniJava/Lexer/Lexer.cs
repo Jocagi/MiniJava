@@ -34,6 +34,11 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, "^this"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
+            //COMENTARIOS
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
+            /**/
             //OPERADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayorIgual, "^>="));
@@ -62,19 +67,22 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
             //ESPACIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, @" "));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, @" "));
+
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F][a-f])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
+
             tokenDescriptions.Add(new TokenDescription(TokenType.Test, "^test"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Test, "^[0-9]*x[0-9]*"));
-
+           
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "([a-z]|[A-Z]|$)([a-z]|[A-Z]|$|[0-9])*"));
 
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^."));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^."));
         }
 
         /// <summary>
