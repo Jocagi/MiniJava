@@ -35,10 +35,8 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
             //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
-            /**/
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));//PENDIENTE
+            tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));            
             //OPERADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayorIgual, "^>="));
@@ -71,8 +69,9 @@ namespace MiniJava.Lexer
 
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
+            
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F][a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
 
             tokenDescriptions.Add(new TokenDescription(TokenType.Test, "^test"));

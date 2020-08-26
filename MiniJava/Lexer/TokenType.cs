@@ -33,10 +33,10 @@ namespace MiniJava.Lexer
         //IDENTIFICADORES
         Identifier,       //YA
         //CONSTANTES
-        Const_Int,
-        Const_bool,
+        Const_Int,          //YA
+        Const_bool,         //YA
         Const_double,
-        Const_String,
+        Const_String,       //YA
         //OPERADORES
         Operator_mas,               //YA
         Operator_menos,             //YA
@@ -68,14 +68,14 @@ namespace MiniJava.Lexer
         //COMENTARIOS
         Comments,
         Block_Comments,
-        //
+        //ESPACIOS
+        WhiteSpace,
+        JumpSpace,
+        Tab,
+
+
         Test,
         Error,
-
-        WhiteSpace,
-        Token_Comparison,
-        Token_ComentInBlock,
-        Token_Doubles
 
     }
 }
