@@ -65,7 +65,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
             //ESPACIOS
-            //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, @" "));
+            //tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, @"\\s"));
 
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
