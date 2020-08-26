@@ -38,10 +38,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(14, 10);
+            this.button1.Location = new System.Drawing.Point(9, 10);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 29);
+            this.button1.Size = new System.Drawing.Size(142, 41);
             this.button1.TabIndex = 0;
             this.button1.Text = "Archivo";
             this.button1.UseVisualStyleBackColor = true;
@@ -57,12 +57,12 @@
             this.sourceCodeBox.BackColor = System.Drawing.SystemColors.MenuText;
             this.sourceCodeBox.EnableAutoDragDrop = true;
             this.sourceCodeBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.sourceCodeBox.Location = new System.Drawing.Point(14, 53);
+            this.sourceCodeBox.Location = new System.Drawing.Point(9, 53);
             this.sourceCodeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
             this.sourceCodeBox.ShowSelectionMargin = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(500, 494);
+            this.sourceCodeBox.Size = new System.Drawing.Size(584, 494);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
             this.sourceCodeBox.WordWrap = false;
@@ -73,12 +73,12 @@
             this.outputBox.BackColor = System.Drawing.SystemColors.MenuText;
             this.outputBox.EnableAutoDragDrop = true;
             this.outputBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.outputBox.Location = new System.Drawing.Point(627, 53);
+            this.outputBox.Location = new System.Drawing.Point(604, 53);
             this.outputBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
             this.outputBox.ShowSelectionMargin = true;
-            this.outputBox.Size = new System.Drawing.Size(500, 494);
+            this.outputBox.Size = new System.Drawing.Size(568, 494);
             this.outputBox.TabIndex = 1;
             this.outputBox.Text = "";
             this.outputBox.WordWrap = false;
@@ -87,7 +87,7 @@
             // 
             this.labelOUTPUT.AutoSize = true;
             this.labelOUTPUT.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelOUTPUT.Location = new System.Drawing.Point(627, 10);
+            this.labelOUTPUT.Location = new System.Drawing.Point(604, 10);
             this.labelOUTPUT.Name = "labelOUTPUT";
             this.labelOUTPUT.Size = new System.Drawing.Size(150, 41);
             this.labelOUTPUT.TabIndex = 2;

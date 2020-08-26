@@ -35,7 +35,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_implements, "^implements"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_int, "^int"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_interface, "^interface"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, "^new"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, "^New"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, "^null"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, "^out"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_printlnt, "^printInt"));
