@@ -33,10 +33,10 @@ namespace MiniJava.Lexer
         //IDENTIFICADORES
         Identifier,        
         //CONSTANTES
-        Const_Int,
-        Const_bool,
+        Const_Int,          //YA
+        Const_bool,         //YA
         Const_double,
-        Const_String,
+        Const_String,       //YA
         //OPERADORES
         Operator_mas,                
         Operator_menos,              

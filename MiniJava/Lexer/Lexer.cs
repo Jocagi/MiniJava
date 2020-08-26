@@ -17,10 +17,8 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
 
             //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^/\*(.*?)\*/"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(/)(\*)(.*?)(\*)(/)"));
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Comments, ""));
-            /**/
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));//PENDIENTE
+            tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
 
             //PALABRAS RESERVADAS
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
@@ -45,6 +43,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, "^this"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
+            
             //OPERADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayorIgual, "^>="));
@@ -75,14 +74,15 @@ namespace MiniJava.Lexer
 
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"((^0|^[1-9][0-9]*)\.[0-9]*)(E\+[0-9]+)?"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F][a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "^([a-z]|[A-Z]|\\$)([a-z]|[A-Z]|\\$|[0-9])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
-            //tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, "^."));
         }
 
         /// <summary>
