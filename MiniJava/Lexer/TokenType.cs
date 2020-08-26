@@ -38,7 +38,6 @@ namespace MiniJava.Lexer
         Const_double,
         Const_String,       //YA
         //OPERADORES
-<<<<<<< HEAD
         Operator_mas,               //YA
         Operator_menos,             //YA
         Operator_asterisco,         //YA
@@ -71,50 +70,8 @@ namespace MiniJava.Lexer
         Block_Comments,
         //ESPACIOS
         WhiteSpace,
-        JumpSpace,
-        Tab,
-
-
-=======
-        Operator_mas,                
-        Operator_menos,              
-        Operator_asterisco,          
-        Operator_div,                
-        Operator_porcentaje,         
-        Operator_menor,              
-        Operator_menorIgual,         
-        Operator_mayor,              
-        Operator_mayorIgual,         
-        Operator_igual,              
-        Operator_comparacionIgual,   
-        Operator_diferente,          
-        Operator_dobleAnd,           
-        Operator_dobleOr,            
-        Operator_negacion,           
-        Operator_puntoComa,          
-        Operator_coma,               
-        Operator_punto,              
-        Operator_corcheteAbre,       
-        Operator_corcheteCierra,     
-        Operator_ParentesisAbre,     
-        Operator_ParentesisCierra,   
-        Operator_llaveAbre,          
-        Operator_llaveCierra,        
-        Operator_corchetes,          
-        Operator_parentesis,         
-        Operator_llaves,             
-        //
->>>>>>> Branch-Jose
         Test,
         Error,
-        Enter,
-
-<<<<<<< HEAD
-=======
-        WhiteSpace,
-        Token_Comparison,
-        Token_ComentInBlock,
-        Token_Doubles
->>>>>>> Branch-Jose
+        Enter
     }
 }
