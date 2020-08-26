@@ -97,6 +97,12 @@ namespace MiniJava.Lexer
                     //Si se ha econtrado una coincidencia, agregarlo a la lista de tokens y seguir
                     if (token.match)
                     {
+                        //Prevenir ciclos infinitos
+                        if (token.value == string.Empty)
+                        {
+                            throw new Exception($"Se ha encontrado un problema con el regex {token.tokenType}");
+                        }
+
                         //Calcular posicion del token
                         int row = 1;
                         int col1 = 1;

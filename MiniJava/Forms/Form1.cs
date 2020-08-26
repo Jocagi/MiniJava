@@ -65,8 +65,15 @@ namespace MiniJava
             {
                 if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter)
                 {
-                    output +=
-                    $"{item.value} >> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                    if (item.tokenType == TokenType.Error)
+                    {
+                        output += $"*** Error line {item.location.row}.*** Unrecognized element: {item.value}\r\n";
+                    }
+                    else
+                    {
+                        output +=
+                        $"{item.value} >> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                    }
                 }
             }
 

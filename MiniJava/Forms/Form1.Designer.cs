@@ -51,27 +51,35 @@
             // 
             // sourceCodeBox
             // 
+            this.sourceCodeBox.AcceptsTab = true;
             this.sourceCodeBox.BackColor = System.Drawing.SystemColors.MenuText;
+            this.sourceCodeBox.EnableAutoDragDrop = true;
             this.sourceCodeBox.ForeColor = System.Drawing.SystemColors.Info;
             this.sourceCodeBox.Location = new System.Drawing.Point(14, 53);
             this.sourceCodeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(483, 362);
+            this.sourceCodeBox.ShowSelectionMargin = true;
+            this.sourceCodeBox.Size = new System.Drawing.Size(500, 494);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
+            this.sourceCodeBox.WordWrap = false;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AllowDrop = true;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(617, 426);
+            this.ClientSize = new System.Drawing.Size(639, 558);
             this.Controls.Add(this.sourceCodeBox);
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "MiniJava";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
