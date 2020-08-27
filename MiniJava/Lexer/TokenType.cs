@@ -73,6 +73,7 @@ namespace MiniJava.Lexer
         //SPECIAL TOKENS
         Error,
         Error_Comment,
+        Error_Length,
         Enter,
         WhiteSpace
         }

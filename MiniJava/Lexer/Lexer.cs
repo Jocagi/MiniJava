@@ -19,8 +19,8 @@ namespace MiniJava.Lexer
             //COMENTARIOS
             tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
 
             //PALABRAS RESERVADAS
@@ -36,7 +36,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_implements, @"^implements(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_int, @"^int(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_interface, @"^interface(?![a-z]|[A-Z]|\$|[0-9])"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, @"^new(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, @"^New(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, @"^null(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, @"^out(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_println, @"^printIn(?![a-z]|[A-Z]|\$|[0-9])"));
@@ -78,13 +78,13 @@ namespace MiniJava.Lexer
 
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"^(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^[0-9]+"));//decimales
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*?)\""));
 
             //IDENTIFICADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){1,31}ica"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){1,31}"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
         }
@@ -152,6 +152,15 @@ namespace MiniJava.Lexer
                                 col1 = 1;
                                 col2 = lines[countlines].Length;
                             }
+                        }
+
+
+                        //ID with lenght > 31
+                        if (token.tokenType == TokenType.Identifier && tokensCount > 0 &&
+                            (tokens[tokensCount - 1].tokenType == TokenType.Identifier ||
+                            tokens[tokensCount - 1].tokenType == TokenType.Error_Length))
+                        {
+                            token.tokenType = TokenType.Error_Length;
                         }
 
                         TokenLocation location = new TokenLocation(row, col1, col2);

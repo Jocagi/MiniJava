@@ -21,7 +21,7 @@ namespace MiniJava
 
             this.labelOUTPUT.Visible = false;
             this.outputBox.Visible = false;
-            this.Size = new Size(625, 615);
+            this.Size = new Size(635, 615);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,32 +66,50 @@ namespace MiniJava
 
             foreach (var item in tokens)
             {
+                string line = "";
+                
                 if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter
                     && item.tokenType != TokenType.Block_Comments && item.tokenType != TokenType.Comments)
                 {
                     if (item.tokenType == TokenType.Error)
                     {
-                        output += $"*** Error line {item.location.row}.*** Unrecognized element: {item.value}\r\n";
+                        line = $"*** Error line {item.location.row}.*** Unrecognized element: {item.value}\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_Comment)
                     {
-                        output += $"*** Error unfinished comment at line {item.location.row}.***\r\n";
+                        line = $"*** Error unfinished comment at line {item.location.row}.***\r\n";
+                    }
+                    else if (item.tokenType == TokenType.Error_Length)
+                    {
+                        line = $"*** Warning: Max id length exceeded at line {item.location.row}.***\r\n";
                     }
                     else
                     {
-                        output +=
+                        line =
                         $"{item.value} \t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                     }
+
+                    //Color
+
+                    output += line;
                 }
             }
 
             //Show output
 
             this.outputBox.Text = output;
-
             this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
-            this.Size = new Size(1200, 615);
+            this.Size = new Size(1500, 615);
+        }
+
+        private void AppendText(string text, Color color)
+        {
+            outputBox.SuspendLayout();
+            outputBox.SelectionColor = color;
+            outputBox.AppendText(text);
+            outputBox.ScrollToCaret();
+            outputBox.ResumeLayout();
         }
     }
 }

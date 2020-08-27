@@ -62,7 +62,7 @@
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
             this.sourceCodeBox.ShowSelectionMargin = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(584, 494);
+            this.sourceCodeBox.Size = new System.Drawing.Size(714, 494);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
             this.sourceCodeBox.WordWrap = false;
@@ -73,12 +73,12 @@
             this.outputBox.BackColor = System.Drawing.SystemColors.MenuText;
             this.outputBox.EnableAutoDragDrop = true;
             this.outputBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.outputBox.Location = new System.Drawing.Point(604, 53);
+            this.outputBox.Location = new System.Drawing.Point(741, 54);
             this.outputBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
             this.outputBox.ShowSelectionMargin = true;
-            this.outputBox.Size = new System.Drawing.Size(568, 494);
+            this.outputBox.Size = new System.Drawing.Size(725, 494);
             this.outputBox.TabIndex = 1;
             this.outputBox.Text = "";
             this.outputBox.WordWrap = false;
@@ -87,7 +87,7 @@
             // 
             this.labelOUTPUT.AutoSize = true;
             this.labelOUTPUT.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelOUTPUT.Location = new System.Drawing.Point(604, 10);
+            this.labelOUTPUT.Location = new System.Drawing.Point(741, 9);
             this.labelOUTPUT.Name = "labelOUTPUT";
             this.labelOUTPUT.Size = new System.Drawing.Size(150, 41);
             this.labelOUTPUT.TabIndex = 2;
@@ -100,7 +100,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(1178, 559);
+            this.ClientSize = new System.Drawing.Size(1478, 559);
             this.Controls.Add(this.labelOUTPUT);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.sourceCodeBox);
