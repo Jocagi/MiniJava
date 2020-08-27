@@ -78,7 +78,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
             //CONSTANTES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, @"(^true|^false)(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"^(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^[0-9]+"));//decimales
