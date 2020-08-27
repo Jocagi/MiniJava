@@ -81,7 +81,7 @@ namespace MiniJava
                     }
                     else if (item.tokenType == TokenType.Error_Comment)
                     {
-                        line = $"*** Error unfinished comment at line {item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** Unfinished comment.\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_Length)
                     {
@@ -89,23 +89,23 @@ namespace MiniJava
                     }
                     else if (item.tokenType == TokenType.Error_EOFComnet)
                     {
-                        line = $"*** Error: EOF in comment at line { item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** EOF in comment.\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_nullString)
                     {
-                        line = $"*** Error: null character in the middle of a string{ item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** Null character in string.\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_null)
                     {
-                        line = $"*** Error: null character { item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** Null character.\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_EOFstring)
                     {
-                        line = $"*** Error: EOF in string at line { item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** EOF in string.\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_String)
                     {
-                        line = $"*** Error unfinished string at line {item.location.row}.***\r\n";
+                        line = $"*** Error line {item.location.row}.*** Unfinished string.\r\n";
                     }
                     else
                     {
