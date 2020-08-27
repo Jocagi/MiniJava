@@ -86,7 +86,7 @@ namespace MiniJava.Lexer
            
 
             //IDENTIFICADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)([a-z]|[A-Z]|\$|[0-9])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){1,31}ica"));
 
 
         }
