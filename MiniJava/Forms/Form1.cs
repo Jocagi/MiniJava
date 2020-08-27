@@ -57,6 +57,8 @@ namespace MiniJava
 
         private void ReadFile(string path) 
         {
+            this.labelFileName.Text = Path.GetFileName(path);
+
             string text = File.ReadAllText(path);
             output = "";
 

@@ -36,6 +36,7 @@
             this.labelOUTPUT = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.labelFileName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -116,6 +117,15 @@
             this.saveFileDialog1.Filter = "Out files|*.out";
             this.saveFileDialog1.Title = "miniJava";
             // 
+            // labelFileName
+            // 
+            this.labelFileName.AutoSize = true;
+            this.labelFileName.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelFileName.Location = new System.Drawing.Point(158, 24);
+            this.labelFileName.Name = "labelFileName";
+            this.labelFileName.Size = new System.Drawing.Size(0, 27);
+            this.labelFileName.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -124,6 +134,7 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1478, 658);
+            this.Controls.Add(this.labelFileName);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.labelOUTPUT);
             this.Controls.Add(this.outputBox);
@@ -152,6 +163,7 @@
         private System.Windows.Forms.Label labelOUTPUT;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Label labelFileName;
     }
 }
 
