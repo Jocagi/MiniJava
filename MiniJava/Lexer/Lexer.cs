@@ -40,9 +40,9 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, @"^void(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, @"^while(?![a-z]|[A-Z]|\$|[0-9])"));
             //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));//PENDIENTE
-
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
             //OPERADORES
 
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
@@ -71,6 +71,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_parentesis, @"^\(\)"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
 
             //CONSTANTES
@@ -87,7 +88,6 @@ namespace MiniJava.Lexer
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)([a-z]|[A-Z]|\$|[0-9])*"));
 
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
         }
 
