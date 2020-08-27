@@ -76,7 +76,10 @@ namespace MiniJava.Lexer
         Error_String,
         Error_Length,
         Enter,
-        WhiteSpace
+        WhiteSpace,
+        Error_EOFComnet,
+        Error_EOFstring
+
 
         }
 }
