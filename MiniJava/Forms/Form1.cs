@@ -55,23 +55,23 @@ namespace MiniJava
             ReadFile(files[0]);
         }
 
-        private void ReadFile(string path) 
+        private void ReadFile(string path)
         {
-            this.labelFileName.Text = Path.GetFileName(path);
-
             string text = File.ReadAllText(path);
             output = "";
 
-            sourceCodeBox.Text = text;
+            //Show text
+            labelFileName.Text = Path.GetFileName(path);
+            sourceCodeBox.Text = text.Replace("\0", "<null>"); //Prevenir que el null corte el texto
 
+            //Analizar tokens
             Lexer.Lexer lex = new Lexer.Lexer();
-
             var tokens = lex.getTokens(text);
 
             foreach (var item in tokens)
             {
                 string line;
-                
+
                 if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter
                     && item.tokenType != TokenType.Block_Comments && item.tokenType != TokenType.Comments)
                 {
@@ -111,7 +111,7 @@ namespace MiniJava
 
             //Show output
 
-            this.outputBox.Text = output;
+            this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
             this.Size = new Size(1500, 715);
