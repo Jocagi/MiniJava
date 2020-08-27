@@ -68,7 +68,7 @@ namespace MiniJava
 
             foreach (var item in tokens)
             {
-                string line = "";
+                string line;
                 
                 if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter
                     && item.tokenType != TokenType.Block_Comments && item.tokenType != TokenType.Comments)
@@ -87,11 +87,11 @@ namespace MiniJava
                     }
                     else if (item.tokenType == TokenType.Error_EOFComnet)
                     {
-                        line = $"*** Warning: EOF in comment { item.location.row}.***\r\n";
+                        line = $"*** Error: EOF in comment at line { item.location.row}.***\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_EOFstring)
                     {
-                        line = $"*** Warning: EOF in string { item.location.row}.***\r\n";
+                        line = $"*** Error: EOF in string at line { item.location.row}.***\r\n";
                     }
                     else if (item.tokenType == TokenType.Error_String)
                     {
@@ -100,7 +100,7 @@ namespace MiniJava
                     else
                     {
                         line =
-                        $"{item.value} \t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                     }
 
                     output += line;
