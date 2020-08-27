@@ -17,34 +17,35 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
 
             //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));//PENDIENTE
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
 
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
 
             //PALABRAS RESERVADAS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, "^break"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, "^boolean"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_class, "^class"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_const, "^const"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_double, "^double"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_else, "^else"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_extends, "^extends"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_for, "^for"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_if, "^if"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_implements, "^implements"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_int, "^int"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_interface, "^interface"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, "^New"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, "^null"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, "^out"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_printlnt, "^printInt"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_return, "^return"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_string, "^string"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_System, "^System"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, "^this"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, "^void"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, "^while"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_break, @"^break(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_boolean, @"^boolean(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_class, @"^class(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_const, @"^const(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_double, @"^double(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_else, @"^else(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_extends, @"^extends(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_for, @"^for(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_if, @"^if(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_implements, @"^implements(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_int, @"^int(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_interface, @"^interface(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_New, @"^new(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, @"^null(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, @"^out(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_println, @"^printIn(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_return, @"^return(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_string, @"^string(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_System, @"^System(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_this, @"^this(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_void, @"^void(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_while, @"^while(?![a-z]|[A-Z]|\$|[0-9])"));
             
             //OPERADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menorIgual, "^<="));
@@ -73,16 +74,17 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_parentesis, @"^\(\)"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisAbre, @"^\("));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, "^true|^false"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"((^0|^[1-9][0-9]*)\.[0-9]*)(E\+[0-9]+)?"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^0|^[1-9][0-9]*"));//decimales
-            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*)\""));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^[0-9]+"));//decimales
+            tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "\"(.*?)\""));
 
             //IDENTIFICADORES
-            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, "^([a-z]|[A-Z]|\\$)([a-z]|[A-Z]|\\$|[0-9])*"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){1,31}ica"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
         }

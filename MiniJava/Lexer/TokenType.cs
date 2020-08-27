@@ -29,7 +29,7 @@ namespace MiniJava.Lexer
         Token_New,         
         Token_System,      
         Token_out,         
-        Token_printlnt,    
+        Token_println,    
         //IDENTIFICADORES
         Identifier,        
         //CONSTANTES
