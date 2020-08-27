@@ -14,6 +14,8 @@ namespace MiniJava
 {
     public partial class Form1 : Form
     {
+        string output = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -21,7 +23,7 @@ namespace MiniJava
 
             this.labelOUTPUT.Visible = false;
             this.outputBox.Visible = false;
-            this.Size = new Size(635, 615);
+            this.Size = new Size(645, 715);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -56,7 +58,7 @@ namespace MiniJava
         private void ReadFile(string path) 
         {
             string text = File.ReadAllText(path);
-            string output = "";
+            output = "";
 
             sourceCodeBox.Text = text;
 
@@ -102,7 +104,9 @@ namespace MiniJava
             this.outputBox.Text = output;
             this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
-            this.Size = new Size(1500, 615);
+            this.Size = new Size(1500, 715);
+
+            this.saveButton.Visible = true;
 
             //Color errors
 
@@ -118,13 +122,19 @@ namespace MiniJava
             }
         }
 
-        private void AppendText(string text, Color color)
+        private void saveButton_Click(object sender, EventArgs e)
         {
-            outputBox.SuspendLayout();
-            outputBox.SelectionColor = color;
-            outputBox.AppendText(text);
-            outputBox.ScrollToCaret();
-            outputBox.ResumeLayout();
+            saveFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog1.FileName, output);
+                MessageBox.Show("Archivo guardado exitosamente");
+            }
+            else
+            {
+                MessageBox.Show("No se ha especificado ninguna ruta");
+            }
         }
     }
 }

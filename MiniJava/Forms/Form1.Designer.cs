@@ -34,10 +34,13 @@
             this.sourceCodeBox = new System.Windows.Forms.RichTextBox();
             this.outputBox = new System.Windows.Forms.RichTextBox();
             this.labelOUTPUT = new System.Windows.Forms.Label();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button1.Location = new System.Drawing.Point(9, 10);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
@@ -62,7 +65,7 @@
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
             this.sourceCodeBox.ShowSelectionMargin = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(714, 494);
+            this.sourceCodeBox.Size = new System.Drawing.Size(714, 594);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
             this.sourceCodeBox.WordWrap = false;
@@ -78,7 +81,7 @@
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
             this.outputBox.ShowSelectionMargin = true;
-            this.outputBox.Size = new System.Drawing.Size(725, 494);
+            this.outputBox.Size = new System.Drawing.Size(725, 593);
             this.outputBox.TabIndex = 1;
             this.outputBox.Text = "";
             this.outputBox.WordWrap = false;
@@ -93,6 +96,26 @@
             this.labelOUTPUT.TabIndex = 2;
             this.labelOUTPUT.Text = "OUTPUT";
             // 
+            // saveButton
+            // 
+            this.saveButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.saveButton.Location = new System.Drawing.Point(897, 13);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(112, 34);
+            this.saveButton.TabIndex = 3;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Visible = false;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.AddExtension = false;
+            this.saveFileDialog1.DefaultExt = "out";
+            this.saveFileDialog1.FileName = "Output";
+            this.saveFileDialog1.Filter = "Out files|*.out";
+            this.saveFileDialog1.Title = "miniJava";
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -100,7 +123,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(1478, 559);
+            this.ClientSize = new System.Drawing.Size(1478, 658);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.labelOUTPUT);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.sourceCodeBox);
@@ -126,6 +150,8 @@
         private System.Windows.Forms.RichTextBox sourceCodeBox;
         private System.Windows.Forms.RichTextBox outputBox;
         private System.Windows.Forms.Label labelOUTPUT;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
