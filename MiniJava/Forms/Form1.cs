@@ -83,13 +83,15 @@ namespace MiniJava
                     {
                         line = $"*** Warning: Max id length exceeded at line {item.location.row}.***\r\n";
                     }
+                    else if (item.tokenType == TokenType.Error_String)
+                    {
+                        line = $"*** Error unfinished string at line {item.location.row}.***\r\n";
+                    }
                     else
                     {
                         line =
                         $"{item.value} \t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                     }
-
-                    //Color
 
                     output += line;
                 }
@@ -101,6 +103,19 @@ namespace MiniJava
             this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
             this.Size = new Size(1500, 615);
+
+            //Color errors
+
+            for (int i = 0; i < outputBox.Lines.Length; i++)
+            {
+                string line = outputBox.Lines[i];
+
+                if (line.Contains("***"))
+                {
+                    outputBox.Select(outputBox.GetFirstCharIndexFromLine(i), line.Length);
+                    outputBox.SelectionColor = Color.Red;
+                }
+            }
         }
 
         private void AppendText(string text, Color color)
