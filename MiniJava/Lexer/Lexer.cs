@@ -15,12 +15,12 @@ namespace MiniJava.Lexer
             //Espacios en blanco
             tokenDescriptions.Add(new TokenDescription(TokenType.Enter, "^\n")); 
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
-
             //COMENTARIOS
             tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
 
             //ERRORES COMENTARIOS
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComnet, @"^/\*(.*)\Z"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
             
@@ -83,12 +83,13 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "(^0x|^0X)([0-9]|[A-F]|[a-f])*"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^[0-9]+"));//decimales
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*?)\""));
+            //ERRORES
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFstring, "^\".*" + @"\Z"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_String, "^(\"){1}(.)(.(?!\"))*"));
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){0,31}"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
         }
 

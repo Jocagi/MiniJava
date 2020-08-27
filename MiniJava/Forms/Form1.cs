@@ -83,6 +83,14 @@ namespace MiniJava
                     {
                         line = $"*** Warning: Max id length exceeded at line {item.location.row}.***\r\n";
                     }
+                    else if (item.tokenType == TokenType.Error_EOFComnet)
+                    {
+                        line = $"*** Warning: EOF in comment { item.location.row}.***\r\n";
+                    }
+                    else if (item.tokenType == TokenType.Error_EOFstring)
+                    {
+                        line = $"*** Warning: EOF in string { item.location.row}.***\r\n";
+                    }
                     else if (item.tokenType == TokenType.Error_String)
                     {
                         line = $"*** Error unfinished string at line {item.location.row}.***\r\n";
