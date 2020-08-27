@@ -84,6 +84,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_Int, "^[0-9]+"));//decimales
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*?)\""));
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_String, "^(\"){1}(.)(.(?!\"))*"));
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){0,31}"));
