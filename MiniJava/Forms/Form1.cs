@@ -91,6 +91,14 @@ namespace MiniJava
                     {
                         line = $"*** Error: EOF in comment at line { item.location.row}.***\r\n";
                     }
+                    else if (item.tokenType == TokenType.Error_nullString)
+                    {
+                        line = $"*** Error: null character in the middle of a string{ item.location.row}.***\r\n";
+                    }
+                    else if (item.tokenType == TokenType.Error_null)
+                    {
+                        line = $"*** Error: null character { item.location.row}.***\r\n";
+                    }
                     else if (item.tokenType == TokenType.Error_EOFstring)
                     {
                         line = $"*** Error: EOF in string at line { item.location.row}.***\r\n";

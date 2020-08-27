@@ -12,12 +12,13 @@ namespace MiniJava.Lexer
         {
             tokenDescriptions = new List<TokenDescription>();
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_null, "^\0"));
             //Espacios en blanco
             tokenDescriptions.Add(new TokenDescription(TokenType.Enter, "^\n")); 
             tokenDescriptions.Add(new TokenDescription(TokenType.WhiteSpace, "^(\r|\t|\b|\v|\f|\a| )"));
             //COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r)*(\*\/){1}"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.*)"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Block_Comments, @"^(\/\*)((\*\/){0}|(.)|\n|\r|\0)*(\*\/){1}"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.|\0)*"));
 
             //ERRORES COMENTARIOS
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComnet, @"^/\*(.*)\Z"));
@@ -77,6 +78,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_ParentesisCierra, @"^\)"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_punto, @"^\."));
 
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_nullString, "^\"((\0.*)|(.*\0)|(.*\0.*))\""));
             //CONSTANTES
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_bool, @"(^true|^false)(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_double, @"^(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?"));
@@ -85,12 +87,12 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Const_String, "^\"(.*?)\""));
             //ERRORES
 
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFstring, "^\".*" + @"\Z"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFstring, "^\"(\0|.)*" + @"\Z"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_String, "^(\"){1}(.)(.(?!\"))*"));
 
             //IDENTIFICADORES
             tokenDescriptions.Add(new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){0,30}"));
-
+            //NULL
         }
 
         /// <summary>
