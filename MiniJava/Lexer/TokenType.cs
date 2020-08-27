@@ -77,5 +77,6 @@ namespace MiniJava.Lexer
         Error_Length,
         Enter,
         WhiteSpace
+
         }
 }
