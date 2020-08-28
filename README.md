@@ -11,7 +11,7 @@ Se inicia el compilador con la aplicación del análisis léxico. Se crea un esc
 El escáner reconoce los tokens propios del lenguaje en el orden en que se leen, hasta el final del archivo. Determina sus atributos para que la información sobre cada símbolo esté correctamente impresa.
 
 ## Cómo instalar
-Dirijase a la carpeta 'Ejecutable'. Descargue el archivo en zip y descomprimalo. Alli ecnontrará el EXE de la aplicación.
+Dirijase a la carpeta 'Ejecutable'. Descargue el archivo en zip y descomprimalo. Allí econtrará el EXE de la aplicación.
 
 ## Instrucciones de uso
 
