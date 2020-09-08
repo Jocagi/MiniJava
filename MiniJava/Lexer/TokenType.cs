@@ -81,7 +81,9 @@ namespace MiniJava.Lexer
         Error_EOFstring,
         Error_nullString,
         Error_null,
-        Error_UnpairedComment
+        Error_UnpairedComment,
+        Epsilon,
+        Default
 
         }
 }

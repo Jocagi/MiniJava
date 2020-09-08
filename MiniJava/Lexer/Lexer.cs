@@ -223,6 +223,11 @@ namespace MiniJava.Lexer
                 }
             }
 
+            tokens.RemoveAll(x => x.tokenType == TokenType.WhiteSpace);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Enter);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Block_Comments);
+
             return tokens;
         }
 
@@ -254,6 +259,26 @@ namespace MiniJava.Lexer
                 //No hay match
                 return new MatchRegex(false);
             }
+        }
+
+        public Queue<Token> ListToQueue(List<Token> values) 
+        {
+            List<Token> tokens = new List<Token>(values);
+            tokens.RemoveAll(x => x.tokenType == TokenType.WhiteSpace);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Enter);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Block_Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_Comment);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_EOFComment);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_EOFstring);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_Length);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_null);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_nullString);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_String);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_UnpairedComment);
+
+            return new Queue<Token>(tokens);
         }
     }
 }

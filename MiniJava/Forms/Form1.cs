@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MiniJava.Lexer;
+using MiniJava.Parser.RecursiveDescent;
 
 namespace MiniJava
 {
@@ -116,6 +117,14 @@ namespace MiniJava
                 output += line;
             }
 
+            //Analizador sintactico //To do..
+            Queue<Token> tokensQueue = lex.ListToQueue(tokens);
+            Parser.RecursiveDescent.Parser pars = new Parser.RecursiveDescent.Parser(tokensQueue);
+            ParserReport parserReport = pars.getReport();
+
+            MessageBox.Show(parserReport.isCorrect? "Todo bien :)" : "Oh! No! Hay un error");
+             
+
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.labelOUTPUT.Visible = true;
@@ -124,7 +133,6 @@ namespace MiniJava
             this.saveButton.Visible = true;
 
             //Color errors
-
             for (int i = 0; i < outputBox.Lines.Length; i++)
             {
                 string line = outputBox.Lines[i];
