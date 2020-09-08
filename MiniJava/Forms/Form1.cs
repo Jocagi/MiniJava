@@ -72,58 +72,55 @@ namespace MiniJava
             {
                 string line;
 
-                if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter
-                    && item.tokenType != TokenType.Block_Comments && item.tokenType != TokenType.Comments)
+                switch (item.tokenType)
                 {
-                    if (item.tokenType == TokenType.Error)
-                    {
+                    case TokenType.Enter:
+                    case TokenType.WhiteSpace:
+                    case TokenType.Block_Comments:
+                    case TokenType.Comments:
+                        line = "";
+                        break;
+                    case TokenType.Error:
                         line = $"*** Error line {item.location.row}.*** Unrecognized element: {item.value}\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_Comment)
-                    {
+                        break;
+                    case TokenType.Error_Comment:
                         line = $"*** Error line {item.location.row}.*** Unfinished comment.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_Length)
-                    {
+                        break;
+                    case TokenType.Error_Length:
                         line = $"*** Warning: Max id length exceeded at line {item.location.row}.***\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_EOFComnet)
-                    {
+                        break;
+                    case TokenType.Error_EOFComment:
                         line = $"*** Error line {item.location.row}.*** EOF in comment.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_nullString)
-                    {
+                        break;
+                    case TokenType.Error_nullString:
                         line = $"*** Error line {item.location.row}.*** Null character in string.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_null)
-                    {
+                        break;
+                    case TokenType.Error_null:
                         line = $"*** Error line {item.location.row}.*** Null character.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_EOFstring)
-                    {
+                        break;
+                    case TokenType.Error_EOFstring:
                         line = $"*** Error line {item.location.row}.*** EOF in string.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_String)
-                    {
+                        break;
+                    case TokenType.Error_String:
                         line = $"*** Error line {item.location.row}.*** Unfinished string.\r\n";
-                    }
-                    else
-                    {
+                        break;
+                    case TokenType.Error_UnpairedComment:
+                        line = $"*** Error line {item.location.row}.*** Unpaired comment.\r\n";
+                        break;
+                    default:
                         line =
-                        $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
-                    }
-
-                    output += line;
+                    $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        break;
                 }
+
+                output += line;
             }
 
             //Show output
-
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
             this.Size = new Size(1500, 715);
-
             this.saveButton.Visible = true;
 
             //Color errors

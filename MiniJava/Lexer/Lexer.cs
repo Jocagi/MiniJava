@@ -21,8 +21,8 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.|\0)*"));
 
             //ERRORES COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComnet, @"^/\*(.*)\Z"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComment, @"^/\*(.*)\Z"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_UnpairedComment, @"^\*/"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
             
             //PALABRAS RESERVADAS

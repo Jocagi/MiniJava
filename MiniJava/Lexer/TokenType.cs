@@ -77,10 +77,11 @@ namespace MiniJava.Lexer
         Error_Length,
         Enter,
         WhiteSpace,
-        Error_EOFComnet,
+        Error_EOFComment,
         Error_EOFstring,
         Error_nullString,
-        Error_null
+        Error_null,
+        Error_UnpairedComment
 
         }
 }
