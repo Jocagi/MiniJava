@@ -18,12 +18,14 @@ namespace MiniJava.Parser.RecursiveDescent
         private ParserReport result;
         private TokenType lookahead;
         private TokenType expectedValue;
+        private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
 
         public Parser(Queue<Token> tokens)
         {
             this.tokens = tokens;
             this.result = new ParserReport();
             this.lookahead = TokenType.Default;
+            this.acertoToken = false;
         }
 
         public ParserReport getReport()
@@ -37,14 +39,15 @@ namespace MiniJava.Parser.RecursiveDescent
             return result;
         }
 
-        private bool Match(TokenType token)
+        private bool Match(TokenType token, bool epsilon)// si epsilon es true, el token es nulable
         {
             if (lookahead == token)
             {
                 lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                acertoToken = true;
                 return true;
             }
-            else if (token == TokenType.Epsilon) 
+            else if (token == TokenType.Epsilon || epsilon) 
             {
                 return true;
             }
@@ -52,24 +55,56 @@ namespace MiniJava.Parser.RecursiveDescent
             expectedValue = token;
             return false;
         }
-        private bool Match_Several_Times(TokenType token)//una o 0 veces lo toma como correcto
+        private bool Match_Several_Times(TokenType[] tokensArray)//una o 0 veces lo toma como correcto
         {
-            if (lookahead == token)
+            if (tokensArray.Length > 1 && lookahead == tokensArray[0])
+            {
+                foreach (var token in tokensArray)
+                {
+                    if (token == TokenType.Data_Type)
+                    {
+                        if (!MatchType(false))
+                        {
+                            return false;
+                        }
+                        
+                    }
+                    else if (lookahead == token)
+                    {
+                        lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                Match_Several_Times(tokensArray);
+                return true;
+            }
+            else if (lookahead == tokensArray[0])
             {
                 lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
-                Match_Several_Times(token);
+                Match_Several_Times(tokensArray);
                 return true;
             }
             return true;
         }
 
-        private bool MatchType()
+        private bool MatchType(bool epsilon)
         {
+
+            TokenType[] corchetes = { TokenType.Operator_corchetes };
             if (lookahead == TokenType.Token_boolean || lookahead == TokenType.Token_int || lookahead == TokenType.Token_string || lookahead == TokenType.Token_double)
             {
                 lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                acertoToken = true;
+                Match_Several_Times(corchetes);
                 return true;
-            }  
+            }
+            if (epsilon)
+            {
+                return true;
+            }
             expectedValue = TokenType.Data_Type;
             return false;
         }
@@ -95,28 +130,52 @@ namespace MiniJava.Parser.RecursiveDescent
         private bool DECL() 
         {
             bool esFunction = false;
-            bool firstTime = false;
-            if (MatchType()) //VariableDECL
+            acertoToken = false;
+            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false)) //VariableDECL
             {
-                firstTime = true;
-                if (Match_Several_Times(TokenType.Operator_corchetes) && Match(TokenType.Identifier) && Match(TokenType.Operator_puntoComa))
+                acertoToken = false;
+                if ( Match(TokenType.Operator_puntoComa,true) && acertoToken)
                 {
+                    acertoToken = false;
                     return true;
                 }
-                else if (Match_Several_Times(TokenType.Operator_corchetes) && Match(TokenType.Identifier) && Match(TokenType.Operator_ParentesisAbre))
+                else 
                 {
-                    firstTime = false;
                     esFunction = true;
                 }
-                else
+            }
+            if (esFunction || Match(TokenType.Token_void,false) ) //FunctionDECL
+            {
+                //Formals
+                if (Match(TokenType.Operator_ParentesisAbre,true) && acertoToken)
+                {
+                    acertoToken = false;
+                    TokenType[] comaTipoId = { TokenType.Operator_coma, TokenType.Data_Type, TokenType.Identifier };
+                    if (MatchType(true) && acertoToken)
+                    {
+                        acertoToken = false;
+                        if (!(Match(TokenType.Identifier, false) && Match_Several_Times(comaTipoId) && Match(TokenType.Operator_ParentesisCierra, false)))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (!Match(TokenType.Operator_ParentesisCierra, false))
+                    {
+                        return false;
+                    }
+                }
+                else if (!Match(TokenType.Operator_parentesis,false))
                 {
                     return false;
                 }
-            }
-            if (!firstTime && (esFunction || (Match(TokenType.Token_void) && Match(TokenType.Operator_ParentesisAbre)))) //FunctionDECL
-            {
+                   
+                acertoToken = false;
+                
+                
+                //funtionStmt
+
                 return true;
-                //formals
+
             }
             return false;
 
@@ -129,7 +188,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 DECLPlus();
                 return true;
             }
-            else if (Match(TokenType.Epsilon))
+            else if (Match(TokenType.Epsilon,true))
             {
                 return true;
             }
