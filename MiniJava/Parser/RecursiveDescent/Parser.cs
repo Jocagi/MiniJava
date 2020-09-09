@@ -96,14 +96,14 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             bool esFunction = false;
             bool firstTime = false;
-            if (MatchType() && Match(TokenType.Identifier)) //VariableDECL
+            if (MatchType()) //VariableDECL
             {
                 firstTime = true;
-                if (Match_Several_Times(TokenType.Operator_llaves) && Match(TokenType.Operator_puntoComa))
+                if (Match_Several_Times(TokenType.Operator_corchetes) && Match(TokenType.Identifier) && Match(TokenType.Operator_puntoComa))
                 {
                     return true;
                 }
-                else if (Match(TokenType.Operator_ParentesisAbre))
+                else if (Match_Several_Times(TokenType.Operator_corchetes) && Match(TokenType.Identifier) && Match(TokenType.Operator_ParentesisAbre))
                 {
                     firstTime = false;
                     esFunction = true;
@@ -115,7 +115,8 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             if (!firstTime && (esFunction || (Match(TokenType.Token_void) && Match(TokenType.Operator_ParentesisAbre)))) //FunctionDECL
             {
-                
+                return true;
+                //formals
             }
             return false;
 
