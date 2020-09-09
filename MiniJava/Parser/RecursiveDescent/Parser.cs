@@ -7,6 +7,13 @@ namespace MiniJava.Parser.RecursiveDescent
 {
     public class Parser
     {
+        /// <summary>
+        /// El analizador sitanctico recursivo recorred e forma recursiva la gramatica.
+        /// Cada Simbolo NO TERMINAL es representado como una funcion y cada simbolo TERMINAL se evalua atraves del MATCH()
+        /// El punto de partida es PROGRAM, si se hace backtracking hasta aqui se reporta el error.
+        /// Se 'Concatenan' varias expresiones a traves de un AND para validar que todo este es el lugar correcto. Sin importar si es terminal o no terminal.
+        /// </summary>
+
         private Queue<Token> tokens;
         private ParserReport result;
         private TokenType lookahead;
@@ -37,6 +44,10 @@ namespace MiniJava.Parser.RecursiveDescent
                 lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
                 return true;
             }
+            else if (token == TokenType.Epsilon) 
+            {
+                return true;
+            }
 
             expectedValue = token;
             return false;
@@ -50,10 +61,11 @@ namespace MiniJava.Parser.RecursiveDescent
 
         private void PROGRAM() 
         {
-            DECL();
-            DECLPlus();
-
-            if (tokens.Count > 0)
+            if ( !(DECL() && DECLPlus()) )
+            {
+                ERROR(expectedValue);
+            }
+            else if (tokens.Count > 0)
             {
                 ERROR(expectedValue);
                 PROGRAM();
@@ -65,8 +77,6 @@ namespace MiniJava.Parser.RecursiveDescent
             if (true) //VariableDECL
             {
                 //Test -> reconoce int ID = <num>;
-
-                //Se 'Concatenan' varias expresiones a traves del AND para validar que todo este es el lugar correcto
 
                 if (Match(TokenType.Token_int) && Match(TokenType.Identifier)
                     && Match(TokenType.Operator_igual) && Match(TokenType.Const_Int)
@@ -89,11 +99,20 @@ namespace MiniJava.Parser.RecursiveDescent
             }
         }
 
-        private void DECLPlus()
+        private bool DECLPlus()
         {
             if (DECL())
             {
                 DECLPlus();
+                return true;
+            }
+            else if (Match(TokenType.Epsilon))
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
             }
         }
     }
