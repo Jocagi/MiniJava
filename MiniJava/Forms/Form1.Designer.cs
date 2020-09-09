@@ -42,10 +42,10 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(9, 10);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button1.Location = new System.Drawing.Point(8, 8);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 41);
+            this.button1.Size = new System.Drawing.Size(118, 34);
             this.button1.TabIndex = 0;
             this.button1.Text = "Archivo";
             this.button1.UseVisualStyleBackColor = true;
@@ -61,12 +61,12 @@
             this.sourceCodeBox.BackColor = System.Drawing.SystemColors.MenuText;
             this.sourceCodeBox.EnableAutoDragDrop = true;
             this.sourceCodeBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.sourceCodeBox.Location = new System.Drawing.Point(9, 53);
-            this.sourceCodeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.sourceCodeBox.Location = new System.Drawing.Point(8, 44);
+            this.sourceCodeBox.Margin = new System.Windows.Forms.Padding(2);
             this.sourceCodeBox.Name = "sourceCodeBox";
             this.sourceCodeBox.ReadOnly = true;
             this.sourceCodeBox.ShowSelectionMargin = true;
-            this.sourceCodeBox.Size = new System.Drawing.Size(714, 594);
+            this.sourceCodeBox.Size = new System.Drawing.Size(596, 496);
             this.sourceCodeBox.TabIndex = 1;
             this.sourceCodeBox.Text = "";
             this.sourceCodeBox.WordWrap = false;
@@ -77,12 +77,12 @@
             this.outputBox.BackColor = System.Drawing.SystemColors.MenuText;
             this.outputBox.EnableAutoDragDrop = true;
             this.outputBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.outputBox.Location = new System.Drawing.Point(741, 54);
-            this.outputBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.outputBox.Location = new System.Drawing.Point(618, 45);
+            this.outputBox.Margin = new System.Windows.Forms.Padding(2);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
             this.outputBox.ShowSelectionMargin = true;
-            this.outputBox.Size = new System.Drawing.Size(725, 593);
+            this.outputBox.Size = new System.Drawing.Size(605, 495);
             this.outputBox.TabIndex = 1;
             this.outputBox.Text = "";
             this.outputBox.WordWrap = false;
@@ -91,18 +91,20 @@
             // 
             this.labelOUTPUT.AutoSize = true;
             this.labelOUTPUT.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelOUTPUT.Location = new System.Drawing.Point(741, 9);
+            this.labelOUTPUT.Location = new System.Drawing.Point(618, 8);
+            this.labelOUTPUT.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelOUTPUT.Name = "labelOUTPUT";
-            this.labelOUTPUT.Size = new System.Drawing.Size(150, 41);
+            this.labelOUTPUT.Size = new System.Drawing.Size(123, 34);
             this.labelOUTPUT.TabIndex = 2;
             this.labelOUTPUT.Text = "OUTPUT";
             // 
             // saveButton
             // 
             this.saveButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.saveButton.Location = new System.Drawing.Point(897, 13);
+            this.saveButton.Location = new System.Drawing.Point(748, 11);
+            this.saveButton.Margin = new System.Windows.Forms.Padding(2);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(112, 34);
+            this.saveButton.Size = new System.Drawing.Size(93, 28);
             this.saveButton.TabIndex = 3;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -121,19 +123,20 @@
             // 
             this.labelFileName.AutoSize = true;
             this.labelFileName.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelFileName.Location = new System.Drawing.Point(158, 24);
+            this.labelFileName.Location = new System.Drawing.Point(132, 20);
+            this.labelFileName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelFileName.Name = "labelFileName";
-            this.labelFileName.Size = new System.Drawing.Size(0, 27);
+            this.labelFileName.Size = new System.Drawing.Size(0, 23);
             this.labelFileName.TabIndex = 4;
             // 
             // Form1
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(1478, 658);
+            this.ClientSize = new System.Drawing.Size(1232, 548);
             this.Controls.Add(this.labelFileName);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.labelOUTPUT);
@@ -143,7 +146,7 @@
             this.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "MiniJava";

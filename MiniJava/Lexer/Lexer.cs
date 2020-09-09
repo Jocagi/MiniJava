@@ -42,6 +42,7 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_null, @"^null(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_out, @"^out(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_println, @"^println(?![a-z]|[A-Z]|\$|[0-9])"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Token_Print, @"^Print(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_return, @"^return(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_string, @"^string(?![a-z]|[A-Z]|\$|[0-9])"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Token_System, @"^System(?![a-z]|[A-Z]|\$|[0-9])"));
