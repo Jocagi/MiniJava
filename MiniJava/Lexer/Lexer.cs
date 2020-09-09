@@ -21,8 +21,8 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Comments, @"^//(.|\0)*"));
 
             //ERRORES COMENTARIOS
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComnet, @"^/\*(.*)\Z"));
-            tokenDescriptions.Add(new TokenDescription(TokenType.Error, @"^\*/"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_EOFComment, @"^/\*(.*)\Z"));
+            tokenDescriptions.Add(new TokenDescription(TokenType.Error_UnpairedComment, @"^\*/"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Error_Comment, @"^(\/\*)((.)|\n|\r)*"));
             
             //PALABRAS RESERVADAS
@@ -224,6 +224,11 @@ namespace MiniJava.Lexer
                 }
             }
 
+            tokens.RemoveAll(x => x.tokenType == TokenType.WhiteSpace);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Enter);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Block_Comments);
+
             return tokens;
         }
 
@@ -255,6 +260,26 @@ namespace MiniJava.Lexer
                 //No hay match
                 return new MatchRegex(false);
             }
+        }
+
+        public Queue<Token> ListToQueue(List<Token> values) 
+        {
+            List<Token> tokens = new List<Token>(values);
+            tokens.RemoveAll(x => x.tokenType == TokenType.WhiteSpace);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Enter);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Block_Comments);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_Comment);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_EOFComment);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_EOFstring);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_Length);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_null);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_nullString);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_String);
+            tokens.RemoveAll(x => x.tokenType == TokenType.Error_UnpairedComment);
+
+            return new Queue<Token>(tokens);
         }
     }
 }
