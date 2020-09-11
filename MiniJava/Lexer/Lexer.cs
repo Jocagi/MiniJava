@@ -57,6 +57,11 @@ namespace MiniJava.Lexer
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_diferente, "^!="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_mayor, "^>"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_menor, "^<"));
+
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_puntosIgual, "^:="));
+
+            tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dosPuntos, "^:"));
+
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_igual, "^="));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_dobleAnd, "^&&"));
             tokenDescriptions.Add(new TokenDescription(TokenType.Operator_puntoComa, "^;"));
