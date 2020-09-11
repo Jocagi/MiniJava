@@ -19,6 +19,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private TokenType lookahead;
         private TokenType expectedValue;
         private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
+        private bool noMasSTMS; //no stms iniciado
 
         public Parser(Queue<Token> tokens)
         {
@@ -26,6 +27,7 @@ namespace MiniJava.Parser.RecursiveDescent
             this.result = new ParserReport();
             this.lookahead = TokenType.Default;
             this.acertoToken = false;
+            this.noMasSTMS = false;
         }
 
         public ParserReport getReport()
@@ -131,7 +133,8 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             bool esFunction = false;
             acertoToken = false;
-            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false)) //VariableDECL
+            //VariableDECL
+            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false)) 
             {
                 acertoToken = false;
                 if ( Match(TokenType.Operator_puntoComa,true) && acertoToken)
@@ -144,7 +147,8 @@ namespace MiniJava.Parser.RecursiveDescent
                     esFunction = true;
                 }
             }
-            if (esFunction || Match(TokenType.Token_void,false) ) //FunctionDECL
+            //FunctionDECL
+            if (esFunction || Match(TokenType.Token_void,false) ) 
             {
                 //Formals
                 if (Match(TokenType.Operator_ParentesisAbre,true) && acertoToken)
@@ -170,18 +174,81 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
                    
                 acertoToken = false;
-                
-                
-                //funtionStmt
 
+                //STMT
                 return true;
-
             }
             return false;
 
         }
+        private bool STMT(bool nullable)
+        {
+            //while stament 
+            if (Match(TokenType.Token_while, true) && acertoToken)
+            {
+                noMasSTMS = false;//Entró al STMT
+                acertoToken = false;
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!EXPR())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!STMT(false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            //rerurn stament
+            else if (Match(TokenType.Token_return, true) && acertoToken)
+            {
+                noMasSTMS = false;//Entró al STMT
+                acertoToken = false;
+                
+                if (!EXPR())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            //EXPR stament
+            else if (EXPR())
+            {
+                noMasSTMS = false;//Entró al STMT
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            noMasSTMS = true;
+            if (nullable)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool EXPR()
+        {
 
-        private bool DECLPlus()
+
+            return true;
+        }
+         private bool DECLPlus()
         {
             if (DECL())
             {
