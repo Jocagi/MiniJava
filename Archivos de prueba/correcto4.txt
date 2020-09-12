@@ -1,0 +1,29 @@
+
+int suma;
+int resta;
+int multiplicacion;
+int division;
+
+void calculator()
+       return 0;     
+
+int sum( int a, int b)
+  return a + b;
+
+int resta( int a, int b)
+  return a - b;
+
+int multi( int a, int b)
+  return a * b;
+
+double div( int a, int b)
+  return a / b;
+
+int mod( int a, int b)
+  return a % b;
+
+string simpleFunction()
+   return "Hello world";
+
+string complexFunction(int variable)
+   return 1 + variable + 2 * 3 * 4 / (1+2);

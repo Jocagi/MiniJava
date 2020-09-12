@@ -1,0 +1,21 @@
+
+//Inicio
+string value;
+
+//este deberia ser un error
+string
+
+void main() 
+   value = "hola mundo";
+  //otro error
+  178
+
+   d = 2 + 3 * 4 - 6;
+   b = 3;
+   a = b + 2;
+
+int sum( int a, int b)
+  return a + b;
+
+double diff( double a, double b)
+ return a - b;

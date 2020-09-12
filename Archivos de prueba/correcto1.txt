@@ -1,0 +1,7 @@
+int d;
+int a;
+
+void main() 
+   d = 2 / 367 * 4 - 6 % 2;
+   a = 2 / 367 * 4 - 6 % 2;
+return 0;

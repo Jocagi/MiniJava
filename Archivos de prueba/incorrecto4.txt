@@ -1,0 +1,6 @@
+
+string value;
+void main() 
+ //imprimir muchas veces
+   while(true)
+       printf("Hello Wolrd!");

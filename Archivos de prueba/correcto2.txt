@@ -1,0 +1,11 @@
+
+int counter;
+void main()
+  counter = 0;
+  while( counter < 10000000)
+        counter = counter + 50;
+               while( counter < 10000)
+                      counter = counter + 100;
+return 0;
+                 
+        
