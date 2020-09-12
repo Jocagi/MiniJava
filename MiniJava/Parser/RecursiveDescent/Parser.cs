@@ -18,6 +18,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private ParserReport result;
         private TokenType lookahead;
         private TokenType expectedValue;
+        private TokenLocation actualLocation;
         private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
         private bool noMasSTMS; //no stms iniciado
         private bool LValue;
@@ -36,11 +37,26 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             if (tokens.Count > 0)
             {
-                lookahead = tokens.Dequeue().tokenType;
+                Dequeue();
+
                 //Start grammar path
                 PROGRAM();
             }
             return result;
+        }
+
+        private void Dequeue() 
+        {
+            if (tokens.Count > 0)
+            {
+                Token t = tokens.Dequeue();
+                lookahead = t.tokenType;
+                actualLocation = t.location;
+            }
+            else
+            {
+                lookahead = TokenType.Default;
+            }
         }
 
         private bool Match(TokenType token, bool epsilon)// si epsilon es true, el token es nulable
@@ -48,7 +64,7 @@ namespace MiniJava.Parser.RecursiveDescent
             acertoToken = false;
             if (lookahead == token)
             {
-                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                Dequeue();
                 acertoToken = true;
                 return true;
             }
@@ -76,7 +92,7 @@ namespace MiniJava.Parser.RecursiveDescent
                     }
                     else if (lookahead == token)
                     {
-                        lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                        Dequeue();
                     }
                     else
                     {
@@ -88,7 +104,7 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             else if (lookahead == tokensArray[0])
             {
-                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                Dequeue();
                 Match_Several_Times(tokensArray);
                 return true;
             }
@@ -101,7 +117,7 @@ namespace MiniJava.Parser.RecursiveDescent
             TokenType[] corchetes = { TokenType.Operator_corchetes };
             if (lookahead == TokenType.Token_boolean || lookahead == TokenType.Token_int || lookahead == TokenType.Token_string || lookahead == TokenType.Token_double)
             {
-                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                Dequeue();
                 acertoToken = true;
                 Match_Several_Times(corchetes);
                 return true;
@@ -119,7 +135,7 @@ namespace MiniJava.Parser.RecursiveDescent
             acertoToken = false;
             if (lookahead == TokenType.Const_Int|| lookahead == TokenType.Const_double || lookahead == TokenType.Const_bool|| lookahead == TokenType.Const_String || lookahead == TokenType.Token_null)
             {
-                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                Dequeue();
                 acertoToken = true;
                 return true;
             }
@@ -136,7 +152,7 @@ namespace MiniJava.Parser.RecursiveDescent
             acertoToken = false;
             if (lookahead == TokenType.Operator_menor || lookahead == TokenType.Operator_menorIgual || lookahead == TokenType.Operator_mayor || lookahead == TokenType.Operator_mayorIgual)
             {
-                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                Dequeue();
                 acertoToken = true;
                 return true;
             }
@@ -150,8 +166,13 @@ namespace MiniJava.Parser.RecursiveDescent
 
         private void ERROR(TokenType expected)
         {
-            result.addError(new ParserError(lookahead, expected));
-            lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+            result.addError(new ParserError(lookahead, expected, actualLocation));
+            int errorRow = actualLocation.row;
+            //Saltar a la siguiente linea
+            while (errorRow == actualLocation.row && lookahead != TokenType.Default)
+            {
+                Dequeue();
+            }
         }
 
         private void PROGRAM()
