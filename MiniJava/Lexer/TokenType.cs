@@ -86,7 +86,9 @@ namespace MiniJava.Lexer
         Error_UnpairedComment,
         Epsilon,
         Default,
-        Data_Type
+        Data_Type,
+        Constant,
+        boolSymbol
 
         }
 }

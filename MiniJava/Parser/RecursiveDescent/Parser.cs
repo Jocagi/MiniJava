@@ -392,13 +392,82 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             return false;
         }
-        private bool OPETerm()
+        private bool OPTerm()
         {
-            return true;
+            //Constant
+            if (MatchConstant(true) && acertoToken)
+            {
+                return true;
+            }
+            //lValue
+            if (Match(TokenType.Identifier, true) && acertoToken)
+            {
+                if (Match(TokenType.Operator_punto, true) && acertoToken)
+                {
+                    if (!Match(TokenType.Identifier, false))
+                    {
+                        return false;
+                    }
+                }
+                else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
+                {
+                    if (!EXPR())
+                    {
+                        return false;
+                    }
+                    if (!Match(TokenType.Operator_corcheteCierra, false))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (Match(TokenType.Token_this, true) && acertoToken)
+            {
+                if (!Match(TokenType.Operator_punto, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            //(OPERATION)
+            if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
+            {
+                if (!OPERATION())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            return false;
         }
         private bool OP1()
         {
-            return true;
+            //OpTerm OP1_1
+            if (OPTerm() && acertoToken)
+            {
+                acertoToken = false;
+                if (!OP1_1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            //OP2
+            if (OP2())
+            {
+                return true;
+            }
+            return false;
         }
         private bool OP1_1()
         {
