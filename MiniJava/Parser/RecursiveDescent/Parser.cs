@@ -22,6 +22,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
         private bool noMasSTMS; //no stms iniciado
         private bool LValue;
+        private bool repetirDECLerror;
 
         public Parser(Queue<Token> tokens)
         {
@@ -30,6 +31,7 @@ namespace MiniJava.Parser.RecursiveDescent
             this.lookahead = TokenType.Default;
             this.acertoToken = false;
             this.noMasSTMS = false;
+            this.repetirDECLerror = false;
             this.LValue = false;
         }
 
@@ -168,10 +170,19 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             result.addError(new ParserError(lookahead, expected, actualLocation));
             int errorRow = actualLocation.row;
-            //Saltar a la siguiente linea
-            while (errorRow == actualLocation.row && lookahead != TokenType.Default)
+
+            if (repetirDECLerror)
             {
-                Dequeue();
+                repetirDECLerror = false;
+                //Saltar a la siguiente linea
+                while (errorRow == actualLocation.row && lookahead != TokenType.Default)
+                {
+                    Dequeue();
+                }
+            }
+            else
+            {
+                repetirDECLerror = true;
             }
         }
 
