@@ -66,7 +66,8 @@ namespace MiniJava.Lexer
         Operator_corchetes,          
         Operator_parentesis,         
         Operator_llaves,     
-
+        Operator_dosPuntos,
+        Operator_puntosIgual,
         //COMENTARIOS
         Comments,
         Block_Comments,        
@@ -85,7 +86,9 @@ namespace MiniJava.Lexer
         Error_UnpairedComment,
         Epsilon,
         Default,
-        Data_Type
+        Data_Type,
+        Constant,
+        boolSymbol
 
         }
 }
