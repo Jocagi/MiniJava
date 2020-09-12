@@ -191,8 +191,13 @@ namespace MiniJava.Parser.RecursiveDescent
         private bool DECL()
         {
             bool esFunction = false;
+            bool type = false;
+            if (MatchType(true) && acertoToken)
+            {
+                type = true; 
+            }
             //VariableDECL
-            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false))
+            if (type && Match(TokenType.Identifier, false))
             {
                 if (Match(TokenType.Operator_puntoComa, true) && acertoToken)
                 {
@@ -204,7 +209,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
             }
             //FunctionDECL
-            if (esFunction || (Match(TokenType.Token_void, true) & Match(TokenType.Identifier, false)))
+            if (esFunction || (!type & Match(TokenType.Token_void, true) & Match(TokenType.Identifier, false)))
             {
                 //Formals
                 if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
