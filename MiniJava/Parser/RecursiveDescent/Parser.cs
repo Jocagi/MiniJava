@@ -270,10 +270,8 @@ namespace MiniJava.Parser.RecursiveDescent
             {
                 noMasSTMS = false;//Entró al STMT
 
-                if (!EXPR(false))
-                {
-                    return false;
-                }
+                EXPR(false);
+                
                 if (!Match(TokenType.Operator_puntoComa, false))
                 {
                     return false;
