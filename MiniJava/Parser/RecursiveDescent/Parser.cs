@@ -287,10 +287,40 @@ namespace MiniJava.Parser.RecursiveDescent
             //ExprP
             if (lValue)
             {
-
+                Match(TokenType.Operator_puntosIgual, true);
+                if (!acertoToken)
+                {
+                    Match(TokenType.Operator_igual, true);
+                }
+                if (!acertoToken)
+                {
+                    return false;
+                }
+                acertoToken = false;
+                if (Match(TokenType.Token_New, true) && acertoToken)
+                {
+                    if (!Match(TokenType.Operator_ParentesisAbre, false))
+                    {
+                        return false;
+                    }
+                    if (!Match(TokenType.Identifier, false))
+                    {
+                        return false;
+                    }
+                    if (!Match(TokenType.Operator_ParentesisCierra, false))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                if (!EXPR())
+                {
+                    return false;
+                }
+                return true;
             }
             //: Expr
-            if (Match(TokenType.Operator_dosPuntos, true)&& acertoToken)
+            if (!lValue && Match(TokenType.Operator_dosPuntos, true)&& acertoToken)
             {
                 acertoToken = false;
                 if (!EXPR())
@@ -300,7 +330,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 return true;
             }
             //Operation
-            if (true)
+            else if (true)
             {
 
             }
