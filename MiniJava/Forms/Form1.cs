@@ -117,13 +117,20 @@ namespace MiniJava
                 output += line;
             }
 
-            //Analizador sintactico //To do..
+            //Analizador sintactico
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
             Parser.RecursiveDescent.Parser pars = new Parser.RecursiveDescent.Parser(tokensQueue);
             ParserReport parserReport = pars.getReport();
 
             MessageBox.Show(parserReport.isCorrect? "Todo bien :)" : "Oh! No! Hay un error");
-             
+
+            if (!parserReport.isCorrect)
+            {
+                foreach (var item in parserReport.Errors)
+                {
+                    output += $"*** Error sintáctico: Se encontró {item.value}, se esperaba {item.expected} ***\n";
+                }
+            }
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
