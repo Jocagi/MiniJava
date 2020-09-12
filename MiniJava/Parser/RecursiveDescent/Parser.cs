@@ -318,11 +318,12 @@ namespace MiniJava.Parser.RecursiveDescent
                 if (!acertoToken)
                 {
                     Match(TokenType.Operator_igual, true);
+                    if (!acertoToken)
+                    {
+                        return false;
+                    }
                 }
-                if (!acertoToken)
-                {
-                    return false;
-                }
+                
                 if (Match(TokenType.Token_New, true) && acertoToken)
                 {
                     if (!Match(TokenType.Operator_ParentesisAbre, false))
@@ -471,26 +472,139 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool OP1_1()
         {
-            return true;
+            // || OP1 
+            if (Match(TokenType.Operator_dobleOr, true) && acertoToken)
+            {
+                if (!OP1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // && OP1 
+            if (Match(TokenType.Operator_dobleAnd, true) && acertoToken)
+            {
+                if (!OP1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // == OP1
+            if (Match(TokenType.Operator_comparacionIgual, true) && acertoToken)
+            {
+                if (!OP1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
         private bool OP2()
         {
-            return true;
+            //OpTerm BoolSymb OP2
+            if (OPTerm())
+            {
+                if (!MatchBoolSymbol(false))
+                {
+                    return false;
+                }
+                if (!OP2())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // OP3
+            if (OP3())
+            {
+                return true;
+            }
+            return false;
         }
         private bool OP3()
         {
-            return true;
+            // OpTerm OP3_1
+            if (OPTerm())
+            {
+                if (!OP3_1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            //OP4
+            if (OP4())
+            {
+                return true;
+            }
+            return false;
         }
         private bool OP3_1()
         {
-            return true;
+            // * OP3 
+            if (Match(TokenType.Operator_asterisco, true) && acertoToken)
+            {
+                if (!OP3())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // / OP3
+            if (Match(TokenType.Operator_div, true) && acertoToken)
+            {
+                if (!OP3())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // % OP3
+            if (Match(TokenType.Operator_porcentaje, true) && acertoToken)
+            {
+                if (!OP3())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
         private bool OP4()
         {
-            return true;
+            if (OPTerm())
+            {
+                if (!OP4_1())
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
         }
         private bool OP4_1()
         {
+            // + OP4
+            if (Match(TokenType.Operator_mas, true)&& acertoToken)
+            {
+                if (!OP4())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // - OP4
+            if (Match(TokenType.Operator_menos, true) && acertoToken)
+            {
+                if (!OP4())
+                {
+                    return false;
+                }
+                return true;
+            }
             return true;
         }
         private bool DECLPlus()
