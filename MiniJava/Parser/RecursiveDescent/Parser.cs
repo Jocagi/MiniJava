@@ -186,7 +186,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
             }
             //FunctionDECL
-            if (esFunction || Match(TokenType.Token_void, true))
+            if (esFunction || (Match(TokenType.Token_void, true) & Match(TokenType.Identifier, false)))
             {
                 //Formals
                 if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
@@ -247,7 +247,7 @@ namespace MiniJava.Parser.RecursiveDescent
             {
                 noMasSTMS = false;//Entró al STMT
 
-                if (EXPR(false))
+                if (!EXPR(false))
                 {
                     return false;
                 }
