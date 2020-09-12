@@ -19,7 +19,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private TokenType lookahead;
         private TokenType expectedValue;
         private TokenLocation actualLocation;
-        private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
+        private bool acertoToken; // sirve para ver si un token nullable cumplio o no
         private bool noMasSTMS; //no stms iniciado
         private bool LValue;
         private bool repetirDECLerror;
@@ -246,7 +246,10 @@ namespace MiniJava.Parser.RecursiveDescent
                 noMasSTMS = false;
                 while (!noMasSTMS)
                 {
-                    STMT(true);
+                    if (!STMT(true))
+                    {
+                        return false;
+                    }
                 }
                 return true;
             }
