@@ -418,7 +418,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private bool OPERATION()
         {
             //-OPERATION
-            if (Match(TokenType.Operator_menos,true) && acertoToken )
+            if (!LValue && Match(TokenType.Operator_menos,true) && acertoToken )
             {
                 if (!OPERATION())
                 {
@@ -427,7 +427,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 return true;
             }
             //(OPERATION)
-            if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
+            if (!LValue && Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
             {
                 if (!OPERATION())
                 {
@@ -639,8 +639,7 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             // + OP1
             if (Match(TokenType.Operator_mas, true)&& acertoToken)
-            {
-                
+            {                
                 if (!OP1())
                 {
                     return false;
