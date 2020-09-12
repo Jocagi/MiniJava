@@ -548,10 +548,10 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool OP2()
         {
-            //OpTerm BoolSymb OP2
+            //OpTerm BoolSymb OP1
             if (MatchBoolSymbol(false))
             { 
-                if (!OP2_1())
+                if (!OP1())
                 {
                     return false;
                 }
@@ -560,18 +560,6 @@ namespace MiniJava.Parser.RecursiveDescent
             // OP3
             if (OP3())
             {
-                return true;
-            }
-            return false;
-        }
-        private bool OP2_1()
-        {
-            if (OPTerm())
-            {
-                if (!OP2())
-                {
-                    return false;
-                }
                 return true;
             }
             return false;
@@ -590,42 +578,30 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             return false;
         }
-        private bool OP3_2()
-        {
-            if (OPTerm())
-            {
-                if (!OP3())
-                {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
         private bool OP3_1()
         {
-            // * OP3 
+            // * OP1 
             if (Match(TokenType.Operator_asterisco, true) && acertoToken)
             {
-                if (!OP3_2())
+                if (!OP1())
                 {
                     return false;
                 }
                 return true;
             }
-            // / OP3
+            // / OP1
             if (Match(TokenType.Operator_div, true) && acertoToken)
             {
-                if (!OP3_2())
+                if (!OP1())
                 {
                     return false;
                 }
                 return true;
             }
-            // % OP3
+            // % OP
             if (Match(TokenType.Operator_porcentaje, true) && acertoToken)
             {
-                if (!OP3_2())
+                if (!OP1())
                 {
                     return false;
                 }
@@ -635,35 +611,20 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool OP4()
         {
-            if (OP4_1())
-            {
-                return true;
-            }
-            return false;
-        }
-        private bool OP4_1()
-        {
-            // + OP4
+            // + OP1
             if (Match(TokenType.Operator_mas, true)&& acertoToken)
             {
-                if (!OPTerm())
-                {
-                    return false;
-                }
-                if (!OP4())
+                
+                if (!OP1())
                 {
                     return false;
                 }
                 return true;
             }
-            // - OP4
+            // - OP1
             if (Match(TokenType.Operator_menos, true) && acertoToken)
             {
-                if (!OPTerm())
-                {
-                    return false;
-                }
-                if (!OP4())
+                if (!OP1())
                 {
                     return false;
                 }
