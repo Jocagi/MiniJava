@@ -21,10 +21,6 @@ namespace MiniJava
         {
             InitializeComponent();
             this.AllowDrop = true;
-
-            this.labelOUTPUT.Visible = false;
-            this.outputBox.Visible = false;
-            this.Size = new Size(645, 715);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -122,21 +118,19 @@ namespace MiniJava
             Parser.RecursiveDescent.Parser pars = new Parser.RecursiveDescent.Parser(tokensQueue);
             ParserReport parserReport = pars.getReport();
 
-            MessageBox.Show(parserReport.isCorrect? "Todo bien :)" : "Oh! No! Hay un error");
+            output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
 
             if (!parserReport.isCorrect)
             {
                 foreach (var item in parserReport.Errors)
                 {
-                    output += $"*** Error sintáctico: Se encontró {item.value}, se esperaba {item.expected} ***\n";
+                    output += $"*** Error sintáctico en linea {item.location.row}: Se encontró {item.value}, se esperaba {item.expected} ***\n";
                 }
             }
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
-            this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
-            this.Size = new Size(1500, 715);
             this.saveButton.Visible = true;
 
             //Color errors

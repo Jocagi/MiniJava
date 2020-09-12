@@ -37,9 +37,7 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             if (tokens.Count > 0)
             {
-                Token token = tokens.Dequeue();
-                lookahead = token.tokenType;
-                actualLocation = token.location;
+                Dequeue();
 
                 //Start grammar path
                 PROGRAM();
@@ -169,7 +167,12 @@ namespace MiniJava.Parser.RecursiveDescent
         private void ERROR(TokenType expected)
         {
             result.addError(new ParserError(lookahead, expected, actualLocation));
-            Dequeue();
+            int errorRow = actualLocation.row;
+            //Saltar a la siguiente linea
+            while (errorRow == actualLocation.row && lookahead != TokenType.Default)
+            {
+                Dequeue();
+            }
         }
 
         private void PROGRAM()

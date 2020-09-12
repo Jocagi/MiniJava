@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniJava", "MiniJava\MiniJava.csproj", "{8F445D3A-28E7-45C1-909B-899DA16F8A7C}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "JavaInstaller1", "JavaInstaller1\JavaInstaller1.vdproj", "{05049D7E-60B7-406C-AC76-305D4DAA1F24}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{8F445D3A-28E7-45C1-909B-899DA16F8A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F445D3A-28E7-45C1-909B-899DA16F8A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F445D3A-28E7-45C1-909B-899DA16F8A7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05049D7E-60B7-406C-AC76-305D4DAA1F24}.Debug|Any CPU.ActiveCfg = Debug
-		{05049D7E-60B7-406C-AC76-305D4DAA1F24}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
