@@ -60,7 +60,6 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool Match_Several_Times(TokenType[] tokensArray)//una o 0 veces lo toma como correcto
         {
-            acertoToken = false;
             if (tokensArray.Length > 1 && lookahead == tokensArray[0])
             {
                 foreach (var token in tokensArray)
@@ -185,7 +184,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
             }
             //FunctionDECL
-            if (esFunction || Match(TokenType.Token_void, false))
+            if (esFunction || Match(TokenType.Token_void, true))
             {
                 //Formals
                 if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
@@ -195,6 +194,7 @@ namespace MiniJava.Parser.RecursiveDescent
                     {
                         if (!(Match(TokenType.Identifier, false) && Match_Several_Times(comaTipoId) && Match(TokenType.Operator_ParentesisCierra, false)))
                         {
+                            acertoToken = false;
                             return false;
                         }
                     }
@@ -203,16 +203,18 @@ namespace MiniJava.Parser.RecursiveDescent
                         return false;
                     }
                 }
-                else if (!Match(TokenType.Operator_parentesis, false))
+                else if (!Match(TokenType.Operator_parentesis, true))
                 {
                     return false;
                 }
-
-                //STMT
+                noMasSTMS = false;
+                while (!noMasSTMS)
+                {
+                    STMT(true);
+                }
                 return true;
             }
             return false;
-
         }
         private bool STMT(bool nullable)
         {
@@ -609,19 +611,22 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool DECLPlus()
         {
-            if (DECL())
+            if (!(lookahead == TokenType.Default))
             {
-                DECLPlus();
-                return true;
+                if (DECL())
+                {
+                    DECLPlus();
+                    return true;
+                }
             }
+            
             else if (Match(TokenType.Epsilon,true))
             {
                 return true;
             }
-            else 
-            {
+            
                 return false;
-            }
+            
         }
     }
 }
