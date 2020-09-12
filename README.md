@@ -16,6 +16,9 @@ En la segunda fase del proceso, se valida la posición correcta de los tokens se
 ## Cómo instalar
 Dirijase a la pestaña "Releases" en este repositorio o de forma alternativa en la carpeta 'Ejecutable'. Descargue el archivo en zip y descomprimalo. Allí econtrará el EXE de la aplicación. 
 
+## Manejo de errores
+El analizador léxico reporta tokens no válidos, sin embargo, aún así intenta llevar el código al analizador léxico simplemente ignorandolos. En el analizador léxico, cada vez que se encuentra un error la gramática se reinicia de cero y regresa a buscar declaraciones de variables y funciones, además se ignora por completo la línea donde estaba el error de léxico, por lo que es posible que si hay un error dentro de una función se reporten todas las líneas subsecuentes como inválidas, hasta encontrar una nueva declaración.
+
 ## Instrucciones de uso
 
 En un principio, se muestra una pantalla como la siguiente:
