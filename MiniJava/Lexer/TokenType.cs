@@ -66,7 +66,8 @@ namespace MiniJava.Lexer
         Operator_corchetes,          
         Operator_parentesis,         
         Operator_llaves,     
-
+        Operator_dosPuntos,
+        Operator_puntosIgual,
         //COMENTARIOS
         Comments,
         Block_Comments,        

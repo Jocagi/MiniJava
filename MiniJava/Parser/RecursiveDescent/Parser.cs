@@ -49,7 +49,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 acertoToken = true;
                 return true;
             }
-            else if (token == TokenType.Epsilon || epsilon) 
+            else if (token == TokenType.Epsilon || epsilon)
             {
                 return true;
             }
@@ -69,7 +69,7 @@ namespace MiniJava.Parser.RecursiveDescent
                         {
                             return false;
                         }
-                        
+
                     }
                     else if (lookahead == token)
                     {
@@ -114,11 +114,11 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             result.addError(new ParserError(lookahead, expected));
             lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
-        } 
+        }
 
-        private void PROGRAM() 
+        private void PROGRAM()
         {
-            if ( !(DECL() && DECLPlus()) )
+            if (!(DECL() && DECLPlus()))
             {
                 ERROR(expectedValue);
             }
@@ -129,29 +129,29 @@ namespace MiniJava.Parser.RecursiveDescent
             }
         }
 
-        private bool DECL() 
+        private bool DECL()
         {
             bool esFunction = false;
             acertoToken = false;
             //VariableDECL
-            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false)) 
+            if (MatchType(true) && acertoToken && Match(TokenType.Identifier, false))
             {
                 acertoToken = false;
-                if ( Match(TokenType.Operator_puntoComa,true) && acertoToken)
+                if (Match(TokenType.Operator_puntoComa, true) && acertoToken)
                 {
                     acertoToken = false;
                     return true;
                 }
-                else 
+                else
                 {
                     esFunction = true;
                 }
             }
             //FunctionDECL
-            if (esFunction || Match(TokenType.Token_void,false) ) 
+            if (esFunction || Match(TokenType.Token_void, false))
             {
                 //Formals
-                if (Match(TokenType.Operator_ParentesisAbre,true) && acertoToken)
+                if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
                 {
                     acertoToken = false;
                     TokenType[] comaTipoId = { TokenType.Operator_coma, TokenType.Data_Type, TokenType.Identifier };
@@ -168,11 +168,11 @@ namespace MiniJava.Parser.RecursiveDescent
                         return false;
                     }
                 }
-                else if (!Match(TokenType.Operator_parentesis,false))
+                else if (!Match(TokenType.Operator_parentesis, false))
                 {
                     return false;
                 }
-                   
+
                 acertoToken = false;
 
                 //STMT
@@ -211,7 +211,7 @@ namespace MiniJava.Parser.RecursiveDescent
             {
                 noMasSTMS = false;//Entró al STMT
                 acertoToken = false;
-                
+
                 if (!EXPR())
                 {
                     return false;
@@ -244,8 +244,66 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool EXPR()
         {
+            // LValue ExprP  
+            bool lValue = false;
+            if (Match(TokenType.Identifier, true) && acertoToken)
+            {
+                acertoToken = false;
+                if (Match(TokenType.Operator_punto, true) && acertoToken)
+                {
+                    acertoToken = false;
+                    if (!Match(TokenType.Identifier, false))
+                    {
+                        return false;
+                    }
+                }
+                else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
+                {
+                    acertoToken = false;
+                    if (!EXPR())
+                    {
+                        return false;
+                    }
+                    if (!Match(TokenType.Operator_corcheteCierra, false))
+                    {
+                        return false;
+                    }
+                }
+                lValue = true;
+            }
+            else if (Match(TokenType.Token_this, true) && acertoToken)
+            {
+                acertoToken = false;
+                if (!Match(TokenType.Operator_punto, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                lValue = true;
+            }
+            //ExprP
+            if (lValue)
+            {
 
+            }
+            //: Expr
+            if (Match(TokenType.Operator_dosPuntos, true)&& acertoToken)
+            {
+                acertoToken = false;
+                if (!EXPR())
+                {
+                    return false;
+                }
+                return true;
+            }
+            //Operation
+            if (true)
+            {
 
+            }
             return true;
         }
          private bool DECLPlus()
