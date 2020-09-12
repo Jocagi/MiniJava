@@ -589,7 +589,7 @@ namespace MiniJava.Parser.RecursiveDescent
             // * OP3 
             if (Match(TokenType.Operator_asterisco, true) && acertoToken)
             {
-                if (!OP3())
+                if (!OP3_2())
                 {
                     return false;
                 }
@@ -598,7 +598,7 @@ namespace MiniJava.Parser.RecursiveDescent
             // / OP3
             if (Match(TokenType.Operator_div, true) && acertoToken)
             {
-                if (!OP3())
+                if (!OP3_2())
                 {
                     return false;
                 }
@@ -607,7 +607,7 @@ namespace MiniJava.Parser.RecursiveDescent
             // % OP3
             if (Match(TokenType.Operator_porcentaje, true) && acertoToken)
             {
-                if (!OP3())
+                if (!OP3_2())
                 {
                     return false;
                 }
