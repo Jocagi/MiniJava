@@ -20,6 +20,7 @@ namespace MiniJava.Parser.RecursiveDescent
         private TokenType expectedValue;
         private bool acertoToken; // sirve para ver si  un token nullable cumplio o no
         private bool noMasSTMS; //no stms iniciado
+        private bool LValue;
 
         public Parser(Queue<Token> tokens)
         {
@@ -28,6 +29,7 @@ namespace MiniJava.Parser.RecursiveDescent
             this.lookahead = TokenType.Default;
             this.acertoToken = false;
             this.noMasSTMS = false;
+            this.LValue = false;
         }
 
         public ParserReport getReport()
@@ -226,7 +228,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 {
                     return false;
                 }
-                if (!EXPR())
+                if (!EXPR(false))
                 {
                     return false;
                 }
@@ -245,7 +247,7 @@ namespace MiniJava.Parser.RecursiveDescent
             {
                 noMasSTMS = false;//Entró al STMT
 
-                if (!EXPR())
+                if (EXPR(false))
                 {
                     return false;
                 }
@@ -256,7 +258,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 return true;
             }
             //EXPR stament
-            else if (EXPR())
+            else if (EXPR(false))
             {
                 noMasSTMS = false;//Entró al STMT
                 if (!Match(TokenType.Operator_puntoComa, false))
@@ -275,10 +277,11 @@ namespace MiniJava.Parser.RecursiveDescent
                 return false;
             }
         }
-        private bool EXPR()
+        private bool EXPR(bool nullable)
         {
             // LValue ExprP  
             bool lValue = false;
+            bool eslValue = true;
             if (Match(TokenType.Identifier, true) && acertoToken)
             {
                 if (Match(TokenType.Operator_punto, true) && acertoToken)
@@ -290,7 +293,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
                 else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
                 {
-                    if (!EXPR())
+                    if (!EXPR(false))
                     {
                         return false;
                     }
@@ -316,54 +319,67 @@ namespace MiniJava.Parser.RecursiveDescent
             //ExprP
             if (lValue)
             {
+                
                 Match(TokenType.Operator_puntosIgual, true);
                 if (!acertoToken)
                 {
                     Match(TokenType.Operator_igual, true);
                     if (!acertoToken)
                     {
-                        return false;
+                        eslValue = false;
                     }
                 }
-                
-                if (Match(TokenType.Token_New, true) && acertoToken)
+                if (eslValue)
                 {
-                    if (!Match(TokenType.Operator_ParentesisAbre, false))
+                    if (Match(TokenType.Token_New, true) && acertoToken)
                     {
-                        return false;
+                        if (!Match(TokenType.Operator_ParentesisAbre, false))
+                        {
+                            return false;
+                        }
+                        if (!Match(TokenType.Identifier, false))
+                        {
+                            return false;
+                        }
+                        if (!Match(TokenType.Operator_ParentesisCierra, false))
+                        {
+                            return false;
+                        }
+                        return true;
                     }
-                    if (!Match(TokenType.Identifier, false))
-                    {
-                        return false;
-                    }
-                    if (!Match(TokenType.Operator_ParentesisCierra, false))
+                    if (!EXPR(false))
                     {
                         return false;
                     }
                     return true;
                 }
-                if (!EXPR())
-                {
-                    return false;
-                }
-                return true;
             }
             //: Expr
             if (!lValue && Match(TokenType.Operator_dosPuntos, true)&& acertoToken)
             {
-                if (!EXPR())
+                if (!EXPR(false))
                 {
                     return false;
                 }
                 return true;
             }
             //Operation
-            else if (OPERATION())
+            if (lValue && !eslValue)
+            {
+                LValue = true;
+            }
+            if (OPERATION())
+            {
+                return true;
+            }
+            if (nullable)
             {
                 return true;
             }
             return false;
         }
+
+
         private bool OPERATION()
         {
             //-OPERATION
@@ -414,7 +430,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
                 else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
                 {
-                    if (!EXPR())
+                    if (!EXPR(false))
                     {
                         return false;
                     }
@@ -456,18 +472,13 @@ namespace MiniJava.Parser.RecursiveDescent
         private bool OP1()
         {
             //OpTerm OP1_1
-            if (OPTerm() && acertoToken)
+            if (LValue || OPTerm() )
             {
-                acertoToken = false;
-                if (!OP1_1())
+                LValue = false;
+                if (!OP1_2())
                 {
                     return false;
                 }
-                return true;
-            }
-            //OP2
-            if (OP2())
-            {
                 return true;
             }
             return false;
@@ -503,16 +514,26 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             return false;
         }
+        private bool OP1_2()
+        {
+            //OP1_1
+            if (OP1_1())
+            {
+                return true;
+            }
+            //OP2
+            if (OP2())
+            {
+                return true;
+            }
+            return false;
+        }
         private bool OP2()
         {
             //OpTerm BoolSymb OP2
-            if (OPTerm())
-            {
-                if (!MatchBoolSymbol(false))
-                {
-                    return false;
-                }
-                if (!OP2())
+            if (MatchBoolSymbol(false))
+            { 
+                if (!OP2_1())
                 {
                     return false;
                 }
@@ -525,20 +546,40 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             return false;
         }
-        private bool OP3()
+        private bool OP2_1()
         {
-            // OpTerm OP3_1
             if (OPTerm())
             {
-                if (!OP3_1())
+                if (!OP2())
                 {
                     return false;
                 }
                 return true;
             }
+            return false;
+        }
+        private bool OP3()
+        {
+            // OpTerm OP3_1
+            if (OP3_1())
+            {
+                return true;
+            }
             //OP4
             if (OP4())
             {
+                return true;
+            }
+            return false;
+        }
+        private bool OP3_2()
+        {
+            if (OPTerm())
+            {
+                if (!OP3())
+                {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -576,13 +617,8 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool OP4()
         {
-            if (OPTerm())
+            if (OP4_1())
             {
-                if (!OP4_1())
-                {
-                    return false;
-                }
-
                 return true;
             }
             return false;
@@ -592,6 +628,10 @@ namespace MiniJava.Parser.RecursiveDescent
             // + OP4
             if (Match(TokenType.Operator_mas, true)&& acertoToken)
             {
+                if (!OPTerm())
+                {
+                    return false;
+                }
                 if (!OP4())
                 {
                     return false;
@@ -601,6 +641,10 @@ namespace MiniJava.Parser.RecursiveDescent
             // - OP4
             if (Match(TokenType.Operator_menos, true) && acertoToken)
             {
+                if (!OPTerm())
+                {
+                    return false;
+                }
                 if (!OP4())
                 {
                     return false;
