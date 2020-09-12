@@ -71,7 +71,7 @@ namespace MiniJava
 
             foreach (var item in tokens)
             {
-                string line;
+                string line = "";
 
                 switch (item.tokenType)
                 {
@@ -109,21 +109,28 @@ namespace MiniJava
                         line = $"*** Error line {item.location.row}.*** Unpaired comment.\r\n";
                         break;
                     default:
-                        line =
-                    $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        //line =
+                    //$"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                         break;
                 }
 
                 output += line;
             }
 
-            //Analizador sintactico //To do..
+            //Analizador sintactico
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
             Parser.RecursiveDescent.Parser pars = new Parser.RecursiveDescent.Parser(tokensQueue);
             ParserReport parserReport = pars.getReport();
 
             MessageBox.Show(parserReport.isCorrect? "Todo bien :)" : "Oh! No! Hay un error");
-             
+
+            if (!parserReport.isCorrect)
+            {
+                foreach (var item in parserReport.Errors)
+                {
+                    output += $"*** Error sintáctico: Se encontró {item.value}, se esperaba {item.expected} ***\n";
+                }
+            }
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
