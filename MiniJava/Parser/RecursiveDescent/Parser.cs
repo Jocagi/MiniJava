@@ -110,6 +110,40 @@ namespace MiniJava.Parser.RecursiveDescent
             expectedValue = TokenType.Data_Type;
             return false;
         }
+
+        private bool MatchConstant(bool epsilon)
+        {
+
+            if (lookahead == TokenType.Const_Int|| lookahead == TokenType.Const_double || lookahead == TokenType.Const_bool|| lookahead == TokenType.Const_String || lookahead == TokenType.Token_null)
+            {
+                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                acertoToken = true;
+                return true;
+            }
+            if (epsilon)
+            {
+                return true;
+            }
+            expectedValue = TokenType.Constant;
+            return false;
+        }
+
+        private bool MatchBoolSymbol(bool epsilon)
+        {
+            if (lookahead == TokenType.Operator_menor || lookahead == TokenType.Operator_menorIgual || lookahead == TokenType.Operator_mayor || lookahead == TokenType.Operator_mayorIgual)
+            {
+                lookahead = tokens.Count > 0 ? tokens.Dequeue().tokenType : TokenType.Default;
+                acertoToken = true;
+                return true;
+            }
+            if (epsilon)
+            {
+                return true;
+            }
+            expectedValue = TokenType.boolSymbol;
+            return false;
+        }
+
         private void ERROR(TokenType expected)
         {
             result.addError(new ParserError(lookahead, expected));
@@ -330,13 +364,22 @@ namespace MiniJava.Parser.RecursiveDescent
                 return true;
             }
             //Operation
-            else if (true)
+            else if (OPERATION())
             {
-
+                return true;
             }
+            return false;
+        }
+        private bool OPERATION()
+        {
             return true;
         }
-         private bool DECLPlus()
+        private bool OPERATION()
+        {
+            return true;
+        }
+
+        private bool DECLPlus()
         {
             if (DECL())
             {
