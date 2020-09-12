@@ -209,7 +209,7 @@ namespace MiniJava.Parser.RecursiveDescent
                 }
             }
             //FunctionDECL
-            if (esFunction || (!type & Match(TokenType.Token_void, true) & Match(TokenType.Identifier, false)))
+            if (esFunction || (!type && Match(TokenType.Token_void, true) && Match(TokenType.Identifier, false)))
             {
                 //Formals
                 if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
@@ -528,6 +528,15 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             // == OP1
             if (Match(TokenType.Operator_comparacionIgual, true) && acertoToken)
+            {
+                if (!OP1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            // != OP1
+            if (Match(TokenType.Operator_diferente, true) && acertoToken)
             {
                 if (!OP1())
                 {
