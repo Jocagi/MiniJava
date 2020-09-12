@@ -21,7 +21,8 @@ namespace MiniJava.Lexer
         Token_extends,     
         Token_implements,  
         Token_for,         
-        Token_while,       
+        Token_while,      
+        Token_Print,
         Token_if,          
         Token_else,        
         Token_return,      
@@ -65,7 +66,8 @@ namespace MiniJava.Lexer
         Operator_corchetes,          
         Operator_parentesis,         
         Operator_llaves,     
-
+        Operator_dosPuntos,
+        Operator_puntosIgual,
         //COMENTARIOS
         Comments,
         Block_Comments,        
@@ -77,10 +79,16 @@ namespace MiniJava.Lexer
         Error_Length,
         Enter,
         WhiteSpace,
-        Error_EOFComnet,
+        Error_EOFComment,
         Error_EOFstring,
         Error_nullString,
-        Error_null
+        Error_null,
+        Error_UnpairedComment,
+        Epsilon,
+        Default,
+        Data_Type,
+        Constant,
+        boolSymbol
 
         }
 }

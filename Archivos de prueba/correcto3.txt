@@ -1,0 +1,29 @@
+
+int value;
+boolean val;
+
+void main()
+    class1.name = "Chucho";
+    val = this.resultado;
+    value = 5;
+
+int sum( int a, int b)
+  return a + b;
+
+int i;
+
+boolean recorrido()
+  i = 0;  
+  while( i <= 0 )
+     i = i-1;
+     return true;
+return ( true || false );
+
+
+boolean resultado(string vaue)
+  value = "value";  
+  while( val )
+     while( 1 < value3)
+         value = value + value3;
+     return true;
+return ( true && false || true && 1 < 2 );

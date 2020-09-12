@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MiniJava.Lexer;
+using MiniJava.Parser.RecursiveDescent;
 
 namespace MiniJava
 {
@@ -20,10 +21,6 @@ namespace MiniJava
         {
             InitializeComponent();
             this.AllowDrop = true;
-
-            this.labelOUTPUT.Visible = false;
-            this.outputBox.Visible = false;
-            this.Size = new Size(645, 715);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -70,64 +67,73 @@ namespace MiniJava
 
             foreach (var item in tokens)
             {
-                string line;
+                string line = "";
 
-                if (item.tokenType != TokenType.WhiteSpace && item.tokenType != TokenType.Enter
-                    && item.tokenType != TokenType.Block_Comments && item.tokenType != TokenType.Comments)
+                switch (item.tokenType)
                 {
-                    if (item.tokenType == TokenType.Error)
-                    {
+                    case TokenType.Enter:
+                    case TokenType.WhiteSpace:
+                    case TokenType.Block_Comments:
+                    case TokenType.Comments:
+                        line = "";
+                        break;
+                    case TokenType.Error:
                         line = $"*** Error line {item.location.row}.*** Unrecognized element: {item.value}\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_Comment)
-                    {
+                        break;
+                    case TokenType.Error_Comment:
                         line = $"*** Error line {item.location.row}.*** Unfinished comment.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_Length)
-                    {
+                        break;
+                    case TokenType.Error_Length:
                         line = $"*** Warning: Max id length exceeded at line {item.location.row}.***\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_EOFComnet)
-                    {
+                        break;
+                    case TokenType.Error_EOFComment:
                         line = $"*** Error line {item.location.row}.*** EOF in comment.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_nullString)
-                    {
+                        break;
+                    case TokenType.Error_nullString:
                         line = $"*** Error line {item.location.row}.*** Null character in string.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_null)
-                    {
+                        break;
+                    case TokenType.Error_null:
                         line = $"*** Error line {item.location.row}.*** Null character.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_EOFstring)
-                    {
+                        break;
+                    case TokenType.Error_EOFstring:
                         line = $"*** Error line {item.location.row}.*** EOF in string.\r\n";
-                    }
-                    else if (item.tokenType == TokenType.Error_String)
-                    {
+                        break;
+                    case TokenType.Error_String:
                         line = $"*** Error line {item.location.row}.*** Unfinished string.\r\n";
-                    }
-                    else
-                    {
-                        line =
-                        $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
-                    }
+                        break;
+                    case TokenType.Error_UnpairedComment:
+                        line = $"*** Error line {item.location.row}.*** Unpaired comment.\r\n";
+                        break;
+                    default:
+                        //line =
+                    //$"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        break;
+                }
 
-                    output += line;
+                output += line;
+            }
+
+            //Analizador sintactico
+            Queue<Token> tokensQueue = lex.ListToQueue(tokens);
+            Parser.RecursiveDescent.Parser pars = new Parser.RecursiveDescent.Parser(tokensQueue);
+            ParserReport parserReport = pars.getReport();
+
+            output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
+
+            if (!parserReport.isCorrect)
+            {
+                foreach (var item in parserReport.Errors)
+                {
+                    output += $"*** Error sintáctico en linea {item.location.row}: Se encontró {item.value}, se esperaba {item.expected} ***\n";
                 }
             }
 
             //Show output
-
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
-            this.labelOUTPUT.Visible = true;
             this.outputBox.Visible = true;
-            this.Size = new Size(1500, 715);
-
             this.saveButton.Visible = true;
 
             //Color errors
-
             for (int i = 0; i < outputBox.Lines.Length; i++)
             {
                 string line = outputBox.Lines[i];
