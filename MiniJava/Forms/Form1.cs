@@ -71,7 +71,7 @@ namespace MiniJava
 
             foreach (var item in tokens)
             {
-                string line;
+                string line = "";
 
                 switch (item.tokenType)
                 {
@@ -109,8 +109,8 @@ namespace MiniJava
                         line = $"*** Error line {item.location.row}.*** Unpaired comment.\r\n";
                         break;
                     default:
-                        line =
-                    $"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
+                        //line =
+                    //$"{item.value} \t\t\t>> {item.tokenType} Line: {item.location.row}  Col: [{item.location.firstCol}:{item.location.lastCol}]\r\n";
                         break;
                 }
 
