@@ -10,7 +10,7 @@ namespace MiniJava.Parser.Ascendente
     {
         public List<Production> Productions { get; set; }
         private List<TokenType> Terminals { get; set; }
-        private List<TokenType> NotTerminals { get; set; }
+        private List<TokenType> NonTerminals { get; set; }
 
         public Grammar(List<Production> productions)
         {
