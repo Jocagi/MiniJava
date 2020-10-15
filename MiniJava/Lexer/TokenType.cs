@@ -4,9 +4,10 @@ using System.Text;
 
 namespace MiniJava.Lexer
 {
-    //Todo agregar todos los tipos de tokens
     public enum TokenType
     {
+        #region Terminales
+
         //PALABRAS RESERVADAS
         Token_void,        
         Token_int,         
@@ -34,10 +35,10 @@ namespace MiniJava.Lexer
         //IDENTIFICADORES
         Identifier,        
         //CONSTANTES
-        Const_Int,          //YA
-        Const_bool,         //YA
+        Const_Int,          
+        Const_bool,         
         Const_double,
-        Const_String,       //YA
+        Const_String,      
         //OPERADORES
         Operator_mas,                
         Operator_menos,              
@@ -68,9 +69,20 @@ namespace MiniJava.Lexer
         Operator_llaves,     
         Operator_dosPuntos,
         Operator_puntosIgual,
+
+        #endregion
+
+        #region NoTerminales
+
+
+
+        #endregion
+
+        #region Especiales
+
         //COMENTARIOS
         Comments,
-        Block_Comments,        
+        Block_Comments,
 
         //SPECIAL TOKENS
         Error,
@@ -90,5 +102,7 @@ namespace MiniJava.Lexer
         Constant,
         boolSymbol
 
-        }
+        #endregion
+
+    }
 }
