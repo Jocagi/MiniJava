@@ -74,7 +74,7 @@ namespace MiniJava.Lexer
 
         #region No_Terminales
 
-
+        NT_Start,
 
         #endregion
 

@@ -12,8 +12,13 @@ namespace MiniJava.Parser.Ascendente
         private List<TokenType> Terminals { get; set; }
         private List<TokenType> NotTerminals { get; set; }
 
-        public Grammar()
+        public Grammar(List<Production> productions)
         {
+            //Definir producciones
+            this.Productions = new List<Production>(productions);
+            //Agregar produccion inicial
+            this.Productions.Insert
+                (0, new Production(TokenType.NT_Start, Productions[0].LeftSide));
         }
 
         public bool isTerminal(TokenType token)
