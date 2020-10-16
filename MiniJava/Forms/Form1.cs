@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MiniJava.Lexer;
 using MiniJava.Parser.RecursiveDescent;
 
-namespace MiniJava
+namespace MiniJava.Forms
 {
     public partial class Form1 : Form
     {
@@ -27,22 +22,20 @@ namespace MiniJava
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Archivo seleccionado exitosamente");
+                MessageBox.Show(@"Archivo seleccionado exitosamente");
 
                 ReadFile(openFileDialog1.FileName);
             }
             else 
             {
-                MessageBox.Show("No se ha seleccionado ningún archivo");
+                MessageBox.Show(@"No se ha seleccionado ningún archivo");
             }
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.All;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? 
+                DragDropEffects.All : DragDropEffects.None;
         }
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
@@ -153,11 +146,11 @@ namespace MiniJava
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllText(saveFileDialog1.FileName, output);
-                MessageBox.Show("Archivo guardado exitosamente");
+                MessageBox.Show(@"Archivo guardado exitosamente");
             }
             else
             {
-                MessageBox.Show("No se ha especificado ninguna ruta");
+                MessageBox.Show(@"No se ha especificado ninguna ruta");
             }
         }
     }
