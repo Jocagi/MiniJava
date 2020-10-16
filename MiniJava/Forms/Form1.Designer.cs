@@ -1,4 +1,4 @@
-﻿namespace MiniJava
+﻿namespace MiniJava.Forms
 {
     partial class Form1
     {
