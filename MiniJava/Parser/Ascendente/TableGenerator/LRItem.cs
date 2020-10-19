@@ -20,9 +20,22 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// </summary>
         public List<TokenType> lookahead { get; set; }
 
+        public LRItem(TokenType state, int position, List<TokenType> lookahead)
+        {
+            this.Token = state;
+            this.Position = position;
+            this.lookahead = new List<TokenType>(lookahead);
+        }
+        public LRItem(TokenType state, int position)
+        {
+            this.Token = state;
+            this.Position = position;
+            this.lookahead = new List<TokenType>{TokenType.Epsilon};
+        }
+
         public bool Equals(LRItem item)
         {
             return (Token == item.Token) && (Position == item.Position);
         }
-	}
+    }
 }

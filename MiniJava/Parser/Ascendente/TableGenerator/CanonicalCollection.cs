@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using MiniJava.Lexer;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator
 {
@@ -19,7 +20,21 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
 
         private void  getCanonicalCollection()
         {
+            int actualState = 0;
+            List<Go_To> nextStates = new List<Go_To>();
 
+            nextStates.Add(getFirstState());
+
+            while (nextStates.Count > 0)
+            {
+                
+
+            }
+        }
+
+        private Go_To getFirstState()
+        {
+            return new Go_To(-1, TokenType.NT_Start, 0);
         }
     }
 }
