@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using MiniJava.Lexer;
 
-namespace MiniJava.Parser.Ascendente
+namespace MiniJava.Parser.Ascendente.TableGenerator
 {
     public class LRItem
     {

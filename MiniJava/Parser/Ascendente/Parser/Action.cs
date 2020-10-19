@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MiniJava.Lexer;
+﻿using MiniJava.Lexer;
 
-namespace MiniJava.Parser.Ascendente
+namespace MiniJava.Parser.Ascendente.Parser
 {
     public class Action
     {

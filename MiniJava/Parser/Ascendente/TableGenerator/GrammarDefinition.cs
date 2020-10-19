@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniJava.Parser.Ascendente
+﻿namespace MiniJava.Parser.Ascendente.TableGenerator
 {
     /// <summary>
     /// Lee el contenido de gramatica.config y crea la tabla de estados
