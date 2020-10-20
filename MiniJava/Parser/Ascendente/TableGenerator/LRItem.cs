@@ -19,6 +19,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// Se refiere al siguiente item posible.
         /// </summary>
         public List<TokenType> lookahead { get; set; }
+        /// <summary>
+        /// El tipo de accion que hace el parser
+        /// </summary>
+        public ActionType action { get; set; }
 
         public LRItem(TokenType state, int position, List<TokenType> lookahead)
         {
