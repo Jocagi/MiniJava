@@ -23,6 +23,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         private void  getCanonicalCollection()
         {
             int actualState = 0;
+            int totalStates = 1;
             List<Go_To> nextStates = new List<Go_To> { getFirstState() };
 
             while (nextStates.Count > 0)
@@ -34,21 +35,30 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                 //Obtener Goto's que apuntan al estado que vamos a analizar ahora
                 List<Go_To> itemsToAnalyze = new List<Go_To>(
                             ( nextStates.FindAll(x => x.NextStateID == actualState) ));
-                //Remover items de la lista original
+                //Remover Goto's anteriores de la lista original
                 nextStates.RemoveAll(x => x.NextStateID == actualState);
 
+                //Analizr todos los correspondientes
                 foreach (var item in itemsToAnalyze)
                 {
-                    bool itemIsNotTerminal = true;
+                    //Aumentar posicion analizada
+                    LRItem kernel = item.LRItem;
+                    kernel.Position++;
+                    
+                    //Token actual
+                    TokenType token = kernel.Production.RightSide[kernel.Position];
 
-                    //Analizar cada kernel hasta llegar a un No terminal o que se terminen las posibles producciones
-                    while (itemIsNotTerminal)
+                    //Verificar si es un terminal o un No Terminal
+                    if (grammar.isNotTerminal(token))
                     {
-                        //Aumentar posicion a recorrer
-                        LRItem closure = item.LRItem;
-                        closure.Position++;
-
-                        //lrItems.Add(  );
+                        //Si es No terminal obtener todos los derivados
+                        //Todo
+                    }
+                    else
+                    {
+                        //Si es terminal, generar GOTO
+                        totalStates++;
+                        nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
                     }
                 }
             }

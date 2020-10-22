@@ -11,8 +11,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// </summary>
         public TokenType Token { get; set; }
         /// <summary>
+        /// Produccion completa
+        /// Ej. E -> AB
+        /// </summary>
+        public Production Production { get; set; }
+        /// <summary>
         /// Se refiere a la posicion actual analizada en la produccion.
-        /// Ej. E -> A.B  (Regresa '1')
+        /// Ej. E -> A*B  (Regresa '1')
         /// </summary>
         public int Position { get; set; }
         /// <summary>
