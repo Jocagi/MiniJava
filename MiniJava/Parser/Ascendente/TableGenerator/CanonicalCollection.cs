@@ -76,13 +76,49 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// Al encontrar un NO TERMINAL, es necesario analizar nuevas producciones.
         /// Se devuelven todas las que correspondan.
         /// </summary>
-        private List<LRItem> getFollowUpItems(TokenType NonTerminalToken)
+        private List<LRItem> getFollowUpItems(TokenType NonTerminalToken, List<TokenType> lookahead)
         {
             List<LRItem> followUpItems = new List<LRItem>();
+            Queue<TokenType> nextItems = new Queue<TokenType>();
+            List<TokenType> itemsAlreadyInState = new List<TokenType>();
 
-            //TODO
+            nextItems.Enqueue(NonTerminalToken);
+
+            while (nextItems.Count > 0)
+            {
+                List<Production> childProductions = getSingleFollowUpItem(nextItems.Dequeue());
+
+                foreach (var item in childProductions)
+                {
+                    followUpItems.Add(new LRItem(NonTerminalToken, item, 0, lookahead));
+
+                    //Si es un NO terminal, seguir obteniendo mas estados derivados
+                    if (grammar.isNotTerminal(item.RightSide[0]) && 
+                        !itemsAlreadyInState.Contains(item.RightSide[0]))
+                    {
+                        nextItems.Enqueue(NonTerminalToken);
+                        itemsAlreadyInState.Add(NonTerminalToken);
+                    }
+                }
+            }
 
             return followUpItems;
         }
+
+        private List<Production> getSingleFollowUpItem(TokenType NonTerminalToken)
+        {
+            List<Production> followUpItems = new List<Production>();
+
+            foreach (var item in grammar.Productions)
+            {
+                if (item.LeftSide == NonTerminalToken)
+                {
+                    followUpItems.Add(item);
+                }
+            }
+
+            return followUpItems;
+        }
+
     }
 }
