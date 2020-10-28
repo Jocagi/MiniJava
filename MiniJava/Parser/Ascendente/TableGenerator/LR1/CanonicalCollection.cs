@@ -78,7 +78,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                         if (grammar.isNotTerminal(token))
                         {
                             //Si es No terminal obtener todos los derivados
-                            List<LRItem> followUpItems = getFollowUpItems(token, kernel.lookahead);
+
+                            //Obtener el first del elemento siguiente
+                            List<TokenType>  firstNextItem = getFirstNextItem(kernel);
+                            //Obtener derivados
+                            List<LRItem> followUpItems = getFollowUpItems(token, firstNextItem, kernel.lookahead);
 
                             foreach (var childItem in followUpItems)
                             {
@@ -124,7 +128,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
         /// Al encontrar un NO TERMINAL, es necesario analizar nuevas producciones.
         /// Se devuelven todas las que correspondan.
         /// </summary>
-        private List<LRItem> getFollowUpItems(TokenType NonTerminalToken, List<TokenType> lookahead)
+        private List<LRItem> getFollowUpItems(TokenType NonTerminalToken, List<TokenType> firstNextItem, List<TokenType> lookahead)
         {
             List<LRItem> followUpItems = new List<LRItem>();
             Queue<TokenType> nextItems = new Queue<TokenType>();
@@ -138,13 +142,29 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
                 foreach (var item in childProductions)
                 {
-                    followUpItems.Add(new LRItem(item, 0, lookahead));
+                    LRItem lritem;
+
+                    //Agregar lookahead del elemento en cuestion
+                    if (firstNextItem.Count > 0)
+                    {
+                        //Si existe un elemento a la derecha del simbolo, agregar first de ese elemento
+                        lritem = new LRItem(item, 0, firstNextItem);
+                    }
+                    else
+                    {
+                        //Si no existe un elemento inmediatamente a la derecha del simbolo, agregar lookahead del padre
+                        lritem = new LRItem(item, 0, lookahead);
+                    }
+
+                    //Agregar a lista de estados
+                    followUpItems.Add(lritem);
 
                     //Si es un NO terminal, seguir obteniendo mas estados derivados
                     if (grammar.isNotTerminal(item.RightSide[0]) && 
                         !itemsAlreadyInState.Contains(item.RightSide[0]))
                     {
                         nextItems.Enqueue(item.RightSide[0]);
+                        firstNextItem = getFirstNextItem(lritem);
                         itemsAlreadyInState.Add(item.RightSide[0]);
                     }
                 }
@@ -168,5 +188,30 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             return followUpItems;
         }
 
+        private List<TokenType> getFirstNextItem(LRItem item)
+        {
+            List<TokenType> result = new List<TokenType>();
+
+            //Aumentar posicion analizada
+            LRItem kernel = item.Copy();
+            
+            //Validar si no se ha llegado a la posicion final en la expresion
+            if (kernel.Position < kernel.Production.RightSide.Count)
+            {
+                TokenType token = kernel.Production.RightSide[kernel.Position];
+                if (grammar.isNotTerminal(token))
+                {
+                    result = grammar.first.Find
+                        (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
+                        ?.first;
+                }
+                else
+                {
+                    result.Add(token);
+                }
+            }
+
+            return result;
+        }
     }
 }

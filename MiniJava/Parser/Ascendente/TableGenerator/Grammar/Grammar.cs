@@ -13,7 +13,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
         private List<TokenType> Terminals { get; set; }
         private List<TokenType> NonTerminals { get; set; }
 
-        //test grammar
         public Grammar()
         {
             //Definir producciones
