@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
-using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
@@ -57,20 +57,23 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     if (kernel.Position > kernel.Production.RightSide.Count)
                     {
                         kernel.action = ActionType.Reduce;
+                        kernel.shiftTo = -1;
                         lrItems.Add(kernel);
                     }
                     else
                     {
+                        totalStates++;
+
                         //Agregar al estado actual el primer elemento
                         LRItem nextLR = kernel.Copy();
                         nextLR.Position--;
+                        nextLR.shiftTo = totalStates;
                         lrItems.Add(nextLR);
 
                         //Token actual
                         TokenType token = kernel.Production.RightSide[kernel.Position - 1];
 
                         //Agregar goto del elemento actualmente analizado al siguiente estado
-                        totalStates++;
                         nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
                         gotoState.Add(token, totalStates);
 
@@ -99,6 +102,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                                     gotoState.Add(childItem.Production.RightSide[0], nextState);
                                 }
 
+                                childItem.shiftTo = nextState;
                                 lrItems.Add(childItem);
 
                                 LRItem next = childItem.Copy();

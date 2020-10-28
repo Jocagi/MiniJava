@@ -26,6 +26,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// El tipo de accion que hace el parser
         /// </summary>
         public ActionType action { get; set; }
+        /// <summary>
+        /// Si la accion es shift, el estado al que apunta
+        /// </summary>
+        public int shiftTo { get; set; }
 
         public LRItem(Production production, int position, List<TokenType> lookahead)
         {
@@ -33,6 +37,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.lookahead = new List<TokenType>(lookahead);
             this.Production = production;
             this.action = ActionType.Shift;
+            this.shiftTo = -1;
         }
         public LRItem(Production production, int position)
         {
@@ -40,6 +45,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.Production = production;
             this.lookahead = new List<TokenType>{TokenType.Epsilon};
             this.action = ActionType.Shift;
+            this.shiftTo = -1;
         }
         public LRItem Copy()
         {

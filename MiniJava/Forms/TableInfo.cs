@@ -12,7 +12,7 @@ namespace MiniJava.Forms
 {
     public partial class TableInfo : Form
     {
-        private CanonicalCollection collection;
+        private readonly CanonicalCollection collection;
 
         public TableInfo()
         {
@@ -55,7 +55,9 @@ namespace MiniJava.Forms
                         i++;
                     }
 
-                    this.richTextBox1.Text += $" \tAction: {lritem.action} \n";
+                    this.richTextBox1.Text += $" \tAction: {lritem.action}";
+
+                    this.richTextBox1.Text += $" \tGO_TO: {lritem.shiftTo} \n";
 
                     string text = this.richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S")
                         .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "");
