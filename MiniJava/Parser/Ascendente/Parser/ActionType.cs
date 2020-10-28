@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniJava.Parser.Ascendente.TableGenerator
+﻿
+namespace MiniJava.Parser.Ascendente.Parser
 {
     /// <summary>
     /// the type of action the parser will perform

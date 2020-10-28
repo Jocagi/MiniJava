@@ -44,8 +44,9 @@ namespace MiniJava.Forms
                         this.richTextBox1.Text += $"{token}";
                         i++;
                     }
+                    this.richTextBox1.Text += lritem.Position > lritem.Production.RightSide.Count ? "•" : "";
 
-                    this.richTextBox1.Text += $" \t\tLookahead: ";
+                    this.richTextBox1.Text += $" \t\t\tLookahead: ";
 
                     foreach (var la in lritem.lookahead)
                     {

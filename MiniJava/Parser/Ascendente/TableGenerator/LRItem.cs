@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiniJava.Lexer;
+using MiniJava.Parser.Ascendente.Parser;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator
 {
