@@ -33,9 +33,9 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.sourceCodeBox = new System.Windows.Forms.RichTextBox();
             this.outputBox = new System.Windows.Forms.RichTextBox();
-            this.saveButton = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.labelFileName = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -86,19 +86,6 @@
             this.outputBox.Text = "";
             this.outputBox.WordWrap = false;
             // 
-            // saveButton
-            // 
-            this.saveButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.saveButton.Location = new System.Drawing.Point(898, 13);
-            this.saveButton.Margin = new System.Windows.Forms.Padding(2);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(112, 34);
-            this.saveButton.TabIndex = 3;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Visible = false;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.AddExtension = false;
@@ -117,6 +104,16 @@
             this.labelFileName.Size = new System.Drawing.Size(0, 27);
             this.labelFileName.TabIndex = 4;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(707, 10);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(323, 34);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Mostrar Coleccion Canonica";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -125,8 +122,8 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1042, 883);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.labelFileName);
-            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.sourceCodeBox);
             this.Controls.Add(this.button1);
@@ -150,9 +147,9 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.RichTextBox sourceCodeBox;
         private System.Windows.Forms.RichTextBox outputBox;
-        private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Label labelFileName;
+        private System.Windows.Forms.Button button2;
     }
 }
 

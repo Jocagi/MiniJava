@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using MiniJava.Lexer;
+using MiniJava.Parser.Ascendente.TableGenerator;
 using MiniJava.Parser.RecursiveDescent;
 
 namespace MiniJava.Forms
@@ -126,8 +127,7 @@ namespace MiniJava.Forms
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.outputBox.Visible = true;
-            this.saveButton.Visible = true;
-
+            
             //Color errors
             for (int i = 0; i < outputBox.Lines.Length; i++)
             {
@@ -154,6 +154,14 @@ namespace MiniJava.Forms
             {
                 MessageBox.Show(@"No se ha especificado ninguna ruta");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            CanonicalCollection cc = new CanonicalCollection(new Grammar());
+           
+            TableInfo t = new TableInfo(cc);
+            t.Show();
         }
     }
 }

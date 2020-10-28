@@ -11,6 +11,32 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         private List<TokenType> Terminals { get; set; }
         private List<TokenType> NonTerminals { get; set; }
 
+        //test grammar
+        public Grammar()
+        {
+            /*
+               0: E' → E 
+               1: E → T + E 
+               2: E → T 
+               3: T → id
+             */
+
+            //Definir producciones
+            this.Productions = new List<Production>
+            {
+                new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT, TokenType.Operator_mas, TokenType.NT_ExampleE}),
+                new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT}),
+                new Production(TokenType.NT_ExampleT, new List<TokenType>{TokenType.Identifier})
+            };
+
+            //Agregar produccion inicial
+            this.Productions.Insert
+                (0, new Production(TokenType.NT_Start, Productions[0].LeftSide));
+            
+            //Agregar tokenes terminales
+            setTerminals();
+        }
+
         public Grammar(List<Production> productions)
         {
             //Definir producciones
@@ -18,6 +44,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             //Agregar produccion inicial
             this.Productions.Insert
                 (0, new Production(TokenType.NT_Start, Productions[0].LeftSide));
+            //Agregar tokenes terminales
+            setTerminals();
         }
 
         public bool isTerminal(TokenType token)

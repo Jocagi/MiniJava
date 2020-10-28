@@ -36,10 +36,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.lookahead = new List<TokenType>(lookahead);
             this.Production = production;
         }
-        public LRItem(TokenType state, int position)
+        public LRItem(TokenType state, Production production, int position)
         {
             this.Token = state;
             this.Position = position;
+            this.Production = production;
             this.lookahead = new List<TokenType>{TokenType.Epsilon};
         }
 

@@ -7,7 +7,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
 {
     public class CanonicalCollection
     {
-        private List<State> States  {get; set;}
+        public List<State> States  {get; set;}
         private Grammar grammar { get; set; }
 
         /// <summary>
@@ -35,10 +35,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                 //Obtener Goto's que apuntan al estado que vamos a analizar ahora
                 List<Go_To> itemsToAnalyze = new List<Go_To>(
                             ( nextStates.FindAll(x => x.NextStateID == actualState) ));
+                
                 //Remover Goto's anteriores de la lista original
                 nextStates.RemoveAll(x => x.NextStateID == actualState);
 
-                //Analizr todos los correspondientes
+                //Analizar todos los correspondientes
                 foreach (var item in itemsToAnalyze)
                 {
                     //Aumentar posicion analizada
@@ -46,7 +47,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                     kernel.Position++;
                     
                     //Token actual
-                    TokenType token = kernel.Production.RightSide[kernel.Position];
+                    TokenType token = kernel.Production.RightSide[kernel.Position - 1];
 
                     //Verificar si es un terminal o un No Terminal
                     if (grammar.isNotTerminal(token))
@@ -57,6 +58,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                         foreach (var childItem in followUpItems)
                         {
                             totalStates++;
+                            lrItems.Add(childItem);
+
                             nextStates.Add(new Go_To(actualState, childItem.Token, totalStates, childItem));
                         }
                     }
@@ -67,6 +70,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                         nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
                     }
                 }
+
+                actualState++;
+                thisState.items = lrItems;
+                this.States.Add(thisState);
             }
         }
 
@@ -75,7 +82,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// </summary>
         private Go_To getFirstState()
         {
-            return new Go_To(-1, TokenType.NT_Start, 0);
+            return new Go_To(-1, TokenType.NT_Start, grammar.Productions[0], 0);
         }
 
         /// <summary>
@@ -102,8 +109,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                     if (grammar.isNotTerminal(item.RightSide[0]) && 
                         !itemsAlreadyInState.Contains(item.RightSide[0]))
                     {
-                        nextItems.Enqueue(NonTerminalToken);
-                        itemsAlreadyInState.Add(NonTerminalToken);
+                        nextItems.Enqueue(item.RightSide[0]);
+                        itemsAlreadyInState.Add(item.RightSide[0]);
                     }
                 }
             }
