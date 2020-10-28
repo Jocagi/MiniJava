@@ -45,7 +45,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                     //Aumentar posicion analizada
                     LRItem kernel = item.LRItem;
                     kernel.Position++;
-                    
+                    lrItems.Add(kernel);
+
                     //Token actual
                     TokenType token = kernel.Production.RightSide[kernel.Position - 1];
 
@@ -60,7 +61,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                             totalStates++;
                             lrItems.Add(childItem);
 
-                            nextStates.Add(new Go_To(actualState, childItem.Token, totalStates, childItem));
+                            nextStates.Add(new Go_To(actualState, childItem.Production.LeftSide, totalStates, childItem));
                         }
                     }
                     else
@@ -103,7 +104,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
 
                 foreach (var item in childProductions)
                 {
-                    followUpItems.Add(new LRItem(NonTerminalToken, item, 0, lookahead));
+                    followUpItems.Add(new LRItem(item, 0, lookahead));
 
                     //Si es un NO terminal, seguir obteniendo mas estados derivados
                     if (grammar.isNotTerminal(item.RightSide[0]) && 

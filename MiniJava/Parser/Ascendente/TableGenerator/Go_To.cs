@@ -25,7 +25,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.StateID = ID;
             this.Token = token;
             this.NextStateID = nextState;
-            this.LRItem = new LRItem(TokenType.NT_Start, prod,0);
+            this.LRItem = new LRItem(prod,0);
         }
 
         public bool isEqual(Go_To _goto)

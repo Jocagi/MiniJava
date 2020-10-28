@@ -6,11 +6,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
     public class LRItem
     {
         /// <summary>
-        /// Se refiere al elemento en la parte izquierda en una produccion.
-        /// Ej. E -> AB  (Se refiere a 'E')
-        /// </summary>
-        public TokenType Token { get; set; }
-        /// <summary>
         /// Produccion completa
         /// Ej. E -> AB
         /// </summary>
@@ -29,24 +24,17 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         /// </summary>
         public ActionType action { get; set; }
 
-        public LRItem(TokenType state, Production production, int position, List<TokenType> lookahead)
+        public LRItem(Production production, int position, List<TokenType> lookahead)
         {
-            this.Token = state;
             this.Position = position;
             this.lookahead = new List<TokenType>(lookahead);
             this.Production = production;
         }
-        public LRItem(TokenType state, Production production, int position)
+        public LRItem(Production production, int position)
         {
-            this.Token = state;
             this.Position = position;
             this.Production = production;
             this.lookahead = new List<TokenType>{TokenType.Epsilon};
-        }
-
-        public bool Equals(LRItem item)
-        {
-            return (Token == item.Token) && (Position == item.Position);
         }
     }
 }
