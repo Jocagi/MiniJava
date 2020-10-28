@@ -53,18 +53,20 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                     //Validar si se ha llegado a la posicion final en la expresion
                     if (kernel.Position > kernel.Production.RightSide.Count)
                     {
-                        //Agregar al siguiente estado
                         kernel.action = ActionType.Reduce;
                         lrItems.Add(kernel);
                     }
                     else
                     {
-                        lrItems.Add(kernel);
+                        //Agregar al estado actual el primer elemento
+                        LRItem nextLR = kernel.Copy();
+                        nextLR.Position--;
+                        lrItems.Add(nextLR);
 
                         //Token actual
                         TokenType token = kernel.Production.RightSide[kernel.Position - 1];
 
-                        //Agregar goto del elemento actualmente analizado
+                        //Agregar goto del elemento actualmente analizado al siguiente estado
                         totalStates++;
                         nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
                         gotoState.Add(token, totalStates);
@@ -91,7 +93,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                                 }
 
                                 lrItems.Add(childItem);
-                                nextStates.Add(new Go_To(actualState, childItem.Production.LeftSide, nextState, childItem));
+
+                                LRItem next = childItem.Copy();
+                                next.Position++;
+
+                                nextStates.Add(new Go_To(actualState, next.Production.LeftSide, nextState, next));
                             }
                         }
                     }
