@@ -24,38 +24,45 @@ namespace MiniJava.Parser.Ascendente.Parser
             bool Error = false;
             bool Aceptado = false;
             ActionType accion = new ActionType();
+            int Enfoque = 0; //booleano que me dice si debo evaluar Entrada o Símbolo
+                        //0 SI ES A ENTRADA Y 1 SI ES A SÍMBOLO 
             while (!Error & Aceptado)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
-                
+                int movEstado = 0;
                 foreach (var item in estado.actions)
                 {
                     if (item.symbol == Entrada.Peek().tokenType)
                     {
                         accion = item.accion;
+                        movEstado = item.estado;
                     }
                 }
                 if (accion == ActionType.Accept)
                 {
-
+                    Aceptado = true;
+                    
                 }
                 else if (accion == ActionType.Reduce)
                 {
-
+                    Enfoque = 1;
                 }
                 else if (accion == ActionType.Shift)
                 {
-
+                    Enfoque = 0;
+                    Pila.Push(movEstado);
+                    Simbolo.Push(Entrada.Dequeue());
                 }
                 else if (accion == ActionType.Ir_A)
                 {
-
+                    Enfoque = 0;
+                    Pila.Push(movEstado);
                 }
                 else
                 {
-                    //error
-                }
+                    Error = true;
+                } //ERROR
 
             }
 
