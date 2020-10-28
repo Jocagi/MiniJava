@@ -9,12 +9,12 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
     public class CanonicalCollection
     {
         public List<State> States  {get; set;}
-        private Gramatica.Grammar grammar { get; set; }
+        private Grammar.Grammar grammar { get; set; }
 
         /// <summary>
         /// Crea la colección canónica a partir de la gramática suministrada
         /// </summary>
-        public CanonicalCollection(Gramatica.Grammar grammar)
+        public CanonicalCollection(Grammar.Grammar grammar)
         {
             this.States = new List<State>();
             this.grammar = grammar;
@@ -27,6 +27,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             int totalStates = 0;
             // Variable de control para conocer los siguientes elementos a analizar
             List<Go_To> nextStates = new List<Go_To> { getFirstState() };
+            // Recordar por donde han pasado los estados
+            List<StatePointer> previouStates = new List<StatePointer>();
 
             while (nextStates.Count > 0)
             {

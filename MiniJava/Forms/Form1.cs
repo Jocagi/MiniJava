@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator;
 using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;
+using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 using MiniJava.Parser.Ascendente.TableGenerator.LR1;
 using MiniJava.Parser.RecursiveDescent;
 

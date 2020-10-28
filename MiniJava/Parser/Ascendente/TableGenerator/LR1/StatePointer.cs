@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MiniJava.Lexer;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
@@ -14,6 +15,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             this.symbol = symbol;
             this.lookahead = lookahead;
             this.state = state;
+        }
+
+        public bool isLookaheadEqual(List<TokenType> lookaheadCompare)
+        {
+            return 
+                lookahead.All(lookaheadCompare.Contains) && 
+                lookahead.Count == lookaheadCompare.Count;
         }
     }
 }
