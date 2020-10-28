@@ -29,12 +29,14 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.Position = position;
             this.lookahead = new List<TokenType>(lookahead);
             this.Production = production;
+            this.action = ActionType.Shift;
         }
         public LRItem(Production production, int position)
         {
             this.Position = position;
             this.Production = production;
             this.lookahead = new List<TokenType>{TokenType.Epsilon};
+            this.action = ActionType.Shift;
         }
     }
 }

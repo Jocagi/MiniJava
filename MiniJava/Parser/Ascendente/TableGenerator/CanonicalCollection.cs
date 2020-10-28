@@ -23,7 +23,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
         private void  getCanonicalCollection()
         {
             int actualState = 0;
-            int totalStates = 1;
+            int totalStates = 0;
             List<Go_To> nextStates = new List<Go_To> { getFirstState() };
 
             while (nextStates.Count > 0)
@@ -42,33 +42,75 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                 //Analizar todos los correspondientes
                 foreach (var item in itemsToAnalyze)
                 {
+                    //Diccionario para validar a que estado dirigirse {Token, NoEstado}
+                    Dictionary<TokenType, int> gotoState = new Dictionary<TokenType, int>();
+
                     //Aumentar posicion analizada
                     LRItem kernel = item.LRItem;
                     kernel.Position++;
-                    lrItems.Add(kernel);
-
-                    //Token actual
-                    TokenType token = kernel.Production.RightSide[kernel.Position - 1];
-
-                    //Verificar si es un terminal o un No Terminal
-                    if (grammar.isNotTerminal(token))
+                    
+                    //Validar si se ha llegado a la posicion final en la expresion
+                    if (kernel.Position > kernel.Production.RightSide.Count)
                     {
-                        //Si es No terminal obtener todos los derivados
-                        List<LRItem> followUpItems = getFollowUpItems(token, kernel.lookahead);
-                        
-                        foreach (var childItem in followUpItems)
-                        {
-                            totalStates++;
-                            lrItems.Add(childItem);
-
-                            nextStates.Add(new Go_To(actualState, childItem.Production.LeftSide, totalStates, childItem));
-                        }
+                        kernel.action = ActionType.Reduce;
+                        lrItems.Add(kernel);
                     }
                     else
                     {
-                        //Si es terminal, generar GOTO
+                        lrItems.Add(kernel);
+
+                        //Token actual
+                        TokenType token = kernel.Production.RightSide[kernel.Position - 1];
+
+                        //Agregar goto del elemento actualmente analizado
                         totalStates++;
                         nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
+                        gotoState.Add(token, totalStates);
+
+                        //Verificar si es un terminal o un No Terminal
+                        if (grammar.isNotTerminal(token))
+                        {
+                            //Si es No terminal obtener todos los derivados
+                            List<LRItem> followUpItems = getFollowUpItems(token, kernel.lookahead);
+
+                            foreach (var childItem in followUpItems)
+                            {
+                                int nextState;
+
+                                if (gotoState.ContainsKey(childItem.Production.LeftSide))
+                                {
+                                    nextState = gotoState[childItem.Production.LeftSide];
+                                }
+                                else
+                                {
+                                    totalStates++;
+                                    nextState = totalStates;
+                                    gotoState.Add(childItem.Production.LeftSide, nextState);
+                                }
+
+                                lrItems.Add(childItem);
+                                nextStates.Add(new Go_To(actualState, childItem.Production.LeftSide, nextState, childItem));
+                            }
+                        }
+                        else
+                        {
+                            //Si es terminal, generar GOTO
+
+                            int nextState;
+
+                            if (gotoState.ContainsKey(token))
+                            {
+                                nextState = gotoState[token];
+                            }
+                            else
+                            {
+                                totalStates++;
+                                nextState = totalStates;
+                                gotoState.Add(token, nextState);
+                            }
+
+                            nextStates.Add(new Go_To(actualState, token, nextState, kernel));
+                        }
                     }
                 }
 
