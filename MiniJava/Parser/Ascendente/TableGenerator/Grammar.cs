@@ -22,10 +22,16 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
              */
 
             //Definir producciones
+            //this.Productions = new List<Production>
+            //{
+            //    new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT, TokenType.Operator_mas, TokenType.NT_ExampleE}),
+            //    new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT}),
+            //    new Production(TokenType.NT_ExampleT, new List<TokenType>{TokenType.Identifier})
+            //};
+
             this.Productions = new List<Production>
             {
-                new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT, TokenType.Operator_mas, TokenType.NT_ExampleE}),
-                new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT}),
+                new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT, TokenType.Operator_mas, TokenType.NT_ExampleT}),
                 new Production(TokenType.NT_ExampleT, new List<TokenType>{TokenType.Identifier})
             };
 

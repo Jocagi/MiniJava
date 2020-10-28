@@ -38,5 +38,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
             this.lookahead = new List<TokenType>{TokenType.Epsilon};
             this.action = ActionType.Shift;
         }
+        public LRItem Copy()
+        {
+            LRItem temp = (LRItem)this.MemberwiseClone();
+            return temp;
+        }
     }
 }

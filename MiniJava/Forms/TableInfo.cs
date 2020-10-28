@@ -22,6 +22,7 @@ namespace MiniJava.Forms
         {
             InitializeComponent();
             this.collection = cc;
+            showCollection();
         }
 
         private void showCollection()
@@ -33,17 +34,18 @@ namespace MiniJava.Forms
                 foreach (var lritem in item.items)
                 {
                     this.richTextBox1.Text += $"\t ->";
-                    this.richTextBox1.Text += $" {lritem.Production.LeftSide}";
+                    this.richTextBox1.Text += $" \t {lritem.Production.LeftSide} =>";
 
                     int i = 0;
 
                     foreach (var token in lritem.Production.RightSide)
                     {
-                        this.richTextBox1.Text += i == lritem.Position ? $"{token}" : $"•{token}";
+                        this.richTextBox1.Text += i == lritem.Position ? "•" : "";
+                        this.richTextBox1.Text += $"{token}";
                         i++;
                     }
 
-                    this.richTextBox1.Text += $" Lookahead: ";
+                    this.richTextBox1.Text += $" \t\tLookahead: ";
 
                     foreach (var la in lritem.lookahead)
                     {
@@ -51,7 +53,12 @@ namespace MiniJava.Forms
                         i++;
                     }
 
-                    this.richTextBox1.Text += $" Action: {lritem.action} \n";
+                    this.richTextBox1.Text += $" \tAction: {lritem.action} \n";
+
+                    string text = this.richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S")
+                        .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "");
+
+                    this.richTextBox1.Text = text;
                 }
             }
         }

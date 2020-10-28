@@ -35,7 +35,7 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(12, 28);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(776, 397);
+            this.richTextBox1.Size = new System.Drawing.Size(1300, 578);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -43,7 +43,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(819, 450);
+            this.ClientSize = new System.Drawing.Size(1324, 610);
             this.Controls.Add(this.richTextBox1);
             this.Name = "TableInfo";
             this.Text = "TableInfo";
