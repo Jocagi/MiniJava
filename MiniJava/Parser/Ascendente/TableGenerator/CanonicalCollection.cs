@@ -52,7 +52,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator
                     if (grammar.isNotTerminal(token))
                     {
                         //Si es No terminal obtener todos los derivados
-                        //Todo
+                        List<LRItem> followUpItems = getFollowUpItems(token, kernel.lookahead);
+                        
+                        foreach (var childItem in followUpItems)
+                        {
+                            totalStates++;
+                            nextStates.Add(new Go_To(actualState, childItem.Token, totalStates, childItem));
+                        }
                     }
                     else
                     {
