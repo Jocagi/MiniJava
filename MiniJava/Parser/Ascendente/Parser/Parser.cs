@@ -31,9 +31,18 @@ namespace MiniJava.Parser.Ascendente.Parser
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
                 int movEstado = 0;
+                TokenType tokenEvalua = new TokenType();
+                if (Enfoque == 0)
+                {
+                    tokenEvalua = Entrada.Peek().tokenType;
+                }
+                else 
+                {
+                    tokenEvalua = Simbolo.Peek().tokenType;
+                }
                 foreach (var item in estado.actions)
                 {
-                    if (item.symbol == Entrada.Peek().tokenType)
+                    if (item.symbol == tokenEvalua)
                     {
                         accion = item.accion;
                         movEstado = item.estado;
