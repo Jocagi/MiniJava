@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using MiniJava.Lexer;
+using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
-namespace MiniJava.Parser.Ascendente.TableGenerator
+namespace MiniJava.Parser.Ascendente.TableGenerator.Gramatica
 {
     public class Grammar
     {
         public List<Production> Productions { get; set; }
+        public List<First> first { get; set; }
         private List<TokenType> Terminals { get; set; }
         private List<TokenType> NonTerminals { get; set; }
 

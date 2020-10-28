@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MiniJava.Lexer;
 
-namespace MiniJava.Parser.Ascendente.TableGenerator
+namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
 {
     public class Production
     {

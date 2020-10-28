@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
+using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;
+using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator
 {

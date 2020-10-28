@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MiniJava.Parser.Ascendente.TableGenerator;
+using MiniJava.Parser.Ascendente.TableGenerator.LR1;
 
 namespace MiniJava.Forms
 {
