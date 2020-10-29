@@ -11,7 +11,7 @@
         Token_boolean,     
         Token_string,      
         Token_class,       
-        Token_const,       
+        Token_static,       
         Token_interface,   
         Token_null,        
         Token_this,        

@@ -29,7 +29,7 @@ namespace MiniJava.Lexer
                 new TokenDescription(TokenType.Token_break, @"^break(?![a-z]|[A-Z]|\$|[0-9])"),
                 new TokenDescription(TokenType.Token_boolean, @"^boolean(?![a-z]|[A-Z]|\$|[0-9])"),
                 new TokenDescription(TokenType.Token_class, @"^class(?![a-z]|[A-Z]|\$|[0-9])"),
-                new TokenDescription(TokenType.Token_const, @"^const(?![a-z]|[A-Z]|\$|[0-9])"),
+                new TokenDescription(TokenType.Token_static, @"^static(?![a-z]|[A-Z]|\$|[0-9])"),
                 new TokenDescription(TokenType.Token_double, @"^double(?![a-z]|[A-Z]|\$|[0-9])"),
                 new TokenDescription(TokenType.Token_else, @"^else(?![a-z]|[A-Z]|\$|[0-9])"),
                 new TokenDescription(TokenType.Token_extends, @"^extends(?![a-z]|[A-Z]|\$|[0-9])"),
