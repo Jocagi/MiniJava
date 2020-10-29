@@ -82,9 +82,30 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                                 x.symbol == token &&
                                 x.isLookaheadEqual(lookAheadNextItem))?.state;
                             if (state != null)
-                                nextLR.shiftTo = (int) state;
+                                nextLR.shiftTo = (int)++totalStates; 
 
                             lrItems.Add(nextLR);
+
+                            //Agregar goto del elemento actualmente analizado al siguiente estado
+                            nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
+                            gotoState.Add(token, totalStates);
+
+                            //Obtener el first del elemento siguiente
+                            List<TokenType> firstNextItem = getFirstNextItem(kernel);
+                            //Obtener derivados
+                            List<LRItem> followUpItems = getFollowUpItems(token, firstNextItem, kernel.lookahead);
+
+                            foreach (var childItem in followUpItems)
+                            {
+                                //Recuperar valor del simbolo anterior
+                                var value = previouStates.Find(x =>
+                                    x.symbol == childItem.Production.LeftSide &&
+                                    x.isLookaheadEqual(childItem.lookahead))?.state;
+                                if (value != null)
+                                    childItem.shiftTo = (int)value;
+
+                                lrItems.Add(childItem);
+                            }
                         }
                         else
                         {
@@ -103,7 +124,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                             //Verificar si es un terminal o un No Terminal
                             if (grammar.isNotTerminal(token))
                             {
-                                previouStates.Add(new StatePointer(token, lookAheadNextItem, totalStates));
+                                previouStates.Add(new StatePointer(token, lookAheadNextItem, totalStates + 1));
 
                                 //Si es No terminal obtener todos los derivados
 
@@ -160,7 +181,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                                     }
                                 }
                             }
-
                         }
                     }
                 }

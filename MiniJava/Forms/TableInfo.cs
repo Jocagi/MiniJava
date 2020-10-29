@@ -57,7 +57,14 @@ namespace MiniJava.Forms
 
                     this.richTextBox1.Text += $" \tAction: {lritem.action}";
 
-                    this.richTextBox1.Text += $" \tGO_TO: {lritem.shiftTo} \n";
+                    if (lritem.shiftTo >= 0)
+                    {
+                        this.richTextBox1.Text += $" \tGO_TO: {lritem.shiftTo} \n";
+                    }
+                    else
+                    {
+                        this.richTextBox1.Text += "\n";
+                    }
 
                     string text = this.richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S")
                         .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "");
