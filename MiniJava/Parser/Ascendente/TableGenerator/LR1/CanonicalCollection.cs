@@ -201,15 +201,15 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
         private List<LRItem> getFollowUpItems(TokenType NonTerminalToken, List<TokenType> firstNextItem, List<TokenType> lookahead)
         {
             List<LRItem> followUpItems = new List<LRItem>();
-            Queue<TokenType> nextItems = new Queue<TokenType>();
-            List<TokenType> itemsAlreadyInState = new List<TokenType>();
+            Queue<TokenLAPair> nextItems = new Queue<TokenLAPair>();
+            List<TokenLAPair> itemsAlreadyInState = new List<TokenLAPair>();
 
-            nextItems.Enqueue(NonTerminalToken);
+            nextItems.Enqueue( new TokenLAPair(NonTerminalToken, getLookaheadNextItem(firstNextItem, lookahead)));
 
             while (nextItems.Count > 0)
             {
                 List<LRItem> childProductions = 
-                    getSingleFollowUpItem(nextItems.Dequeue(), getLookaheadNextItem(firstNextItem, lookahead));
+                    getSingleFollowUpItem(nextItems.Dequeue());
 
                 foreach (var lritem in childProductions)
                 {
@@ -219,15 +219,14 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     followUpItems.Add(lritem);
 
                     //Si es un NO terminal, seguir obteniendo mas estados derivados
-                    if (grammar.isNotTerminal(item.RightSide[0]) && 
-                        !itemsAlreadyInState.Contains(item.RightSide[0]))
+                    if (grammar.isNotTerminal(item.RightSide[0]))
                     {
                         LRItem copyLR = lritem.Copy();
                         copyLR.Position++; //obtener lookahead correcto
 
-                        nextItems.Enqueue(item.RightSide[0]);
-                        firstNextItem = getFirstNextItem(copyLR); //todo econlar esto junto con el estado en si
-                        itemsAlreadyInState.Add(item.RightSide[0]);
+                        nextItems.Enqueue( new TokenLAPair
+                            (item.RightSide[0], getLookaheadNextItem(getFirstNextItem(copyLR), copyLR.lookahead)));
+                        itemsAlreadyInState.Add(new TokenLAPair(item.RightSide[0], copyLR.lookahead));
                     }
                 }
             }
@@ -235,15 +234,15 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             return followUpItems;
         }
 
-        private List<LRItem> getSingleFollowUpItem(TokenType NonTerminalToken, List<TokenType> lookahead)
+        private List<LRItem> getSingleFollowUpItem(TokenLAPair value)
         {
             List<LRItem> followUpItems = new List<LRItem>();
 
             foreach (var item in grammar.Productions)
             {
-                if (item.LeftSide == NonTerminalToken)
+                if (item.LeftSide == value.token)
                 {
-                    followUpItems.Add(new LRItem(item, 0, lookahead));
+                    followUpItems.Add(new LRItem(item, 0, value.lookahead));
                 }
             }
 
