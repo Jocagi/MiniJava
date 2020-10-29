@@ -41,5 +41,28 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             //Remover todos los items mayores al ultimo terminal (No terminales)
             this.Terminals.RemoveAll(x => x > TokenType.Operator_puntosIgual);
         }
+
+        public int findProductionNumber(Production prod)
+        {
+            int i;
+
+            for (i = 0; i < Productions.Count; i++)
+            {
+                if (productionsAreEqual(prod, Productions[i]))
+                {
+                    break;
+                }
+            }
+
+            return i;
+        }
+
+        private bool productionsAreEqual(Production prod1, Production prod2)
+        {
+            return
+                prod1.RightSide.All(prod2.RightSide.Contains) &&
+                prod1.RightSide.Count == prod2.RightSide.Count &&
+                prod1.LeftSide == prod2.LeftSide;
+        }
     }
 }

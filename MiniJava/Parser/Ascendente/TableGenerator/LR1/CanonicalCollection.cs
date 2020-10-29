@@ -11,7 +11,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
     public class CanonicalCollection
     {
         public List<State> States  {get; set;}
-        private Grammar.Grammar grammar { get; set; }
+        public Grammar.Grammar grammar { get; set; }
 
         /// <summary>
         /// Crea la colección canónica a partir de la gramática suministrada
