@@ -102,7 +102,7 @@ namespace MiniJava.Forms
                     {
                         if (tabla.tokens[i] == action.symbol)
                         {
-                            dataGridView1.Rows[stateNumber].Cells[i+1].Value = $"{action.accion} {action.estado}";
+                            dataGridView1.Rows[stateNumber].Cells[i+1].Value += $" {action.accion} {action.estado}";
                             break;
                         }
                     }
