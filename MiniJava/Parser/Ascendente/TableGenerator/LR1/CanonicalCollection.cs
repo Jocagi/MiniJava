@@ -208,11 +208,12 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
             while (nextItems.Count > 0)
             {
-                List<Production> childProductions = getSingleFollowUpItem(nextItems.Dequeue());
+                List<LRItem> childProductions = 
+                    getSingleFollowUpItem(nextItems.Dequeue(), getLookaheadNextItem(firstNextItem, lookahead));
 
-                foreach (var item in childProductions)
+                foreach (var lritem in childProductions)
                 {
-                    LRItem lritem = new LRItem(item, 0, getLookaheadNextItem(firstNextItem, lookahead)); 
+                    var item = lritem.Copy().Production;
 
                     //Agregar a lista de estados
                     followUpItems.Add(lritem);
@@ -221,8 +222,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     if (grammar.isNotTerminal(item.RightSide[0]) && 
                         !itemsAlreadyInState.Contains(item.RightSide[0]))
                     {
+                        LRItem copyLR = lritem.Copy();
+                        copyLR.Position++; //obtener lookahead correcto
+
                         nextItems.Enqueue(item.RightSide[0]);
-                        firstNextItem = getFirstNextItem(lritem);
+                        firstNextItem = getFirstNextItem(copyLR); //todo econlar esto junto con el estado en si
                         itemsAlreadyInState.Add(item.RightSide[0]);
                     }
                 }
@@ -231,15 +235,15 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             return followUpItems;
         }
 
-        private List<Production> getSingleFollowUpItem(TokenType NonTerminalToken)
+        private List<LRItem> getSingleFollowUpItem(TokenType NonTerminalToken, List<TokenType> lookahead)
         {
-            List<Production> followUpItems = new List<Production>();
+            List<LRItem> followUpItems = new List<LRItem>();
 
             foreach (var item in grammar.Productions)
             {
                 if (item.LeftSide == NonTerminalToken)
                 {
-                    followUpItems.Add(item);
+                    followUpItems.Add(new LRItem(item, 0, lookahead));
                 }
             }
 
