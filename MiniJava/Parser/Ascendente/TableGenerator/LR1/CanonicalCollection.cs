@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
@@ -57,7 +58,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     //Validar si se ha llegado a la posicion final en la expresion
                     if (kernel.Position > kernel.Production.RightSide.Count)
                     {
-                        kernel.action = ActionType.Reduce;
+                        kernel.action = kernel.Production.LeftSide == TokenType.NT_Start?
+                            ActionType.Accept : ActionType.Reduce;
                         kernel.shiftTo = -1;
                         lrItems.Add(kernel);
                     }
@@ -67,7 +69,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                         TokenType token = kernel.Production.RightSide[kernel.Position - 1];
                         List<TokenType> lookAheadNextItem = getLookaheadNextItem(getFirstNextItem(kernel), kernel.lookahead);
 
-                        //Verificar si se ha visto el simbolo anteriormente
+                        //Verificar si se ha visto el simbolo anteriormente todo arreglar error
                         if (previouStates.Any(x => 
                             x.symbol == token &&
                             x.isLookaheadEqual(lookAheadNextItem)))

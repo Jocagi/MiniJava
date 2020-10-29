@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniJava.Lexer
+﻿namespace MiniJava.General
 {
     public enum TokenType
     {
@@ -99,12 +95,12 @@ namespace MiniJava.Lexer
         Error_null,
         Error_UnpairedComment,
         Epsilon,
+        EOF,
         Default,
         Data_Type,
         Constant,
         boolSymbol
 
         #endregion
-
     }
 }

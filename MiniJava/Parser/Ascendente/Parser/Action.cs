@@ -1,4 +1,5 @@
-﻿using MiniJava.Lexer;
+﻿using MiniJava.General;
+using MiniJava.Lexer;
 
 namespace MiniJava.Parser.Ascendente.Parser
 {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator;
 using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;

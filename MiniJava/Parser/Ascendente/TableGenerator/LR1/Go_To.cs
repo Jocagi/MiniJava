@@ -1,4 +1,5 @@
-﻿using MiniJava.Lexer;
+﻿using MiniJava.General;
+using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
