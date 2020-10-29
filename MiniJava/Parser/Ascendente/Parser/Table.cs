@@ -23,9 +23,11 @@ namespace MiniJava.Parser.Ascendente.Parser
                 
                 foreach (var item in state.items)
                 {
-                    if (!actions.Any(x => x.accion == item.action && x.estado == item.shiftTo))
+                    //Shift
+                    if (item.action == ActionType.Shift && collection.grammar.isTerminal(item.Production.RightSide[item.Position]))
                     {
-                        if (item.action == ActionType.Shift && collection.grammar.isTerminal(item.Production.RightSide[item.Position]))
+                        if (!actions.Any(x => x.accion == item.action && x.estado == item.shiftTo
+                            && x.symbol == item.Production.RightSide[item.Position]))
                         {
                             actions.Add(new Action(item.Production.RightSide[item.Position], item.action, item.shiftTo));
 
@@ -34,7 +36,12 @@ namespace MiniJava.Parser.Ascendente.Parser
                                 tokens.Add(item.Production.RightSide[item.Position]);
                             }
                         }
-                        else if (item.action == ActionType.Shift && collection.grammar.isNotTerminal(item.Production.RightSide[item.Position]))
+                    }
+                    //Ir_A
+                    else if (item.action == ActionType.Shift && collection.grammar.isNotTerminal(item.Production.RightSide[item.Position]))
+                    {
+                        if (!actions.Any(x => x.accion == ActionType.Ir_A && x.estado == item.shiftTo
+                                                                          && x.symbol == item.Production.RightSide[item.Position]))
                         {
                             actions.Add(new Action(item.Production.RightSide[item.Position], ActionType.Ir_A, item.shiftTo));
 
@@ -43,20 +50,26 @@ namespace MiniJava.Parser.Ascendente.Parser
                                 tokens.Add(item.Production.RightSide[item.Position]);
                             }
                         }
-                        else if (item.action == ActionType.Accept)
-                        {
-                            actions.Add(new Action(TokenType.EOF, ActionType.Accept, 0));
+                    }
+                    //Aceptar
+                    else if (item.action == ActionType.Accept)
+                    {
+                        actions.Add(new Action(TokenType.EOF, ActionType.Accept, 0));
 
-                            if (!tokens.Contains(TokenType.EOF))
-                            {
-                                tokens.Add(TokenType.EOF);
-                            }
+                        if (!tokens.Contains(TokenType.EOF))
+                        {
+                            tokens.Add(TokenType.EOF);
                         }
-                        else if (item.action == ActionType.Reduce)
-                        {
-                            int position = collection.grammar.findProductionNumber(item.Production);
+                    }
+                    //Reducir
+                    else if (item.action == ActionType.Reduce)
+                    {
+                        int position = collection.grammar.findProductionNumber(item.Production);
 
-                            foreach (var lookahead in item.lookahead)
+                        foreach (var lookahead in item.lookahead)
+                        {
+                            if (!actions.Any(x => x.accion == item.action && x.estado == position
+                                                                          && x.symbol == lookahead))
                             {
                                 actions.Add(new Action(lookahead, ActionType.Reduce, position));
 

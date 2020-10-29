@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
@@ -245,13 +246,16 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                         LRItem copyLR = lritem.Copy();
                         copyLR.Position++; //obtener lookahead correcto
 
-                        nextItems.Enqueue( new TokenLAPair
-                            (item.RightSide[0], getLookaheadNextItem(getFirstNextItem(copyLR), copyLR.lookahead)));
-                        itemsAlreadyInState.Add(new TokenLAPair(item.RightSide[0], copyLR.lookahead));
+                        if (!itemsAlreadyInState.Any(x => 
+                            x.token == item.RightSide[0] && x.isLookaheadEqual(copyLR.lookahead)))
+                        {
+                            nextItems.Enqueue(new TokenLAPair
+                                (item.RightSide[0], getLookaheadNextItem(getFirstNextItem(copyLR), copyLR.lookahead)));
+                            itemsAlreadyInState.Add(new TokenLAPair(item.RightSide[0], copyLR.lookahead));
+                        }
                     }
                 }
             }
-
             return followUpItems;
         }
 
