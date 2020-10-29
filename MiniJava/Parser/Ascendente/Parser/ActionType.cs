@@ -9,6 +9,7 @@ namespace MiniJava.Parser.Ascendente.Parser
         Accept,
         Reduce,
         Shift,
-        Error
+        Error,
+        Ir_A
     };
 }
