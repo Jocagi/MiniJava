@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
@@ -62,54 +63,102 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     }
                     else
                     {
-                        totalStates++;
-
-                        //Agregar al estado actual el primer elemento
-                        LRItem nextLR = kernel.Copy();
-                        nextLR.Position--;
-                        nextLR.shiftTo = totalStates;
-                        lrItems.Add(nextLR);
-
                         //Token actual
                         TokenType token = kernel.Production.RightSide[kernel.Position - 1];
+                        List<TokenType> lookAheadNextItem = getLookaheadNextItem(getFirstNextItem(kernel), kernel.lookahead);
 
-                        //Agregar goto del elemento actualmente analizado al siguiente estado
-                        nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
-                        gotoState.Add(token, totalStates);
-
-                        //Verificar si es un terminal o un No Terminal
-                        if (grammar.isNotTerminal(token))
+                        //Verificar si se ha visto el simbolo anteriormente
+                        if (previouStates.Any(x => 
+                            x.symbol == token &&
+                            x.isLookaheadEqual(lookAheadNextItem)))
                         {
-                            //Si es No terminal obtener todos los derivados
+                            //No hacer nada, solo indicar elemento econtrado
+                            LRItem nextLR = kernel.Copy();
+                            nextLR.Position--;
+                            
+                            var state = previouStates.Find(x =>
+                                x.symbol == token &&
+                                x.isLookaheadEqual(lookAheadNextItem))?.state;
+                            if (state != null)
+                                nextLR.shiftTo = (int) state;
 
-                            //Obtener el first del elemento siguiente
-                            List<TokenType>  firstNextItem = getFirstNextItem(kernel);
-                            //Obtener derivados
-                            List<LRItem> followUpItems = getFollowUpItems(token, firstNextItem, kernel.lookahead);
+                            lrItems.Add(nextLR);
+                        }
+                        else
+                        {
+                            totalStates++;
 
-                            foreach (var childItem in followUpItems)
+                            //Agregar al estado actual el primer elemento
+                            LRItem nextLR = kernel.Copy();
+                            nextLR.Position--;
+                            nextLR.shiftTo = totalStates;
+                            lrItems.Add(nextLR);
+
+                            //Agregar goto del elemento actualmente analizado al siguiente estado
+                            nextStates.Add(new Go_To(actualState, token, totalStates, kernel));
+                            gotoState.Add(token, totalStates);
+
+                            //Verificar si es un terminal o un No Terminal
+                            if (grammar.isNotTerminal(token))
                             {
-                                int nextState;
+                                previouStates.Add(new StatePointer(token, lookAheadNextItem, totalStates));
 
-                                if (gotoState.ContainsKey(childItem.Production.RightSide[0]))
+                                //Si es No terminal obtener todos los derivados
+
+                                //Obtener el first del elemento siguiente
+                                List<TokenType> firstNextItem = getFirstNextItem(kernel);
+                                //Obtener derivados
+                                List<LRItem> followUpItems = getFollowUpItems(token, firstNextItem, kernel.lookahead);
+
+                                foreach (var childItem in followUpItems)
                                 {
-                                    nextState = gotoState[childItem.Production.RightSide[0]];
+                                    List<TokenType> lookAheadNextChildItem = 
+                                        getLookaheadNextItem(getFirstNextItem(childItem), childItem.lookahead);
+
+                                    //Verificar si se ha visto el simbolo anteriormente
+                                    if (previouStates.Any(x =>
+                                        x.symbol == childItem.Production.RightSide[0] &&
+                                        x.isLookaheadEqual(lookAheadNextChildItem)))
+                                    {
+                                        var state = previouStates.Find(x =>
+                                            x.symbol == childItem.Production.RightSide[0] &&
+                                            x.isLookaheadEqual(lookAheadNextChildItem))?.state;
+                                        if (state != null)
+                                            childItem.shiftTo = (int)state;
+
+                                        lrItems.Add(childItem);
+                                    }
+                                    else
+                                    {
+                                        int nextState;
+
+                                        if (gotoState.ContainsKey(childItem.Production.RightSide[0]))
+                                        {
+                                            nextState = gotoState[childItem.Production.RightSide[0]];
+                                        }
+                                        else
+                                        {
+                                            totalStates++;
+                                            nextState = totalStates;
+                                            gotoState.Add(childItem.Production.RightSide[0], nextState);
+                                        }
+
+                                        LRItem next = childItem.Copy();
+                                        next.Position++;
+
+                                        nextStates.Add(new Go_To(actualState, next.Production.LeftSide, nextState, next));
+
+                                        if (grammar.isNotTerminal(next.Production.LeftSide))
+                                        {
+                                            previouStates.Add(new StatePointer(next.Production.LeftSide, next.lookahead, nextState));
+                                        }
+
+                                        childItem.shiftTo = nextState;
+                                        lrItems.Add(childItem);
+                                    }
                                 }
-                                else
-                                {
-                                    totalStates++;
-                                    nextState = totalStates;
-                                    gotoState.Add(childItem.Production.RightSide[0], nextState);
-                                }
-
-                                childItem.shiftTo = nextState;
-                                lrItems.Add(childItem);
-
-                                LRItem next = childItem.Copy();
-                                next.Position++;
-
-                                nextStates.Add(new Go_To(actualState, next.Production.LeftSide, nextState, next));
                             }
+
                         }
                     }
                 }
@@ -126,6 +175,21 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
         private Go_To getFirstState()
         {
             return new Go_To(-1, TokenType.NT_Start, grammar.Productions[0], 0);
+        }
+
+        private List<TokenType> getLookaheadNextItem(List<TokenType> firstNextItem, List<TokenType> lookaheadActualItem)
+        {
+            //Agregar lookahead del elemento en cuestion
+            if (firstNextItem.Count > 0)
+            {
+                //Si existe un elemento a la derecha del simbolo, agregar first de ese elemento
+                return firstNextItem;
+            }
+            else
+            {
+                //Si no existe un elemento inmediatamente a la derecha del simbolo, agregar lookahead del padre
+                return lookaheadActualItem;
+            }
         }
 
         /// <summary>
@@ -146,19 +210,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
                 foreach (var item in childProductions)
                 {
-                    LRItem lritem;
-
-                    //Agregar lookahead del elemento en cuestion
-                    if (firstNextItem.Count > 0)
-                    {
-                        //Si existe un elemento a la derecha del simbolo, agregar first de ese elemento
-                        lritem = new LRItem(item, 0, firstNextItem);
-                    }
-                    else
-                    {
-                        //Si no existe un elemento inmediatamente a la derecha del simbolo, agregar lookahead del padre
-                        lritem = new LRItem(item, 0, lookahead);
-                    }
+                    LRItem lritem = new LRItem(item, 0, getLookaheadNextItem(firstNextItem, lookahead)); 
 
                     //Agregar a lista de estados
                     followUpItems.Add(lritem);
