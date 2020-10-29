@@ -73,6 +73,8 @@
         NT_Start,
         NT_ExampleE,
         NT_ExampleT,
+        NT_ExampleS,
+        NT_ExampleV,
 
         #endregion
 

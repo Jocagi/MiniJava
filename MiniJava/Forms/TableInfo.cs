@@ -66,8 +66,10 @@ namespace MiniJava.Forms
                         this.richTextBox1.Text += "\n";
                     }
 
-                    string text = this.richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S")
-                        .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "");
+                    string text = this.richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S'")
+                        .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "")
+                        .Replace("NT_ExampleS", "S").Replace("NT_ExampleV", "V").Replace("Operator_puntosIgual", ":=")
+                        .Replace("Const_Int", "num");
 
                     this.richTextBox1.Text = text;
                 }

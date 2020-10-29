@@ -21,17 +21,20 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
 
         public static List<Production> productions = new List<Production>
         {
-            new Production(TokenType.NT_Start, new List<TokenType>{TokenType.NT_ExampleE}),
-            new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT, TokenType.Operator_mas, TokenType.NT_ExampleE}),
-            new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleT}),
-            new Production(TokenType.NT_ExampleT, new List<TokenType>{TokenType.Identifier})
+            new Production(TokenType.NT_Start, new List<TokenType>{TokenType.NT_ExampleS}),
+            new Production(TokenType.NT_ExampleS, new List<TokenType>{TokenType.Identifier}),
+            new Production(TokenType.NT_ExampleS, new List<TokenType>{TokenType.NT_ExampleV, TokenType.Operator_puntosIgual, TokenType.NT_ExampleE}),
+            new Production(TokenType.NT_ExampleV, new List<TokenType>{TokenType.Identifier}),
+            new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.NT_ExampleV}),
+            new Production(TokenType.NT_ExampleE, new List<TokenType>{TokenType.Const_Int})
         };
 
         public static List<First> first = new List<First>
         {
             new First(TokenType.NT_Start, new List<TokenType>{TokenType.Identifier}),
-            new First(TokenType.NT_ExampleE, new List<TokenType>{TokenType.Identifier}),
-            new First(TokenType.NT_ExampleT, new List<TokenType>{TokenType.Identifier})
+            new First(TokenType.NT_ExampleS, new List<TokenType>{TokenType.Identifier}),
+            new First(TokenType.NT_ExampleV, new List<TokenType>{TokenType.Identifier}),
+            new First(TokenType.NT_ExampleE, new List<TokenType>{TokenType.Identifier, TokenType.Const_Int})
         };
     }
 }
