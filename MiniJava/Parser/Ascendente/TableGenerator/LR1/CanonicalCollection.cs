@@ -55,8 +55,9 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     LRItem kernel = item.LRItem.Copy();
                     kernel.Position++;
                     
-                    //Validar si se ha llegado a la posicion final en la expresion
-                    if (kernel.Position > kernel.Production.RightSide.Count)
+                    //Validar si se ha llegado a la posicion final en la expresion o si es epsilon
+                    if (kernel.Position > kernel.Production.RightSide.Count || 
+                        kernel.Production.RightSide[kernel.Position - 1] == TokenType.Epsilon)
                     {
                         kernel.action = kernel.Production.LeftSide == TokenType.NT_Start?
                             ActionType.Accept : ActionType.Reduce;
