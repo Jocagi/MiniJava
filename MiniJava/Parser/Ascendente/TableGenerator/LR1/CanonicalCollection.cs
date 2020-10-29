@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using MiniJava.General;
@@ -285,15 +286,25 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             if (kernel.Position < kernel.Production.RightSide.Count)
             {
                 TokenType token = kernel.Production.RightSide[kernel.Position];
-                if (grammar.isNotTerminal(token))
+
+                if (token != TokenType.Epsilon)
                 {
-                    result = grammar.first.Find
-                        (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
-                        ?.first;
+                    if (grammar.isNotTerminal(token))
+                    {
+                        result = grammar.first.Find
+                                (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
+                            ?.first;
+
+                        Debug.WriteLine(token);
+                    }
+                    else
+                    {
+                        result.Add(token);
+                    }
                 }
                 else
                 {
-                    result.Add(token);
+                    result = new List<TokenType>();
                 }
             }
 

@@ -41,7 +41,7 @@ namespace MiniJava.Forms
                         foreach (var token in lritem.Production.RightSide)
                         {
                             richTextBox1.Text += i == lritem.Position ? "•" : "";
-                            richTextBox1.Text += $"{token}";
+                            richTextBox1.Text += $" {token} ";
                             i++;
                         }
 
@@ -65,14 +65,6 @@ namespace MiniJava.Forms
                         {
                             richTextBox1.Text += "\n";
                         }
-
-                        string text = richTextBox1.Text.Replace("Operator_mas", "+").Replace("NT_Start", "S'")
-                            .Replace("NT_ExampleE", "E").Replace("NT_ExampleT", "T").Replace("entifier", "")
-                            .Replace("NT_ExampleS", "S").Replace("NT_ExampleV", "V")
-                            .Replace("Operator_puntosIgual", ":=")
-                            .Replace("Const_Int", "num");
-
-                        richTextBox1.Text = text;
                     }
                 }
             }
