@@ -49,7 +49,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                 }
                 HacerPeek = true;
                 int cont = 0;
-
+                #region Asigancion de opcion
                 if (opcion!=3 & tokenEvalua == TokenType.Token_void)
                 {
                     opcion = 1;
@@ -80,6 +80,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                     opcion = 6;
                 }
 
+                #endregion
 
                 foreach (var item in estado.actions)
                 {
@@ -126,8 +127,10 @@ namespace MiniJava.Parser.Ascendente.Parser
                     Enfoque = 0;
                     Pila.Push(movEstado);
                 }
+                //ERRORES :c
                 else
                 {
+                    //Si el token que debia seguir se puede "adivinar"
                     if (cont == 1)
                     {
                         string error = "Falta token " + estado.actions[1].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
@@ -162,8 +165,49 @@ namespace MiniJava.Parser.Ascendente.Parser
                             Pila.Push(movEstado);
                             Simbolo.Push(Entrada.Dequeue());
                         }
-                    } 
+                    }
+                    else 
+                    {
+                        //ERROR PRESENTE EN DECLARACION DE FUNCION
+                        if (opcion == 1)
+                        {
+                            HacerPeek = false;
+                            while (tokenEvalua!=TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier)
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
 
+                        //ERROR PRESENTE EN DECLARACION DE CLASE
+                        if (opcion == 2)
+                        {
+                            while (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier)
+                            {
+                                HacerPeek = false;
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                    clase = false;
+                                }
+                            }
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                    }
                     Error = true;
                 } //ERROR
 
