@@ -172,7 +172,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         if (opcion == 1)
                         {
                             HacerPeek = false;
-                            while (tokenEvalua!=TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier)
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
                             {
                                 Entrada.Dequeue();
                                 tokenEvalua = Entrada.Peek().tokenType;
@@ -181,6 +181,8 @@ namespace MiniJava.Parser.Ascendente.Parser
                                     HacerPeek = true;
                                 }
                             }
+                            string error = "Error en declaracion de funcion  en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
                             Simbolo.Clear();
                             Pila.Clear();
                             Pila.Push(0);
@@ -190,7 +192,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         //ERROR PRESENTE EN DECLARACION DE CLASE
                         if (opcion == 2)
                         {
-                            while (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier)
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
                             {
                                 HacerPeek = false;
                                 Entrada.Dequeue();
@@ -201,12 +203,69 @@ namespace MiniJava.Parser.Ascendente.Parser
                                     clase = false;
                                 }
                             }
+                            string error = "Error en declaracion de clase en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
                             Simbolo.Clear();
                             Pila.Clear();
                             Pila.Push(0);
                             opcion = 0;
                         }
 
+                        //ERROR PRESENTE EN DECLARACION DE CLASE
+                        if (tokenEvalua != TokenType.Operator_llaveAbre & clase==true) 
+                        {
+                            
+                            string error = "Llave que cierra clase en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                            clase = false;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE INTERFACE
+                        if (opcion == 3)
+                        {
+                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra ))
+                            {
+                                HacerPeek = false;
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                    clase = false;
+                                }
+                            }
+                            string error = "Error en declaracion de interface en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE VARIABLE
+                        if (opcion == 4)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_puntoComa)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de variable  en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
                     }
                     Error = true;
                 } //ERROR
