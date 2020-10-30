@@ -266,6 +266,59 @@ namespace MiniJava.Parser.Ascendente.Parser
                             Pila.Push(0);
                             opcion = 0;
                         }
+
+                        //ERROR PRESENTE EN DECLARACION DE StamentBlock
+                        if (opcion == 5)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveCierra)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de un bloque de declaracion en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE CONSTANTE
+                        if (opcion == 6)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_puntoComa)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de una constante de declaracion en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //Error de simbolo no adecuado al inicio de un DECL
+                        if (opcion == 0)
+                        {
+                            string error = "Error inicio de declaracion incorrecto en " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
                     }
                     Error = true;
                 } //ERROR
