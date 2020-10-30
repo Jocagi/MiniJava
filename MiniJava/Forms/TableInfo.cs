@@ -37,6 +37,7 @@ namespace MiniJava.Forms
 
         private void showCollection()
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
             textCC = "";
 
             foreach (var item in collection.States)
@@ -82,15 +83,15 @@ namespace MiniJava.Forms
                     }
                 }
             }
-
             richTextBox1.Text = textCC;
         }
 
         private void loadTable()
         {
-            Control.CheckForIllegalCrossThreadCalls = false;
-            
             Table tabla = new Table(collection);
+            string conflictosMensaje = "Conflicto en Estado: ";
+            int conflictos = 0;
+            List<int> stateConflict = new List<int>();
 
             //Columnas
             dataGridView1.Columns.Add("ESTADO", "ESTADO");
@@ -112,6 +113,18 @@ namespace MiniJava.Forms
                     {
                         if (tabla.tokens[i] == action.symbol)
                         {
+                            //Anunciar conflicto
+                            if (dataGridView1.Rows[stateNumber].Cells[i + 1].Value != null)
+                            {
+                                if (!stateConflict.Contains(stateNumber))
+                                {
+                                    conflictosMensaje += $"{stateNumber},";
+                                    conflictos++;
+                                    stateConflict.Add(stateNumber);
+                                }
+                            }
+
+                            //Agregar valor
                             if (action.accion != ActionType.Accept && action.accion != ActionType.Error)
                             {
                                 dataGridView1.Rows[stateNumber].Cells[i + 1].Value += $" {action.accion} {action.estado}";
@@ -126,6 +139,11 @@ namespace MiniJava.Forms
                 }
 
                 stateNumber++;
+            }
+
+            if (conflictos > 0)
+            {
+                MessageBox.Show(conflictosMensaje);
             }
         }
 

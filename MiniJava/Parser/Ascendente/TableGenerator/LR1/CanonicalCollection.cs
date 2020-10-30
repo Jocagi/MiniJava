@@ -215,7 +215,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                 //Si el elemento a la derecha es nullable, combianr ambos
                 if (firstNextItem.Contains(TokenType.Epsilon))
                 {
-                    return firstNextItem.Concat(lookaheadActualItem).ToList();
+                    List<TokenType> result = firstNextItem.Select(item => item).ToList();
+                    result.RemoveAll(x => x == TokenType.Epsilon);
+
+                    return result.Concat(lookaheadActualItem).ToList();
                 }
                 //Si existe un elemento a la derecha del simbolo, agregar first de ese elemento
                 return firstNextItem;
