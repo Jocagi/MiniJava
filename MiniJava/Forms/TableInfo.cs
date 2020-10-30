@@ -9,6 +9,7 @@ namespace MiniJava.Forms
     public partial class TableInfo : Form
     {
         private readonly CanonicalCollection collection;
+        private string textCC;
 
         public TableInfo()
         {
@@ -19,59 +20,76 @@ namespace MiniJava.Forms
         {
             InitializeComponent();
             collection = cc;
-            showCollection();
+            loadObjects();
+        }
+
+        private void loadObjects()
+        {
+            //Coleccion Canonica
+            System.Threading.ThreadStart
+                FStart1 = showCollection;
+            System.Threading.Thread ThreadCC =
+                new System.Threading.Thread(FStart1);
+            ThreadCC.Start();
+            
             loadTable();
         }
 
         private void showCollection()
         {
+            textCC = "";
+
             foreach (var item in collection.States)
             {
                 if (item != null)
                 {
-                    richTextBox1.Text += $"Estado {item.ID}: \n";
+                    textCC += $"Estado {item.ID}: \n";
 
                     foreach (var lritem in item.items)
                     {
-                        richTextBox1.Text += $"\t ->";
-                        richTextBox1.Text += $" \t {lritem.Production.LeftSide} =>";
+                        textCC += $"\t ->";
+                        textCC += $" \t {lritem.Production.LeftSide} =>";
 
                         int i = 0;
 
                         foreach (var token in lritem.Production.RightSide)
                         {
-                            richTextBox1.Text += i == lritem.Position ? "•" : "";
-                            richTextBox1.Text += $" {token} ";
+                            textCC += i == lritem.Position ? "•" : "";
+                            textCC += $" {token} ";
                             i++;
                         }
 
-                        richTextBox1.Text += lritem.Position > lritem.Production.RightSide.Count ? "•" : "";
+                        textCC += lritem.Position > lritem.Production.RightSide.Count ? "•" : "";
 
-                        richTextBox1.Text += $" \t\t\tLookahead: ";
+                        textCC += $" \t\t\tLookahead: ";
 
                         foreach (var la in lritem.lookahead)
                         {
-                            richTextBox1.Text += $"{la} ";
+                            textCC += $"{la} ";
                             i++;
                         }
 
-                        richTextBox1.Text += $" \tAction: {lritem.action}";
+                        textCC += $" \tAction: {lritem.action}";
 
                         if (lritem.shiftTo >= 0)
                         {
-                            richTextBox1.Text += $" \tGO_TO: {lritem.shiftTo} \n";
+                            textCC += $" \tGO_TO: {lritem.shiftTo} \n";
                         }
                         else
                         {
-                            richTextBox1.Text += "\n";
+                            textCC += "\n";
                         }
                     }
                 }
             }
+
+            richTextBox1.Text = textCC;
         }
 
         private void loadTable()
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
+            
             Table tabla = new Table(collection);
 
             //Columnas
@@ -109,6 +127,11 @@ namespace MiniJava.Forms
 
                 stateNumber++;
             }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
