@@ -29,25 +29,64 @@ namespace MiniJava.Parser.Ascendente.Parser
             bool Aceptado = false;
             ActionType accion = new ActionType();
             int Enfoque = 0; //booleano que me dice si debo evaluar Entrada o Símbolo
-                        //0 SI ES A ENTRADA Y 1 SI ES A SÍMBOLO 
+                             //0 SI ES A ENTRADA Y 1 SI ES A SÍMBOLO 
+            bool clase = false;
+            int opcion = 0;
+            bool HacerPeek = true;
             while (!Error & Aceptado)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
                 int movEstado = 0;
                 TokenType tokenEvalua = new TokenType();
-                if (Enfoque == 0)
+                if (Enfoque == 0 & HacerPeek)
                 {
                     tokenEvalua = Entrada.Peek().tokenType;
                 }
-                else 
+                else if(Enfoque == 0 & HacerPeek)
                 {
                     tokenEvalua = Simbolo.Peek().tokenType;
-                } int cont = 0;
+                }
+                HacerPeek = true;
+                int cont = 0;
+
+                if (opcion!=3 & tokenEvalua == TokenType.Token_void)
+                {
+                    opcion = 1;
+                }
+                if (opcion == 4 & tokenEvalua == TokenType.Operator_ParentesisAbre)
+                {
+                    opcion = 1;
+                }
+                if ((opcion == 0 |opcion ==2) & (tokenEvalua == TokenType.Token_int| tokenEvalua == TokenType.Token_double| tokenEvalua == TokenType.Token_boolean| tokenEvalua == TokenType.Token_string| tokenEvalua == TokenType.Identifier))
+                {
+                    opcion = 4;
+                }
+                if ((opcion == 0 | opcion == 2) & tokenEvalua == TokenType.Token_interface)
+                {
+                    opcion = 3;
+                }
+                if (tokenEvalua == TokenType.Token_class)
+                {
+                    opcion = 2;
+                    clase = true;
+                }
+                if (tokenEvalua == TokenType.Operator_llaveAbre & opcion ==1)
+                {
+                    opcion = 5;
+                }
+                if (tokenEvalua == TokenType.Token_static & (opcion == 0 | opcion == 2))
+                {
+                    opcion = 6;
+                }
+
+
                 foreach (var item in estado.actions)
                 {
-                    //solo los terminales
-                    cont++;
+                    if (gramatica.isTerminal(item.symbol))
+                    {
+                        cont++;
+                    }
                     if (item.symbol == tokenEvalua)
                     {
                         accion = item.accion;
@@ -95,6 +134,34 @@ namespace MiniJava.Parser.Ascendente.Parser
                         errores.Add(error);
                         Token tokenNuevo = new Token(estado.actions[1].symbol);
                         Simbolo.Push(tokenNuevo);
+                        if (estado.actions[1].accion == ActionType.Accept)
+                        {
+                            Aceptado = true;
+
+                        }
+                        else if (estado.actions[1].accion == ActionType.Reduce)
+                        {
+                            foreach (var item in gramatica.Productions)
+                            {
+                                if (item.ID == movEstado)
+                                {
+                                    for (int i = 0; i < item.RightSide.Count; i++)
+                                    {
+                                        Simbolo.Pop();
+                                        Pila.Pop();
+                                    }
+                                    Token tokenNuevo = new Token(item.LeftSide);
+                                    Simbolo.Push(tokenNuevo);
+                                }
+                            }
+                            Enfoque = 1;
+                        }
+                        else if (estado.actions[1].accion == ActionType.Shift)
+                        {
+                            Enfoque = 0;
+                            Pila.Push(movEstado);
+                            Simbolo.Push(Entrada.Dequeue());
+                        }
                     } 
 
                     Error = true;
