@@ -94,7 +94,14 @@ namespace MiniJava.Forms
                     {
                         if (tabla.tokens[i] == action.symbol)
                         {
-                            dataGridView1.Rows[stateNumber].Cells[i+1].Value += $" {action.accion} {action.estado}";
+                            if (action.accion != ActionType.Accept && action.accion != ActionType.Error)
+                            {
+                                dataGridView1.Rows[stateNumber].Cells[i + 1].Value += $" {action.accion} {action.estado}";
+                            }
+                            else
+                            {
+                                dataGridView1.Rows[stateNumber].Cells[i + 1].Value += $" {action.accion} ";
+                            }
                             break;
                         }
                     }

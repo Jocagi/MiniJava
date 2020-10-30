@@ -100,9 +100,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
                             foreach (var childItem in followUpItems)
                             {
+                                //todo arreglar error
                                 //Recuperar valor del simbolo anterior
                                 var value = previouStates.Find(x =>
-                                    x.symbol == childItem.Production.LeftSide &&
+                                    x.isProductionEqual(childItem.Production)  &&
                                     x.isLookaheadEqual(childItem.lookahead))?.state;
                                 if (value != null)
                                     childItem.shiftTo = (int)value;
@@ -127,7 +128,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                             //Verificar si es un terminal o un No Terminal
                             if (grammar.isNotTerminal(token))
                             {
-                                previouStates.Add(new StatePointer(token, lookAheadNextItem, totalStates + 1));
+                                previouStates.Add(new StatePointer(token, lookAheadNextItem, totalStates + 1, kernel.Production));
 
                                 //Si es No terminal obtener todos los derivados
 
@@ -178,7 +179,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
                                             if (grammar.isNotTerminal(next.Production.LeftSide))
                                             {
-                                                previouStates.Add(new StatePointer(next.Production.LeftSide, next.lookahead, nextState));
+                                                previouStates.Add(new StatePointer(next.Production.LeftSide, next.lookahead, nextState, next.Production));
                                             }
 
                                             childItem.shiftTo = nextState;
