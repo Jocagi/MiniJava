@@ -17,6 +17,8 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new Production(TokenType.NT_Start, new List<TokenType>{TokenType.NT_Program}),
             new Production(TokenType.NT_Program, new List<TokenType>{TokenType.NT_Decl}),
             //Declaraciones
+            new Production(TokenType.NT_Decl, new List<TokenType>{TokenType.NT_FunctionDecl, TokenType.NT_Decl1}),
+            new Production(TokenType.NT_Decl, new List<TokenType>{TokenType.NT_ClassDecl, TokenType.NT_Decl1}),
             new Production(TokenType.NT_Decl, new List<TokenType>{TokenType.NT_InterfaceDecl, TokenType.NT_Decl1}),
             new Production(TokenType.NT_Decl, new List<TokenType>{TokenType.NT_VariableDecl, TokenType.NT_Decl1}),
             new Production(TokenType.NT_Decl, new List<TokenType>{TokenType.NT_ConstDecl, TokenType.NT_Decl1}),
@@ -91,34 +93,51 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new Production(TokenType.NT_LValue, new List<TokenType> {TokenType.Token_this, TokenType.Operator_punto, TokenType.Identifier}),
             new Production(TokenType.NT_RValue, new List<TokenType> {TokenType.NT_Expr}),
             new Production(TokenType.NT_RValue, new List<TokenType> {TokenType.Token_New, TokenType.Operator_ParentesisAbre, TokenType.Identifier, TokenType.Operator_llaveCierra}),
+           
             new Production(TokenType.NT_ExprLogi, new List<TokenType> {TokenType.NT_ExprDiv}),
             new Production(TokenType.NT_ExprLogi, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_mayor, TokenType.NT_ExprLogi}),
             new Production(TokenType.NT_ExprLogi, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_mayorIgual, TokenType.NT_ExprLogi}),
             new Production(TokenType.NT_ExprLogi, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_diferente, TokenType.NT_ExprLogi}),
             new Production(TokenType.NT_ExprLogi, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_dobleOr, TokenType.NT_ExprLogi}),
+            
             new Production(TokenType.NT_ExprDiv, new List<TokenType> {TokenType.NT_ExprMin}),
             new Production(TokenType.NT_ExprDiv, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_porcentaje, TokenType.NT_ExprMin}),
             new Production(TokenType.NT_ExprDiv, new List<TokenType> {TokenType.NT_Expr, TokenType.Operator_div, TokenType.NT_ExprMin}),
+            
             new Production(TokenType.NT_ExprMin, new List<TokenType> {TokenType.NT_Factor, TokenType.Operator_menos, TokenType.NT_ExprMin}),
             new Production(TokenType.NT_ExprMin, new List<TokenType> {TokenType.NT_Factor}),
+            
             new Production(TokenType.NT_Factor, new List<TokenType> {TokenType.NT_Constant}),
             new Production(TokenType.NT_Factor, new List<TokenType> {TokenType.NT_LValue}),
             new Production(TokenType.NT_Factor, new List<TokenType> {TokenType.Operator_ParentesisAbre, TokenType.NT_Expr, TokenType.Operator_ParentesisCierra}),
+            
             new Production(TokenType.NT_Constant, new List<TokenType> {TokenType.Const_Int}),
             new Production(TokenType.NT_Constant, new List<TokenType> {TokenType.Const_double}),
             new Production(TokenType.NT_Constant, new List<TokenType> {TokenType.Const_bool}),
             new Production(TokenType.NT_Constant, new List<TokenType> {TokenType.Const_String}),
             new Production(TokenType.NT_Constant, new List<TokenType> {TokenType.Token_null}),
+            //Class declaration
+            new Production(TokenType.NT_ClassDecl, new List<TokenType> {TokenType.Token_class, TokenType.Identifier, TokenType.NT_ClassDecl1, TokenType.NT_ClassDecl2, TokenType.Operator_llaveAbre, TokenType.NT_Field, TokenType.Operator_llaveCierra}),
+            new Production(TokenType.NT_ClassDecl1, new List<TokenType> {TokenType.Token_extends, TokenType.Identifier}),
+            new Production(TokenType.NT_ClassDecl1, new List<TokenType> {TokenType.Epsilon}),
+            new Production(TokenType.NT_ClassDecl2, new List<TokenType> {TokenType.Token_implements, TokenType.Identifier, TokenType.NT_ClassDecl3}),
+            new Production(TokenType.NT_ClassDecl2, new List<TokenType> {TokenType.Epsilon}),
+            new Production(TokenType.NT_ClassDecl3, new List<TokenType> {TokenType.Operator_coma, TokenType.Identifier, TokenType.NT_ClassDecl3}),
+            new Production(TokenType.NT_ClassDecl3, new List<TokenType> {TokenType.Epsilon}),
+            new Production(TokenType.NT_Field, new List<TokenType> {TokenType.NT_VariableDecl, TokenType.NT_Field}),
+            new Production(TokenType.NT_Field, new List<TokenType> {TokenType.NT_FunctionDecl, TokenType.NT_Field}),
+            new Production(TokenType.NT_Field, new List<TokenType> {TokenType.NT_ConstDecl, TokenType.NT_Field}),
+            new Production(TokenType.NT_Field, new List<TokenType> {TokenType.Epsilon})
         };
 
         public static List<First> first = new List<First>
         {
             //Inicio
-            new First(TokenType.NT_Start, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier, TokenType.Token_interface}),
-            new First(TokenType.NT_Program, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier,TokenType.Token_interface}),
+            new First(TokenType.NT_Start, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Program, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier,TokenType.Token_interface, TokenType.Token_class}),
             //Declaraciones
-            new First(TokenType.NT_Decl, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier, TokenType.Token_interface}),
-            new First(TokenType.NT_Decl1, new List<TokenType>{TokenType.Epsilon,TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier,TokenType.Token_interface}),
+            new First(TokenType.NT_Decl, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Decl1, new List<TokenType>{TokenType.Epsilon,TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
             //Declaracion de contantes
             new First(TokenType.NT_ConstDecl, new List<TokenType>{TokenType.Token_static}),
             new First(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String}),
@@ -163,6 +182,12 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new First(TokenType.NT_ExprMin, new List<TokenType> {TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_null, TokenType.Operator_ParentesisAbre, TokenType.Identifier, TokenType.Token_this}),
             new First(TokenType.NT_Factor, new List<TokenType> {TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_null, TokenType.Operator_ParentesisAbre, TokenType.Identifier, TokenType.Token_this}),
             new First(TokenType.NT_Constant, new List<TokenType> {TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_null}),
+            //Declaracion de clase
+            new First(TokenType.NT_ClassDecl, new List<TokenType> {TokenType.Token_class}),
+            new First(TokenType.NT_ClassDecl1, new List<TokenType> {TokenType.Token_extends, TokenType.Epsilon}),
+            new First(TokenType.NT_ClassDecl2, new List<TokenType> {TokenType.Token_implements, TokenType.Epsilon}),
+            new First(TokenType.NT_ClassDecl3, new List<TokenType> {TokenType.Operator_coma, TokenType.Epsilon}),
+            new First(TokenType.NT_Field, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Epsilon})
         };
     }
 }
