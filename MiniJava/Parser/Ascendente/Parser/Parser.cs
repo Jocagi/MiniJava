@@ -24,8 +24,9 @@ namespace MiniJava.Parser.Ascendente.Parser
             tabla = tab;
         }
 
-        public Parser()
+        List<string> Parserr()
         {
+            List<string> errores = new List<string>();
             bool Error = false;
             bool Aceptado = false;
             ActionType accion = new ActionType();
@@ -44,9 +45,11 @@ namespace MiniJava.Parser.Ascendente.Parser
                 else 
                 {
                     tokenEvalua = Simbolo.Peek().tokenType;
-                }
+                } int cont = 0;
                 foreach (var item in estado.actions)
                 {
+                    //solo los terminales
+                    cont++;
                     if (item.symbol == tokenEvalua)
                     {
                         accion = item.accion;
@@ -88,11 +91,19 @@ namespace MiniJava.Parser.Ascendente.Parser
                 }
                 else
                 {
+                    if (cont == 1)
+                    {
+                        string error = "Falta token " + estado.actions[1].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                        errores.Add(error);
+                        Token tokenNuevo = new Token(estado.actions[1].symbol);
+                        Simbolo.Push(tokenNuevo);
+                    } 
+
                     Error = true;
                 } //ERROR
 
             }
-
+            return errores;
         }
     }
 }
