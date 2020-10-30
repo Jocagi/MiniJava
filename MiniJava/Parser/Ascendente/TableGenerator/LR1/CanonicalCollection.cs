@@ -212,6 +212,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             //Agregar lookahead del elemento en cuestion
             if (firstNextItem.Count > 0)
             {
+                //Si el elemento a la derecha es nullable, combianr ambos
+                if (firstNextItem.Contains(TokenType.Epsilon))
+                {
+                    return firstNextItem.Concat(lookaheadActualItem).ToList();
+                }
                 //Si existe un elemento a la derecha del simbolo, agregar first de ese elemento
                 return firstNextItem;
             }
@@ -296,6 +301,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             //Aumentar posicion analizada
             LRItem kernel = item.Copy();
             
+            Inicio:
             //Validar si no se ha llegado a la posicion final en la expresion
             if (kernel.Position < kernel.Production.RightSide.Count)
             {
@@ -305,20 +311,22 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                 {
                     if (grammar.isNotTerminal(token))
                     {
-                        result = grammar.first.Find
+                        result = result.Concat( grammar.first.Find
                                 (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
-                            ?.first;
+                            ?.first ?? throw new InvalidOperationException()).ToList();
 
+                        if (result.Contains(TokenType.Epsilon))
+                        {
+                            result.RemoveAll(x => x == TokenType.Epsilon);
+                            kernel.Position++;
+                            goto Inicio;
+                        }
                         Debug.WriteLine(token);
                     }
                     else
                     {
                         result.Add(token);
                     }
-                }
-                else
-                {
-                    result = new List<TokenType>();
                 }
             }
 

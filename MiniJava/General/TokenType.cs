@@ -71,11 +71,6 @@
         #region No_Terminales
 
         NT_Start,
-        //Tokens de prueba
-        NT_ExampleE,
-        NT_ExampleT,
-        NT_ExampleS,
-        NT_ExampleV,
         //Tokens No terminales de la gramatica
         NT_Program,
         NT_Decl,
@@ -85,6 +80,7 @@
         NT_ConstDecl,
         NT_ConstType,
         NT_Type,
+        NT_TypeArray,
         NT_FunctionDecl,
         NT_Formals,
         NT_ClassDecl,
