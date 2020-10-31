@@ -13,6 +13,7 @@ namespace MiniJava.Parser.Ascendente.Parser
         Grammar gramatica = new Grammar();
         public Parser(Queue<Token> tokens, Table tab, Grammar g)
         {
+            //ADD OEF A ENTRADA AL FINAL
             gramatica = g;
             Entrada = tokens;
             Pila.Push(0);
@@ -78,7 +79,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                 }
 
                 #endregion
-
+                List<Action> posibilidades = new List<Action>();
                 foreach (var item in estado.actions)
                 {
                     if (gramatica.isTerminal(item.symbol))
@@ -87,10 +88,21 @@ namespace MiniJava.Parser.Ascendente.Parser
                     }
                     if (item.symbol == tokenEvalua)
                     {
-                        accion = item.accion;
-                        movEstado = item.estado;
+                        posibilidades.Add(item);
                     }
                 }
+                //ELEGIR EL MOVIMIENTO
+                if (posibilidades.Count==1)
+                {
+                    accion = posibilidades[0].accion;
+                    movEstado = posibilidades[0].estado;
+                }
+                if (posibilidades.Count > 1)
+                {
+                    //ELEGIR UNA OPCION
+
+                }
+                //DESPUES DE ELEGIR EL MOVIMIENTO
                 if (accion == ActionType.Accept)
                 {
                     Aceptado = true;
@@ -130,16 +142,16 @@ namespace MiniJava.Parser.Ascendente.Parser
                     //Si el token que debia seguir se puede "adivinar"
                     if (cont == 1)
                     {
-                        string error = "Falta token " + estado.actions[1].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                        string error = "Falta token " + estado.actions[0].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
                         errores.Add(error);
-                        Token tokenNuevo = new Token(estado.actions[1].symbol);
+                        Token tokenNuevo = new Token(estado.actions[0].symbol);
                         Simbolo.Push(tokenNuevo);
-                        if (estado.actions[1].accion == ActionType.Accept)
+                        if (estado.actions[0].accion == ActionType.Accept)
                         {
                             Aceptado = true;
 
                         }
-                        else if (estado.actions[1].accion == ActionType.Reduce)
+                        else if (estado.actions[0].accion == ActionType.Reduce)
                         {
                             foreach (var item in gramatica.Productions)
                             {
@@ -156,7 +168,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                             }
                             Enfoque = 1;
                         }
-                        else if (estado.actions[1].accion == ActionType.Shift)
+                        else if (estado.actions[0].accion == ActionType.Shift)
                         {
                             Enfoque = 0;
                             Pila.Push(movEstado);
@@ -316,8 +328,12 @@ namespace MiniJava.Parser.Ascendente.Parser
                             Pila.Push(0);
                             opcion = 0;
                         }
+
+                        if (Entrada.Count == 0)
+                        {
+                            Error = true;
+                        }
                     }
-                    Error = true;
                 } //ERROR
 
             }
