@@ -57,6 +57,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             return i;
         }
 
+        public Production findNumberProduction(int ID)
+        {
+            return Productions[ID];
+        }
+
         private bool productionsAreEqual(Production prod1, Production prod2)
         {
             return
