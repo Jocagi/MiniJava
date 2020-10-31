@@ -112,23 +112,28 @@ namespace MiniJava.Forms
 
                 output += line;
             }
-
-            //Analizador sintactico
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
-            Parser.Ascendente.Parser.Table tab = new Parser.Ascendente.Parser.Table();
-            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue,  tab);
-            List<string> listaErrores = pars.Parserr();
+            Parser.RecursiveDescent.Parser pars1 = new Parser.RecursiveDescent.Parser(tokensQueue);
+            ParserReport parserReport = pars1.getReport();
 
 
-            output +=  listaErrores.Count == 0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
 
 
-            foreach (var item in listaErrores)
+            //ANALIZADOR SINTACTICO
+            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue);
+
+            output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
+
+            if (!parserReport.isCorrect)
             {
-                output += $"*** "+ item + " ***\n";
+                foreach (var item in parserReport.Errors)
+                {
+                    output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                }
+            
+            
+            
             }
-
-
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto

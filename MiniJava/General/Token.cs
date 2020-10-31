@@ -26,6 +26,9 @@ namespace MiniJava.Lexer
             this.tokenType = tokenType;
             this.value = value;
             this.location = location;
+
+
+
         }
         public Token(MatchRegex match)
         {

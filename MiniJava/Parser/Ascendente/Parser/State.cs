@@ -6,10 +6,7 @@ namespace MiniJava.Parser.Ascendente.Parser
     {
         public List<Action> actions = new List<Action>();
 
-        public State()
-        {
-
-        }
+        
         public State(List<Action> actions)
         {
             this.actions = actions;

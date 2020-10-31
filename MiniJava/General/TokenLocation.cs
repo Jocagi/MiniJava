@@ -12,6 +12,8 @@ namespace MiniJava.Lexer
         public int row;
 
         public int firstCol;
+
+
         public int lastCol;
 
         public TokenLocation(int row, int firstCol, int lastCol) 

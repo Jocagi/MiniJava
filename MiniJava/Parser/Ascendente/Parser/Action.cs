@@ -10,16 +10,19 @@ namespace MiniJava.Parser.Ascendente.Parser
         public int estado;
 
         public int precedencia;
-        public int asociatividad;
 
         public Action()
         {
 
         }
 
+
+
         public Action(TokenType symbol, ActionType action, int state)
         {
             this.accion = action;
+
+
             this.symbol = symbol;
             this.estado = state;
         }

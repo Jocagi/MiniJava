@@ -48,7 +48,7 @@ namespace MiniJava.Parser.RecursiveDescent
             return result;
         }
 
-        private void Dequeue() 
+        private void Dequeue()
         {
             if (tokens.Count > 0)
             {
@@ -79,64 +79,11 @@ namespace MiniJava.Parser.RecursiveDescent
             expectedValue = token;
             return false;
         }
-        private bool Match_Several_Times(TokenType[] tokensArray)//una o 0 veces lo toma como correcto
-        {
-            if (tokensArray.Length > 1 && lookahead == tokensArray[0])
-            {
-                foreach (var token in tokensArray)
-                {
-                    if (token == TokenType.Data_Type)
-                    {
-                        if (!MatchType(false))
-                        {
-                            return false;
-                        }
-
-                    }
-                    else if (lookahead == token)
-                    {
-                        Dequeue();
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                Match_Several_Times(tokensArray);
-                return true;
-            }
-            else if (lookahead == tokensArray[0])
-            {
-                Dequeue();
-                Match_Several_Times(tokensArray);
-                return true;
-            }
-            return true;
-        }
-
-        private bool MatchType(bool epsilon)
-        {
-            acertoToken = false;
-            TokenType[] corchetes = { TokenType.Operator_corchetes };
-            if (lookahead == TokenType.Token_boolean || lookahead == TokenType.Token_int || lookahead == TokenType.Token_string || lookahead == TokenType.Token_double)
-            {
-                Dequeue();
-                acertoToken = true;
-                Match_Several_Times(corchetes);
-                return true;
-            }
-            if (epsilon)
-            {
-                return true;
-            }
-            expectedValue = TokenType.Data_Type;
-            return false;
-        }
-
+       
         private bool MatchConstant(bool epsilon)
         {
             acertoToken = false;
-            if (lookahead == TokenType.Const_Int|| lookahead == TokenType.Const_double || lookahead == TokenType.Const_bool|| lookahead == TokenType.Const_String || lookahead == TokenType.Token_null)
+            if (lookahead == TokenType.Const_Int || lookahead == TokenType.Const_double || lookahead == TokenType.Const_bool || lookahead == TokenType.Const_String || lookahead == TokenType.Token_null)
             {
                 Dequeue();
                 acertoToken = true;
@@ -150,10 +97,136 @@ namespace MiniJava.Parser.RecursiveDescent
             return false;
         }
 
-        private bool MatchBoolSymbol(bool epsilon)
+
+        private void ERROR(TokenType expected)
+        {
+            if (lookahead != TokenType.Default )
+            {
+                result.addError(new ParserError(lookahead, expected, actualLocation));
+                int errorRow = actualLocation.row;
+
+                if (repetirDECLerror)
+                {
+                    repetirDECLerror = false;
+                    //Saltar a la siguiente linea
+                    while (errorRow == actualLocation.row && lookahead != TokenType.Default)
+                    {
+                        Dequeue();
+                    }
+                }
+                else
+                {
+                    repetirDECLerror = true;
+                }
+            }
+            
+        }
+
+        private void PROGRAM()
+        {
+            if (!Decl())
+            {
+                ERROR(expectedValue);
+            }
+             if (tokens.Count > 0)
+            {
+               
+                PROGRAM();
+            }
+        }
+
+       
+
+
+        private bool Constant()
+        {
+            if (MatchConstant(true) && !acertoToken)
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool Lvalue1()
+        {
+            // + OP1
+            if (Match(TokenType.Operator_punto, true) && acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (!Lvalue1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool Lvalue()
+        {
+            if (Match(TokenType.Identifier, true) && acertoToken)
+            {
+                if (!Lvalue1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (Match(TokenType.Token_this, true) && acertoToken)
+            {
+                if (!Match(TokenType.Token_this, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool Factor()
+        {
+            if (Constant())
+            {
+                return true;
+            }
+            if (Lvalue())
+            {
+                return true;
+            }
+            if (Match(TokenType.Operator_ParentesisAbre, true) & acertoToken == true)
+            {
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool Operacion()
         {
             acertoToken = false;
-            if (lookahead == TokenType.Operator_menor || lookahead == TokenType.Operator_menorIgual || lookahead == TokenType.Operator_mayor || lookahead == TokenType.Operator_mayorIgual)
+            if (lookahead == TokenType.Operator_igual || lookahead == TokenType.Operator_mayor || lookahead == TokenType.Operator_mayorIgual || lookahead == TokenType.Operator_diferente || lookahead == TokenType.Operator_dobleOr || lookahead == TokenType.Operator_porcentaje || lookahead == TokenType.Operator_div || lookahead == TokenType.Operator_menos)
+            {
+                Dequeue();
+                acertoToken = true;
+                return true;
+            }
+            expectedValue = TokenType.Operator_menor;
+            return false;
+        }
+        private bool A(bool epsilon)
+        {
+            acertoToken = false;
+            if (lookahead == TokenType.Operator_negacion || lookahead == TokenType.Operator_menos)
             {
                 Dequeue();
                 acertoToken = true;
@@ -163,494 +236,77 @@ namespace MiniJava.Parser.RecursiveDescent
             {
                 return true;
             }
-            expectedValue = TokenType.boolSymbol;
+            expectedValue = TokenType.Operator_menor;
             return false;
         }
-
-        private void ERROR(TokenType expected)
-        {
-            result.addError(new ParserError(lookahead, expected, actualLocation));
-            int errorRow = actualLocation.row;
-
-            if (repetirDECLerror)
-            {
-                repetirDECLerror = false;
-                //Saltar a la siguiente linea
-                while (errorRow == actualLocation.row && lookahead != TokenType.Default)
-                {
-                    Dequeue();
-                }
-            }
-            else
-            {
-                repetirDECLerror = true;
-            }
-        }
-
-        private void PROGRAM()
-        {
-            if (!(DECL() && DECLPlus()))
-            {
-                ERROR(expectedValue);
-            }
-            else if (tokens.Count > 0)
-            {
-                ERROR(expectedValue);
-                PROGRAM();
-            }
-        }
-
-        private bool DECL()
-        {
-            bool esFunction = false;
-            bool type = false;
-            if (MatchType(true) && acertoToken)
-            {
-                type = true; 
-            }
-            //VariableDECL
-            if (type && Match(TokenType.Identifier, false))
-            {
-                if (Match(TokenType.Operator_puntoComa, true) && acertoToken)
-                {
-                    return true;
-                }
-                else
-                {
-                    esFunction = true;
-                }
-            }
-            //FunctionDECL
-            if (esFunction || (!type && Match(TokenType.Token_void, true) && Match(TokenType.Identifier, false)))
-            {
-                //Formals
-                if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
-                {
-                    TokenType[] comaTipoId = { TokenType.Operator_coma, TokenType.Data_Type, TokenType.Identifier };
-                    if (MatchType(true) && acertoToken)
-                    {
-                        if (!(Match(TokenType.Identifier, false) && Match_Several_Times(comaTipoId) && Match(TokenType.Operator_ParentesisCierra, false)))
-                        {
-                            acertoToken = false;
-                            return false;
-                        }
-                    }
-                    else if (!Match(TokenType.Operator_ParentesisCierra, false))
-                    {
-                        return false;
-                    }
-                }
-                else if (!Match(TokenType.Operator_parentesis, true))
-                {
-                    return false;
-                }
-                noMasSTMS = false;
-                while (!noMasSTMS)
-                {
-                    if (!STMT(true))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-        private bool STMT(bool nullable)
-        {
-            //while stament 
-            if (Match(TokenType.Token_while, true) && acertoToken)
-            {
-                noMasSTMS = false;//Entró al STMT
-                if (!Match(TokenType.Operator_ParentesisAbre, false))
-                {
-                    return false;
-                }
-                if (!EXPR(false))
-                {
-                    return false;
-                }
-                if (!Match(TokenType.Operator_ParentesisCierra, false))
-                {
-                    return false;
-                }
-                if (!STMT(false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            //rerurn stament
-            else if (Match(TokenType.Token_return, true) && acertoToken)
-            {
-                noMasSTMS = false;//Entró al STMT
-
-                EXPR(false);
-                
-                if (!Match(TokenType.Operator_puntoComa, false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            //EXPR stament
-            else if (EXPR(false))
-            {
-                noMasSTMS = false;//Entró al STMT
-                if (!Match(TokenType.Operator_puntoComa, false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            noMasSTMS = true;
-            if (nullable)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        private bool EXPR(bool nullable)
-        {
-            // LValue ExprP  
-            bool lValue = false;
-            bool eslValue = true;
-            if (Match(TokenType.Identifier, true) && acertoToken)
-            {
-                if (Match(TokenType.Operator_punto, true) && acertoToken)
-                {
-                    if (!Match(TokenType.Identifier, false))
-                    {
-                        return false;
-                    }
-                }
-                else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
-                {
-                    if (!EXPR(false))
-                    {
-                        return false;
-                    }
-                    if (!Match(TokenType.Operator_corcheteCierra, false))
-                    {
-                        return false;
-                    }
-                }
-                lValue = true;
-            }
-            else if (Match(TokenType.Token_this, true) && acertoToken)
-            {
-                if (!Match(TokenType.Operator_punto, false))
-                {
-                    return false;
-                }
-                if (!Match(TokenType.Identifier, false))
-                {
-                    return false;
-                }
-                lValue = true;
-            }
-            //ExprP
-            if (lValue)
-            {
-                
-                Match(TokenType.Operator_puntosIgual, true);
-                if (!acertoToken)
-                {
-                    Match(TokenType.Operator_igual, true);
-                    if (!acertoToken)
-                    {
-                        eslValue = false;
-                    }
-                }
-                if (eslValue)
-                {
-                    if (Match(TokenType.Token_New, true) && acertoToken)
-                    {
-                        if (!Match(TokenType.Operator_ParentesisAbre, false))
-                        {
-                            return false;
-                        }
-                        if (!Match(TokenType.Identifier, false))
-                        {
-                            return false;
-                        }
-                        if (!Match(TokenType.Operator_ParentesisCierra, false))
-                        {
-                            return false;
-                        }
-                        return true;
-                    }
-                    if (!EXPR(false))
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            //: Expr
-            if (!lValue && Match(TokenType.Operator_dosPuntos, true)&& acertoToken)
-            {
-                if (!EXPR(false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            //Operation
-            if (lValue && !eslValue)
-            {
-                LValue = true;
-            }
-            if (OPERATION())
-            {
-                return true;
-            }
-            if (nullable)
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        private bool OPERATION()
-        {
-            //-OPERATION
-            if (!LValue && Match(TokenType.Operator_menos,true) && acertoToken )
-            {
-                if (!OPERATION())
-                {
-                    return false;
-                }
-                return true;
-            }
-            //(OPERATION)
-            if (!LValue && Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
-            {
-                if (!OPERATION())
-                {
-                    return false;
-                }
-                if (!Match(TokenType.Operator_ParentesisCierra, false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            //OP1
-            if (OP1())
-            {
-                return true;
-            }
-            return false;
-        }
-        private bool OPTerm()
-        {
-            //Constant
-            if (MatchConstant(true) && acertoToken)
-            {
-                return true;
-            }
-            //lValue
-            if (Match(TokenType.Identifier, true) && acertoToken)
-            {
-                if (Match(TokenType.Operator_punto, true) && acertoToken)
-                {
-                    if (!Match(TokenType.Identifier, false))
-                    {
-                        return false;
-                    }
-                }
-                else if (Match(TokenType.Operator_corcheteAbre, true) && acertoToken)
-                {
-                    if (!EXPR(false))
-                    {
-                        return false;
-                    }
-                    if (!Match(TokenType.Operator_corcheteCierra, false))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            if (Match(TokenType.Token_this, true) && acertoToken)
-            {
-                if (!Match(TokenType.Operator_punto, false))
-                {
-                    return false;
-                }
-                if (!Match(TokenType.Identifier, false))
-                {
-                    return false;
-                }
-                return true;
-            }
-            //(OPERATION)
-            if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
-            {
-                if (!OPERATION())
-                {
-                    return false;
-                }
-                if (!Match(TokenType.Operator_ParentesisCierra, false))
-                {
-                    return false;
-                }
-                return true;
-            }
-
-            return false;
-        }
-        private bool OP1()
-        {
-            //OpTerm OP1_1
-            if (LValue || OPTerm() )
-            {
-                LValue = false;
-                if (!OP1_2())
-                {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-        private bool OP1_1()
-        {
-            // || OP1 
-            if (Match(TokenType.Operator_dobleOr, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            // && OP1 
-            if (Match(TokenType.Operator_dobleAnd, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            // == OP1
-            if (Match(TokenType.Operator_comparacionIgual, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            // != OP1
-            if (Match(TokenType.Operator_diferente, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-        private bool OP1_2()
-        {
-            //OP1_1
-            if (OP1_1())
-            {
-                return true;
-            }
-            //OP2
-            if (OP2())
-            {
-                return true;
-            }
-            return false;
-        }
-        private bool OP2()
+        private bool Expr()
         {
             //OpTerm BoolSymb OP1
-            if (MatchBoolSymbol(false))
-            { 
-                if (!OP1())
+            if (A(true))
+            {
+                if (!Factor())
+                {
+                    return false;
+                }
+                if (!Expr1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            
+            return false;
+        }
+        private bool Expr1()
+        {
+            //OpTerm BoolSymb OP1
+            if (Operacion())
+            {               
+                if (!Expr())
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            return true;
+        }
+
+        private bool RValue()
+        {
+            //OpTerm BoolSymb OP1
+            if (Match(TokenType.Token_New, true) && acertoToken == true)
+            {
+                if (Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
                 }
                 return true;
             }
             // OP3
-            if (OP3())
+            if (Expr())
             {
                 return true;
             }
             return false;
         }
-        private bool OP3()
+        private bool PrintStmt3()
         {
-            // OpTerm OP3_1
-            if (OP3_1())
+            if (Match(TokenType.Operator_puntoComa, true) & acertoToken == true)
             {
-                return true;
-            }
-            //OP4
-            if (OP4())
-            {
-                return true;
-            }
-            return false;
-        }
-        private bool OP3_1()
-        {
-            // * OP1 
-            if (Match(TokenType.Operator_asterisco, true) && acertoToken)
-            {
-                if (!OP1())
+                if (!Expr())
                 {
                     return false;
                 }
-                return true;
-            }
-            // / OP1
-            if (Match(TokenType.Operator_div, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            // % OP
-            if (Match(TokenType.Operator_porcentaje, true) && acertoToken)
-            {
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-        private bool OP4()
-        {
-            // + OP1
-            if (Match(TokenType.Operator_mas, true)&& acertoToken)
-            {                
-                if (!OP1())
-                {
-                    return false;
-                }
-                return true;
-            }
-            // - OP1
-            if (Match(TokenType.Operator_menos, true) && acertoToken)
-            {
-                if (!OP1())
+                if (!PrintStmt3())
                 {
                     return false;
                 }
@@ -658,24 +314,721 @@ namespace MiniJava.Parser.RecursiveDescent
             }
             return true;
         }
-        private bool DECLPlus()
+        private bool PrintStmt2()
         {
-            if (!(lookahead == TokenType.Default))
+            if (Expr())
             {
-                if (DECL())
+                if (!PrintStmt3())
                 {
-                    DECLPlus();
-                    return true;
+                    return false;
                 }
+                return true;
             }
-            
-            else if (Match(TokenType.Epsilon,true))
+            return false;
+        }
+        private bool PrintStmt()
+        {
+            if (Match(TokenType.Token_System, true) & acertoToken)
+            {
+                if (!Match(TokenType.Operator_punto, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Token_out, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_punto, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Token_println, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!PrintStmt2())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool BreakStmt()
+        {
+            if (Match(TokenType.Token_break, true) & acertoToken == true)
+            {
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool ReturnStmt()
+        {
+            if (Match(TokenType.Token_return, true) & acertoToken)
+            {
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool ForStmt()
+        {
+            if (Match(TokenType.Token_for, true) & acertoToken)
+            {
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!Stmt())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool WhileStmt()
+        {
+            if (Match(TokenType.Token_while, true) & acertoToken)
+            {
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Expr())
+                {
+                    return false;
+                }
+
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!Stmt())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool ElseStmt()
+        {
+            if (Match(TokenType.Token_else, true) & acertoToken)
+            {
+                if (!Stmt())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool IfStmt()
+        {
+            if (Match(TokenType.Token_if, true) & acertoToken)
+            {
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Expr())
+                {
+                    return false;
+                }
+
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!Stmt())
+                {
+                    return false;
+                }
+                if (!ElseStmt())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool Stmt()
+        {
+            if (Match(TokenType.Operator_puntoComa, true) & acertoToken)
             {
                 return true;
             }
-            
-                return false;
-            
+            if (Match(TokenType.Operator_coma, true) & acertoToken)
+            {
+                if (!Expr())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (IfStmt())
+            {
+                return true;
+            }
+            if (WhileStmt())
+            {
+                return true;
+            }
+            if (ForStmt())
+            {
+                return true;
+            }
+            if (BreakStmt())
+            {
+                return true;
+            }
+            if (ReturnStmt())
+            {
+                return true;
+            }
+            if (PrintStmt())
+            {
+                return true;
+            }
+            if (StmtBlock())
+            {
+                return true;
+            }
+            return false;
+
         }
+        private bool StmtBlock2()
+        {
+            if (Stmt())
+            {
+                if (!StmtBlock2())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool StmtBlock1()
+        {
+            if (VariableDecl())
+            {
+                if (!StmtBlock1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool StmtBlock()
+        {
+            if (Match(TokenType.Operator_llaveAbre, true) & acertoToken)
+            {
+                if (!StmtBlock1())
+                {
+                    return false;
+                }
+                if (!StmtBlock2())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_llaveCierra, false) )
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool Prototype()
+        {
+            if (Type())
+            {
+                if (!TypeArray())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Formals())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                if (!Prototype())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (Match(TokenType.Token_void, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Formals())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                if (!Prototype())
+                {
+                    return false;
+                }
+                return true;
+
+            }
+            return true;
+        }
+        private bool InterfaceDecl()
+        {
+            if (Match(TokenType.Token_interface, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_llaveAbre, false))
+                {
+                    return false;
+                }
+                if (!Prototype())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_llaveCierra, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool Field()
+        {
+
+            if (FunctionDecl1())
+            {
+                if (!Field())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (Variable())
+            {
+                DeclB = true;
+                if (!Declaracion())
+                {
+                    return false;
+                }
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (ConstDecl())
+            {
+                if (!Field())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool ClassDecl3()
+        {
+            if (Match(TokenType.Operator_coma, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+               
+                if (!ClassDecl3())
+                {
+                    return false;
+                }                
+                return true;
+            }
+            return true;
+        }
+        private bool ClassDecl2()
+        {
+            if (Match(TokenType.Token_implements, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+
+                if (!ClassDecl3())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool ClassDecl1()
+        {
+            if (Match(TokenType.Token_extends, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            return true;
+        }
+        private bool ClassDecl()
+        {
+            if (Match(TokenType.Token_class, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+                if (!ClassDecl1())
+                {
+                    return false;
+                }
+                if (!ClassDecl2())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_llaveAbre, false))
+                {
+                    return false;
+                }
+                if (!Field())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_llaveCierra, false))
+                {
+                    return false;
+                }                
+                return true;
+            }
+            return false;
+        }
+        private bool Formals()
+        {
+            if (Variable())
+            {
+                if (Match(TokenType.Operator_coma, true) & acertoToken)
+                {
+                    if (!Formals())
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool FunctionDecl()
+        {         
+            
+            if (Match(TokenType.Operator_ParentesisAbre, true) & acertoToken)
+            { 
+                if (!Formals())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!StmtBlock())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool FunctionDecl1()
+        {
+            
+            if (Match(TokenType.Token_void, true) & acertoToken)
+            {
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+
+                if (!Match(TokenType.Operator_ParentesisAbre, false))
+                {
+                    return false;
+                }
+                if (!Formals())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_ParentesisCierra, false))
+                {
+                    return false;
+                }
+                if (!StmtBlock())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool TypeArray()
+        {
+            if (Match(TokenType.Operator_corchetes, true) & acertoToken)
+            {
+                if (!TypeArray())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private bool Type()
+        {
+            if (ConstType(true))
+            {
+                return true;
+            }
+            if (Match(TokenType.Identifier, true)&acertoToken)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool ConstType(bool epsilon)
+        {
+            acertoToken = false;
+            if (lookahead == TokenType.Token_boolean || lookahead == TokenType.Token_int || lookahead == TokenType.Token_string || lookahead == TokenType.Token_double)
+            {
+                Dequeue();
+                acertoToken = true;
+                return true;
+            }
+            if (epsilon)
+            {
+                return false;
+            }
+            expectedValue = TokenType.Constant;
+            return false;
+        }
+        private bool ConstDecl()
+        {
+            if (Match(TokenType.Token_static, true) & acertoToken)
+            {
+                if (!ConstType(false))
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }
+
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+               
+                return true;
+            }
+
+            return false;
+        }
+        private bool Variable()
+        {
+            if (Type())
+            {
+                if (!TypeArray())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Identifier, false))
+                {
+                    return false;
+                }                
+                return true;
+            }
+            return false;
+        }
+        private bool VariableDecl()
+        {
+            if (Variable())
+            {
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        bool DeclB = false;
+        private bool Declaracion()
+        {
+            
+            if (FunctionDecl())
+            {
+                return true;
+            }
+            if (Match(TokenType.Operator_puntoComa, true) & acertoToken)
+            {
+                return true;
+            }
+            return false;
+
+        }
+        private bool Decl1()
+        {            
+            if (DeclB && !Decl())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        private bool Decl()
+        {
+            DeclB = false;
+            if (FunctionDecl1())
+            {
+                DeclB = true;
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (ClassDecl())
+            {
+                DeclB = true;
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (InterfaceDecl())
+            {
+                DeclB = true;
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (Variable())
+            {
+                DeclB = true;
+                if (!Declaracion())
+                {
+                    return false;
+                }
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            if (ConstDecl())
+            {
+                DeclB = true;
+                if (!Decl1())
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
     }
 }

@@ -15,15 +15,15 @@ namespace MiniJava.Parser.Ascendente.Parser
         Queue<Token> Entrada = new Queue<Token>();
         Table tabla = new Table();
         Grammar gramatica = new Grammar();
-        public Parser(Queue<Token> tokens, Table tab)
+        public Parser(Queue<Token> tokens )
         {
             Token eof = new Token(TokenType.EOF);
            
-            gramatica = tab.grammar;
+            //gramatica = tab.grammar;
             Entrada = tokens;
             Entrada.Enqueue(eof);
             Pila.Push(0);
-            tabla = tab;
+           // tabla = tab;
         }
 
         public List<string> Parserr()
@@ -147,16 +147,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                             }
                         }
                     }
-                    //REDUCCION CON DESPLAZAMIENTO
-                    if (reduccion & desplazamiento)
-                    {
-
-                    }
-                    //IR_A CON IR_A
-                    if (irA)
-                    {
-
-                    }
+                    
                 }
                 //DESPUES DE ELEGIR EL MOVIMIENTO
                 if (accion == ActionType.Accept)
@@ -194,6 +185,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                 //ERRORES :c
                 else
                 {
+
                     //Si el token que debia seguir se puede "adivinar"
                     if (cont == 1)
                     {
@@ -392,6 +384,8 @@ namespace MiniJava.Parser.Ascendente.Parser
 
             }
             if (!Aceptado)
+
+
             { 
                 errores.Add("error");
             }
