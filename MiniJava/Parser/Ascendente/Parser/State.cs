@@ -10,5 +10,9 @@ namespace MiniJava.Parser.Ascendente.Parser
         {
 
         }
+        public State(List<Action> actions)
+        {
+            this.actions = actions;
+        }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MiniJava.General;
 using MiniJava.Lexer;
+using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
-namespace MiniJava.Parser.Ascendente.TableGenerator
+namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 {
     public class Go_To
     {

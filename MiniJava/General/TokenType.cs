@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniJava.Lexer
+﻿namespace MiniJava.General
 {
     public enum TokenType
     {
@@ -75,8 +71,48 @@ namespace MiniJava.Lexer
         #region No_Terminales
 
         NT_Start,
-        NT_ExampleE,
-        NT_ExampleT,
+        //Tokens No terminales de la gramatica
+        NT_Program,
+        NT_Decl,
+        NT_Decl1,
+        NT_VariableDecl,
+        NT_Variable,
+        NT_ConstDecl,
+        NT_ConstType,
+        NT_Type,
+        NT_TypeArray,
+        NT_FunctionDecl,
+        NT_Formals,
+        NT_ClassDecl,
+        NT_ClassDecl1,
+        NT_ClassDecl2,
+        NT_ClassDecl3,
+        NT_Field,
+        NT_InterfaceDecl,
+        NT_Prototype,
+        NT_StmtBlock,
+        NT_StmtBlock1,
+        NT_StmtBlock2,
+        NT_Stmt,
+        NT_IfStmt,
+        NT_ElseStmt,
+        NT_WhileStmt,
+        NT_ForStmt,
+        NT_ReturnStmt,
+        NT_BreakStmt,
+        NT_PrintStmt,
+        NT_PrintStmt2,
+        NT_PrintStmt3,
+        NT_Expr,
+        NT_RValue,
+        NT_LValue,
+        NT_LValue1,
+        NT_Operacion,
+        NT_ExprLogi,
+        NT_ExprDiv,
+        NT_ExprMin,
+        NT_Factor,
+        NT_Constant,
 
         #endregion
 
@@ -99,12 +135,12 @@ namespace MiniJava.Lexer
         Error_null,
         Error_UnpairedComment,
         Epsilon,
+        EOF,
         Default,
         Data_Type,
         Constant,
         boolSymbol
 
         #endregion
-
     }
 }

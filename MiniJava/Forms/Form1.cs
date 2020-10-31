@@ -4,8 +4,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator;
+using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;
+using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
+using MiniJava.Parser.Ascendente.TableGenerator.LR1;
 using MiniJava.Parser.RecursiveDescent;
 
 namespace MiniJava.Forms
@@ -160,9 +164,13 @@ namespace MiniJava.Forms
         private void button2_Click(object sender, EventArgs e)
         {
             CanonicalCollection cc = new CanonicalCollection(new Grammar());
-           
             TableInfo t = new TableInfo(cc);
             t.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

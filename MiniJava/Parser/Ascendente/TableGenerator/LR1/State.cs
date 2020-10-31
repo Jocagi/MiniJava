@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MiniJava.Lexer;
+﻿using System.Collections.Generic;
 
-namespace MiniJava.Parser.Ascendente.TableGenerator
+namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 {
     public class State
     {

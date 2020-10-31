@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MiniJava.General;
 
 namespace MiniJava.Parser.RecursiveDescent
 {
