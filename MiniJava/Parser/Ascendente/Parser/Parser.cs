@@ -26,7 +26,7 @@ namespace MiniJava.Parser.Ascendente.Parser
         }
 
         public List<string> Parserr()
-        {
+        {/*
             List<string> errores = new List<string>();
             bool Error = false;
             bool Aceptado = false;
@@ -389,9 +389,9 @@ namespace MiniJava.Parser.Ascendente.Parser
                         }
                     }
                 } //ERROR
-
+            
             }
-            return errores;
+            return errores;*/ return new List<string>();
         }
     }
 }

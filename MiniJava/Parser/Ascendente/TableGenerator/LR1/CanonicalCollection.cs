@@ -323,14 +323,22 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                 {
                     if (grammar.isNotTerminal(token))
                     {
-                        result = result.Concat( grammar.first.Find
+                        List<TokenType> firstNext = grammar.first.Find
                                 (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
-                            ?.first ?? throw new InvalidOperationException()).ToList();
+                            ?.first ?? throw new InvalidOperationException();
+
+                        result = result.Concat(firstNext).ToList();
 
                         if (result.Contains(TokenType.Epsilon))
                         {
                             result.RemoveAll(x => x == TokenType.Epsilon);
                             kernel.Position++;
+
+                            if (kernel.Position < kernel.Production.RightSide.Count)
+                            {
+                                result.Add(TokenType.Epsilon);
+                            }
+
                             goto Inicio;
                         }
                     }
@@ -338,6 +346,12 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     {
                         result.Add(token);
                     }
+                }
+                else
+                {
+                    result.Add(token);
+                    kernel.Position++;
+                    goto Inicio;
                 }
             }
 
