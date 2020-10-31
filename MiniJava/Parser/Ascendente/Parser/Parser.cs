@@ -217,8 +217,8 @@ namespace MiniJava.Parser.Ascendente.Parser
                                     Pila.Pop();
                                 }
                             }
-                            Token tokenNuevo = new Token(item1.LeftSide);
-                            Simbolo.Push(tokenNuevo);
+                            Token tokenNuevo1 = new Token(item1.LeftSide);
+                            Simbolo.Push(tokenNuevo1);
 
                             Enfoque = 1;
                         }
