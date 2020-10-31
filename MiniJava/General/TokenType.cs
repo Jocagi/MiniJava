@@ -108,6 +108,7 @@
         NT_LValue,
         NT_LValue1,
         NT_Operacion,
+        NT_OperacionUnaria,
         NT_ExprLogi,
         NT_ExprDiv,
         NT_ExprMin,

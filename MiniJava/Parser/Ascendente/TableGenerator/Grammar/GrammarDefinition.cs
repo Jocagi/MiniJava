@@ -32,10 +32,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             //Declaracion de variable
             new Production(TokenType.NT_VariableDecl, new List<TokenType>{TokenType.NT_Variable, TokenType.Operator_puntoComa}),
             new Production(TokenType.NT_Variable, new List<TokenType>{TokenType.NT_Type,TokenType.NT_TypeArray,TokenType.Identifier}),
-            new Production(TokenType.NT_Type, new List<TokenType>{TokenType.Const_Int}),
-            new Production(TokenType.NT_Type, new List<TokenType>{TokenType.Const_double}),
-            new Production(TokenType.NT_Type, new List<TokenType>{TokenType.Const_bool}),
-            new Production(TokenType.NT_Type, new List<TokenType>{TokenType.Const_String}),
+            new Production(TokenType.NT_Type, new List<TokenType>{TokenType.NT_ConstType}),
             new Production(TokenType.NT_Type, new List<TokenType>{TokenType.Identifier}),
             new Production(TokenType.NT_TypeArray, new List<TokenType>{TokenType.Operator_corchetes, TokenType.NT_TypeArray}),
             new Production(TokenType.NT_TypeArray, new List<TokenType>{TokenType.Epsilon}),
@@ -83,11 +80,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new Production(TokenType.NT_PrintStmt3, new List<TokenType>{TokenType.Operator_coma, TokenType.NT_Expr, TokenType.NT_PrintStmt3}),
             new Production(TokenType.NT_PrintStmt3, new List<TokenType>{TokenType.Epsilon}),
             //Expr
-            new Production(TokenType.NT_Expr, new List<TokenType>{TokenType.NT_LValue, TokenType.Operator_igual, TokenType.NT_RValue}),
+            new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.NT_LValue, TokenType.Operator_igual, TokenType.NT_RValue}),
             new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.NT_Expr, TokenType.NT_Operacion, TokenType.NT_Factor}),
-            new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.Operator_menos, TokenType.NT_Expr}),
-            new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.Operator_negacion, TokenType.NT_Expr}),
-            new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.NT_Factor}),
+            new Production(TokenType.NT_Expr, new List<TokenType> {TokenType.NT_OperacionUnaria, TokenType.NT_Factor}),
+
+            new Production(TokenType.NT_OperacionUnaria, new List<TokenType> {TokenType.Operator_menos}),
+            new Production(TokenType.NT_OperacionUnaria, new List<TokenType> {TokenType.Operator_negacion}),
+            new Production(TokenType.NT_OperacionUnaria, new List<TokenType> {TokenType.Epsilon}),
 
             new Production(TokenType.NT_LValue, new List<TokenType> {TokenType.Identifier, TokenType.NT_LValue1}),
             new Production(TokenType.NT_LValue, new List<TokenType> {TokenType.Token_this, TokenType.Operator_punto, TokenType.Identifier}),
@@ -176,6 +175,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new First(TokenType.NT_LValue, new List<TokenType> {TokenType.Identifier, TokenType.Token_this}),
             new First(TokenType.NT_LValue1, new List<TokenType> {TokenType.Operator_punto, TokenType.Epsilon}),
             new First(TokenType.NT_RValue, new List<TokenType> {TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_null, TokenType.Operator_ParentesisAbre, TokenType.Identifier, TokenType.Token_this, TokenType.Operator_menos, TokenType.Operator_diferente, TokenType.Token_New}),
+            new First(TokenType.NT_OperacionUnaria, new List<TokenType>{TokenType.Operator_menos, TokenType.Operator_negacion, TokenType.Epsilon}),
             //Operacion
             new First(TokenType.NT_Operacion, new List<TokenType> {TokenType.Operator_div, TokenType.Operator_mayor, TokenType.Operator_mayorIgual, TokenType.Operator_diferente, TokenType.Operator_dobleOr, TokenType.Operator_porcentaje, TokenType.Operator_menos}),
             new First(TokenType.NT_Factor, new List<TokenType> {TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_null, TokenType.Operator_ParentesisAbre, TokenType.Identifier, TokenType.Token_this}),

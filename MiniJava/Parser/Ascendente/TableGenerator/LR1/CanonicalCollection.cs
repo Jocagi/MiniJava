@@ -108,10 +108,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                                 }
                                 else
                                 {
-                                    childItem.shiftTo = ++totalStates;  
-                                    //Agregar goto del elemento actualmente analizado al siguiente estado
-                                    nextStates.Add(new Go_To(actualState, childItem.Production.RightSide[0], totalStates, childItem));
-                                    gotoState.Add(childItem.Production.RightSide[0], totalStates);
+                                    if (!gotoState.ContainsKey(childItem.Production.RightSide[0]))
+                                    {
+                                        childItem.shiftTo = ++totalStates;
+                                        //Agregar goto del elemento actualmente analizado al siguiente estado
+                                        nextStates.Add(new Go_To(actualState, childItem.Production.RightSide[0], totalStates, childItem));
+                                        gotoState.Add(childItem.Production.RightSide[0], totalStates);
+                                    }
                                 }
 
                                 lrItems.Add(childItem);
