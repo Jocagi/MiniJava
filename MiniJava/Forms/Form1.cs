@@ -120,7 +120,7 @@ namespace MiniJava.Forms
             List<string> listaErrores = pars.Parserr();
 
 
-            listaErrores.Add(  listaErrores.Count == 0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n");
+            output +=  listaErrores.Count == 0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
 
 
             foreach (var item in listaErrores)
