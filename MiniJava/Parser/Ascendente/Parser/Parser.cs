@@ -17,7 +17,8 @@ namespace MiniJava.Parser.Ascendente.Parser
         Grammar gramatica = new Grammar();
         public Parser(Queue<Token> tokens, Table tab, Grammar g)
         {
-            //ADD OEF A ENTRADA AL FINAL
+            Token eof = new Token(TokenType.EOF);
+            Entrada.Enqueue(eof);
             gramatica = g;
             Entrada = tokens;
             Pila.Push(0);
@@ -103,8 +104,58 @@ namespace MiniJava.Parser.Ascendente.Parser
                 }
                 if (posibilidades.Count > 1)
                 {
-                    //ELEGIR UNA OPCION
+                    accion = posibilidades[0].accion;
+                    movEstado = posibilidades[0].estado;
+                    //bool reduccion = false;
+                    //bool desplazamiento = false;
+                    //bool irA = false;
 
+                    ////ELEGIR UNA OPCION
+                    //foreach (var item in posibilidades)
+                    //{
+                    //    if (item.accion == ActionType.Reduce)
+                    //    {
+                    //        reduccion = true;
+                    //    }
+                    //    if (item.accion == ActionType.Shift)
+                    //    {
+                    //        desplazamiento = true;
+                    //    }
+                    //    if (item.accion == ActionType.Ir_A)
+                    //    {
+                    //        irA = true;
+                    //    }
+                    //}
+                    ////REDUCCION CON REDUCCION
+                    //if (reduccion & !desplazamiento)
+                    //{
+                    //    accion = posibilidades[0].accion;
+                    //    movEstado = posibilidades[0].estado;
+                    //}
+                    //// DESPLAZAMIENTO CON DESPLZAMIENTO
+                    //if (!reduccion & desplazamiento)
+                    //{
+                    //    int prece = 0;
+                    //    foreach (var item in posibilidades)
+                    //    {
+                    //        if (prece < item.precedencia)
+                    //        {
+                    //            prece = item.precedencia;
+                    //            accion = item.accion;
+                    //            movEstado = item.estado;
+                    //        }
+                    //    }
+                    //}
+                    ////REDUCCION CON DESPLAZAMIENTO
+                    //if (reduccion & desplazamiento)
+                    //{
+
+                    //}
+                    ////IR_A CON IR_A
+                    //if (irA)
+                    //{
+
+                    //}
                 }
                 //DESPUES DE ELEGIR EL MOVIMIENTO
                 if (accion == ActionType.Accept)
