@@ -61,7 +61,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     {
                         kernel.action = kernel.Production.LeftSide == TokenType.NT_Start?
                             ActionType.Accept : ActionType.Reduce;
-                        kernel.shiftTo = -1;
+                        kernel.shiftTo = 0;
                         lrItems.Add(kernel);
                     }
                     else
