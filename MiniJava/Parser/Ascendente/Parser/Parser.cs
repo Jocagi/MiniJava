@@ -15,11 +15,11 @@ namespace MiniJava.Parser.Ascendente.Parser
         Queue<Token> Entrada = new Queue<Token>();
         Table tabla = new Table();
         Grammar gramatica = new Grammar();
-        public Parser(Queue<Token> tokens, Table tab, Grammar g)
+        public Parser(Queue<Token> tokens, Table tab)
         {
             Token eof = new Token(TokenType.EOF);
             Entrada.Enqueue(eof);
-            gramatica = g;
+            gramatica = tab.grammar;
             Entrada = tokens;
             Pila.Push(0);
             tabla = tab;
@@ -36,7 +36,7 @@ namespace MiniJava.Parser.Ascendente.Parser
             bool clase = false;
             int opcion = 0;
             bool HacerPeek = true;
-            while (!Error & Aceptado)
+            while (!Error & !Aceptado)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];

@@ -116,11 +116,12 @@ namespace MiniJava.Forms
             //Analizador sintactico
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
             Parser.Ascendente.Parser.Table tab = new Parser.Ascendente.Parser.Table();
-            Grammar G = new Grammar();
-            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue,  tab,  G);
+            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue,  tab);
             List<string> listaErrores = pars.Parserr();
 
+
             listaErrores.Add(  listaErrores.Count == 0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n");
+
 
             foreach (var item in listaErrores)
             {
