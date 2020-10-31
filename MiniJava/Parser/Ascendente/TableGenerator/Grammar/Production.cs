@@ -8,6 +8,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
     {
         public TokenType LeftSide { get; set; }
         public List<TokenType> RightSide { get; set; }
+        public int ID { get; set; }
 
         public Production(TokenType left, List<TokenType> right)
         {

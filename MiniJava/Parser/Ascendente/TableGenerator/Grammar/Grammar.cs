@@ -13,6 +13,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
         public List<First> first { get; set; }
         private List<TokenType> Terminals { get; set; }
         private List<TokenType> NonTerminals { get; set; }
+        private int currentProductionNumber { get; set; }
 
         public Grammar()
         {
@@ -40,6 +41,21 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             this.Terminals = Enum.GetValues(typeof(TokenType)).Cast<TokenType>().ToList();
             //Remover todos los items mayores al ultimo terminal (No terminales)
             this.Terminals.RemoveAll(x => x > TokenType.Operator_puntosIgual);
+        }
+
+        public void setProductionNumber(Production prod)
+        {
+            foreach (var item in Productions)
+            {
+                if (productionsAreEqual(prod, item))
+                {
+                    if (item.ID == 0)
+                    {
+                        item.ID = ++currentProductionNumber;
+                    }
+                    break;
+                }
+            }
         }
 
         public int findProductionNumber(Production prod)

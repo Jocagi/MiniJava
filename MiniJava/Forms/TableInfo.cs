@@ -72,7 +72,7 @@ namespace MiniJava.Forms
 
                         textCC += $" \tAction: {lritem.action}";
 
-                        if (lritem.shiftTo >= 0)
+                        if (lritem.shiftTo > 0)
                         {
                             textCC += $" \tGO_TO: {lritem.shiftTo} \n";
                         }

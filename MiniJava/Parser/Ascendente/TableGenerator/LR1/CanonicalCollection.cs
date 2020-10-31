@@ -213,6 +213,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
         /// </summary>
         private Go_To getFirstState()
         {
+            grammar.setProductionNumber(grammar.Productions[0]);
             return new Go_To(-1, TokenType.NT_Start, grammar.Productions[0], 0);
         }
 
@@ -299,6 +300,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             {
                 if (item.LeftSide == value.token)
                 {
+                    grammar.setProductionNumber(item);
                     followUpItems.Add(new LRItem(item, 0, value.lookahead));
                 }
             }
