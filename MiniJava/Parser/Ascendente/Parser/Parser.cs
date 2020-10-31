@@ -208,19 +208,18 @@ namespace MiniJava.Parser.Ascendente.Parser
                         }
                         else if (estado.actions[0].accion == ActionType.Reduce)
                         {
-                            foreach (var item in gramatica.Productions)
+                            var item1 = gramatica.findNumberProduction(movEstado);
+                            if (!(item1.RightSide.Count == 1 && item1.RightSide[0] == TokenType.Epsilon))
                             {
-                                if (item.ID == movEstado)
+                                for (int i = 0; i < item1.RightSide.Count; i++)
                                 {
-                                    for (int i = 0; i < item.RightSide.Count; i++)
-                                    {
-                                        Simbolo.Pop();
-                                        Pila.Pop();
-                                    }
-                                    Token tokenNuevo1 = new Token(item.LeftSide);
-                                    Simbolo.Push(tokenNuevo1);
+                                    Simbolo.Pop();
+                                    Pila.Pop();
                                 }
                             }
+                            Token tokenNuevo = new Token(item1.LeftSide);
+                            Simbolo.Push(tokenNuevo);
+
                             Enfoque = 1;
                         }
                         else if (estado.actions[0].accion == ActionType.Shift)
