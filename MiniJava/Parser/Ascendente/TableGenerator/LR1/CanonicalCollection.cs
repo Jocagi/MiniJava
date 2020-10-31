@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
@@ -100,13 +99,21 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
                             foreach (var childItem in followUpItems)
                             {
-                                //todo arreglar error
                                 //Recuperar valor del simbolo anterior
                                 var value = previouStates.Find(x =>
                                     x.isProductionEqual(childItem.Production)  &&
                                     x.isLookaheadEqual(childItem.lookahead))?.state;
                                 if (value != null)
-                                    childItem.shiftTo = (int)value;
+                                {
+                                    childItem.shiftTo = (int) value;
+                                }
+                                else
+                                {
+                                    childItem.shiftTo = ++totalStates;  
+                                    //Agregar goto del elemento actualmente analizado al siguiente estado
+                                    nextStates.Add(new Go_To(actualState, childItem.Production.RightSide[0], totalStates, childItem));
+                                    gotoState.Add(childItem.Production.RightSide[0], totalStates);
+                                }
 
                                 lrItems.Add(childItem);
                             }
@@ -324,7 +331,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                             kernel.Position++;
                             goto Inicio;
                         }
-                        Debug.WriteLine(token);
                     }
                     else
                     {
