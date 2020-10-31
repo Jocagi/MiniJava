@@ -213,6 +213,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
         /// </summary>
         private Go_To getFirstState()
         {
+            grammar.setProductionNumber(grammar.Productions[0]);
             return new Go_To(-1, TokenType.NT_Start, grammar.Productions[0], 0);
         }
 
@@ -299,13 +300,13 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             {
                 if (item.LeftSide == value.token)
                 {
+                    grammar.setProductionNumber(item);
                     followUpItems.Add(new LRItem(item, 0, value.lookahead));
                 }
             }
 
             return followUpItems;
         }
-
         private List<TokenType> getFirstNextItem(LRItem item)
         {
             List<TokenType> result = new List<TokenType>();
@@ -323,14 +324,22 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                 {
                     if (grammar.isNotTerminal(token))
                     {
-                        result = result.Concat( grammar.first.Find
+                        List<TokenType> firstNext = grammar.first.Find
                                 (x => x.tokenNT == kernel.Production.RightSide[kernel.Position])
-                            ?.first ?? throw new InvalidOperationException()).ToList();
+                            ?.first ?? throw new InvalidOperationException();
+
+                        result = result.Concat(firstNext).ToList();
 
                         if (result.Contains(TokenType.Epsilon))
                         {
                             result.RemoveAll(x => x == TokenType.Epsilon);
                             kernel.Position++;
+
+                            if (kernel.Position < kernel.Production.RightSide.Count)
+                            {
+                                result.Add(TokenType.Epsilon);
+                            }
+
                             goto Inicio;
                         }
                     }
@@ -339,6 +348,17 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                         result.Add(token);
                     }
                 }
+                else
+                {
+                    result.Add(token);
+                    kernel.Position++;
+                    goto Inicio;
+                }
+            }
+            else if (result.Contains(TokenType.Epsilon))
+            {
+                result.RemoveAll(x => x == TokenType.Epsilon);
+                result = result.Concat(item.lookahead).ToList();
             }
 
             return result;

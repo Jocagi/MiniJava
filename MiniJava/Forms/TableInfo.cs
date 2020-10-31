@@ -72,7 +72,7 @@ namespace MiniJava.Forms
 
                         textCC += $" \tAction: {lritem.action}";
 
-                        if (lritem.shiftTo >= 0)
+                        if (lritem.shiftTo > 0)
                         {
                             textCC += $" \tGO_TO: {lritem.shiftTo} \n";
                         }
@@ -140,11 +140,11 @@ namespace MiniJava.Forms
 
                 stateNumber++;
             }
-
+            /*
             if (conflictos > 0)
             {
                 MessageBox.Show(conflictosMensaje);
-            }
+            }*/
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

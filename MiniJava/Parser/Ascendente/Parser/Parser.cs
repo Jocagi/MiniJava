@@ -37,36 +37,36 @@ namespace MiniJava.Parser.Ascendente.Parser
             bool clase = false;
             int opcion = 0;
             bool HacerPeek = true;
-            while (!Error & !Aceptado & Entrada.Count > 0)
+            while (!Error && !Aceptado && Entrada.Count > 0 && Pila.Count > 0)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
                 int movEstado = 0;
                 TokenType tokenEvalua = new TokenType();
-                if (Enfoque == 0 & HacerPeek)
+                if (Enfoque == 0 && HacerPeek)
                 {
                     tokenEvalua = Entrada.Peek().tokenType;
                 }
-                else if (Enfoque == 1 & HacerPeek)
+                else if (Enfoque == 1 && HacerPeek)
                 {
                     tokenEvalua = Simbolo.Peek().tokenType;
                 }
                 HacerPeek = true;
                 int cont = 0;
                 #region Asigancion de opcion
-                if (opcion != 3 & tokenEvalua == TokenType.Token_void)
+                if (opcion != 3 && tokenEvalua == TokenType.Token_void)
                 {
                     opcion = 1;
                 }
-                if (opcion == 4 & tokenEvalua == TokenType.Operator_ParentesisAbre)
+                if (opcion == 4 && tokenEvalua == TokenType.Operator_ParentesisAbre)
                 {
                     opcion = 1;
                 }
-                if ((opcion == 0 | opcion == 2) & (tokenEvalua == TokenType.Token_int | tokenEvalua == TokenType.Token_double | tokenEvalua == TokenType.Token_boolean | tokenEvalua == TokenType.Token_string | tokenEvalua == TokenType.Identifier))
+                if ((opcion == 0 | opcion == 2) && (tokenEvalua == TokenType.Token_int | tokenEvalua == TokenType.Token_double | tokenEvalua == TokenType.Token_boolean | tokenEvalua == TokenType.Token_string | tokenEvalua == TokenType.Identifier))
                 {
                     opcion = 4;
                 }
-                if ((opcion == 0 | opcion == 2) & tokenEvalua == TokenType.Token_interface)
+                if ((opcion == 0 | opcion == 2) && tokenEvalua == TokenType.Token_interface)
                 {
                     opcion = 3;
                 }
@@ -75,11 +75,11 @@ namespace MiniJava.Parser.Ascendente.Parser
                     opcion = 2;
                     clase = true;
                 }
-                if (tokenEvalua == TokenType.Operator_llaveAbre & opcion == 1)
+                if (tokenEvalua == TokenType.Operator_llaveAbre && opcion == 1)
                 {
                     opcion = 5;
                 }
-                if (tokenEvalua == TokenType.Token_static & (opcion == 0 | opcion == 2))
+                if (tokenEvalua == TokenType.Token_static && (opcion == 0 | opcion == 2))
                 {
                     opcion = 6;
                 }
@@ -381,7 +381,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         }
                     }
                 } //ERROR
-
+            
             }
             if (!Aceptado)
 
