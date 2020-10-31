@@ -25,10 +25,10 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
             new Production(TokenType.NT_Decl1, new List<TokenType>{TokenType.Epsilon}),
             //Declaracion de constante
             new Production(TokenType.NT_ConstDecl, new List<TokenType>{TokenType.Token_static, TokenType.NT_ConstType, TokenType.Identifier, TokenType.Operator_puntoComa}),
-            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_Int}),
-            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_double}),
-            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_bool}),
-            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_String}),
+            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Token_int}),
+            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Token_double}),
+            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Token_boolean}),
+            new Production(TokenType.NT_ConstType, new List<TokenType>{TokenType.Token_string}),
             //Declaracion de variable
             new Production(TokenType.NT_VariableDecl, new List<TokenType>{TokenType.NT_Variable, TokenType.Operator_puntoComa}),
             new Production(TokenType.NT_Variable, new List<TokenType>{TokenType.NT_Type,TokenType.NT_TypeArray,TokenType.Identifier}),
@@ -130,26 +130,26 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
         public static List<First> first = new List<First>
         {
             //Inicio
-            new First(TokenType.NT_Start, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
-            new First(TokenType.NT_Program, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier,TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Start, new List<TokenType>{TokenType.Token_static,TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Program, new List<TokenType>{TokenType.Token_static, TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Token_void, TokenType.Identifier,TokenType.Token_interface, TokenType.Token_class}),
             //Declaraciones
-            new First(TokenType.NT_Decl, new List<TokenType>{TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
-            new First(TokenType.NT_Decl1, new List<TokenType>{TokenType.Epsilon,TokenType.Token_static,TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Decl, new List<TokenType>{TokenType.Token_static, TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
+            new First(TokenType.NT_Decl1, new List<TokenType>{TokenType.Epsilon,TokenType.Token_static, TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Token_void, TokenType.Identifier, TokenType.Token_interface, TokenType.Token_class}),
             //Declaracion de contantes
             new First(TokenType.NT_ConstDecl, new List<TokenType>{TokenType.Token_static}),
-            new First(TokenType.NT_ConstType, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String}),
+            new First(TokenType.NT_ConstType, new List<TokenType>{TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean}),
             //Declaracion de variables
-            new First(TokenType.NT_VariableDecl, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier}),
-            new First(TokenType.NT_Variable, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier}),
-            new First(TokenType.NT_Type, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier}),
+            new First(TokenType.NT_VariableDecl, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier}),
+            new First(TokenType.NT_Variable, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier}),
+            new First(TokenType.NT_Type, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier}),
             new First(TokenType.NT_TypeArray, new List<TokenType>{TokenType.Epsilon, TokenType.Operator_corchetes}),
             //Declaracion de interfaz
             new First(TokenType.NT_InterfaceDecl, new List<TokenType>{TokenType.Token_interface}),
-            new First(TokenType.NT_Prototype, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier, TokenType.Token_void, TokenType.Epsilon}),
+            new First(TokenType.NT_Prototype, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier, TokenType.Token_void, TokenType.Epsilon}),
             //Formals
-            new First(TokenType.NT_Formals, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier}),
+            new First(TokenType.NT_Formals, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier}),
             //Declaracion de funcion
-            new First(TokenType.NT_FunctionDecl, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier, TokenType.Token_void}),
+            new First(TokenType.NT_FunctionDecl, new List<TokenType>{ TokenType.Token_int, TokenType.Token_double, TokenType.Token_string, TokenType.Token_boolean, TokenType.Identifier, TokenType.Token_void}),
             //Stmt
             new First(TokenType.NT_StmtBlock, new List<TokenType>{TokenType.Operator_llaveAbre}),
             new First(TokenType.NT_StmtBlock1, new List<TokenType>{TokenType.Const_Int, TokenType.Const_double, TokenType.Const_bool, TokenType.Const_String, TokenType.Identifier, TokenType.Epsilon}),
