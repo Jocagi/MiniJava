@@ -10,13 +10,13 @@ namespace MiniJava.Parser.Ascendente.Parser
     {
         public List<State> states = new List<State>();
         public List<TokenType> tokens = new List<TokenType>();
+        public Grammar grammar { get; set; }
 
         public Table()
         {
+            CanonicalCollection collection = new CanonicalCollection(new Grammar());
+            this.grammar = collection.grammar;
 
-        }
-        public Table(CanonicalCollection collection)
-        {
             foreach (var state in collection.States)
             {
                 List<Action> actions = new List<Action>();

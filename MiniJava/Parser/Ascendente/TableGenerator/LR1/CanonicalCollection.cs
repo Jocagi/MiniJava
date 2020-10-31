@@ -5,13 +5,12 @@ using System.Linq;
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.Parser;
-using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
 namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 {
     public class CanonicalCollection
     {
-        public List<State> States  {get; set;}
+        public List<State> States  { get; set; }
         public Grammar.Grammar grammar { get; set; }
 
         /// <summary>

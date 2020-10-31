@@ -163,7 +163,6 @@ namespace MiniJava.Forms
         private void button2_Click(object sender, EventArgs e)
         {
             CanonicalCollection cc = new CanonicalCollection(new Grammar());
-           
             TableInfo t = new TableInfo(cc);
             t.Show();
         }

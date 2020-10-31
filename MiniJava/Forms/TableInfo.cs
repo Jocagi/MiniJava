@@ -88,7 +88,7 @@ namespace MiniJava.Forms
 
         private void loadTable()
         {
-            Table tabla = new Table(collection);
+            Table tabla = new Table();
             string conflictosMensaje = "Conflicto en Estado: ";
             int conflictos = 0;
             List<int> stateConflict = new List<int>();
