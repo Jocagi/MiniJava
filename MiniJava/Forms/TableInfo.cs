@@ -140,11 +140,11 @@ namespace MiniJava.Forms
 
                 stateNumber++;
             }
-
+            /*
             if (conflictos > 0)
             {
                 MessageBox.Show(conflictosMensaje);
-            }
+            }*/
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

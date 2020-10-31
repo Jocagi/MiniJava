@@ -307,7 +307,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
 
             return followUpItems;
         }
-
         private List<TokenType> getFirstNextItem(LRItem item)
         {
             List<TokenType> result = new List<TokenType>();
@@ -355,6 +354,11 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
                     kernel.Position++;
                     goto Inicio;
                 }
+            }
+            else if (result.Contains(TokenType.Epsilon))
+            {
+                result.RemoveAll(x => x == TokenType.Epsilon);
+                result = result.Concat(item.lookahead).ToList();
             }
 
             return result;
