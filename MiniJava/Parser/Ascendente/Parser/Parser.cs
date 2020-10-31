@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiniJava.Lexer;
-using MiniJava.Parser.Ascendente.TableGenerator
+using MiniJava.Parser.Ascendente.TableGenerator;
 
 namespace MiniJava.Parser.Ascendente.Parser
 {
@@ -11,18 +11,15 @@ namespace MiniJava.Parser.Ascendente.Parser
         Queue<Token> Entrada = new Queue<Token>();
         Table tabla = new Table();
         Grammar gramatica = new Grammar();
-        public Parser(List<Token> tokens, Table tab, Grammar g)
+        public Parser(Queue<Token> tokens, Table tab, Grammar g)
         {
             gramatica = g;
-            foreach (var item in tokens)
-            {
-                Entrada.Enqueue(item);
-            }
+            Entrada = tokens;
             Pila.Push(0);
             tabla = tab;
         }
 
-        List<string> Parserr()
+        public List<string> Parserr()
         {
             List<string> errores = new List<string>();
             bool Error = false;
@@ -153,8 +150,8 @@ namespace MiniJava.Parser.Ascendente.Parser
                                         Simbolo.Pop();
                                         Pila.Pop();
                                     }
-                                    Token tokenNuevo = new Token(item.LeftSide);
-                                    Simbolo.Push(tokenNuevo);
+                                    Token tokenNuevo1 = new Token(item.LeftSide);
+                                    Simbolo.Push(tokenNuevo1);
                                 }
                             }
                             Enfoque = 1;

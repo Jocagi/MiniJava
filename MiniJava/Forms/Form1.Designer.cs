@@ -36,7 +36,6 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.labelFileName = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.ErrorBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -116,21 +115,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // ErrorBox
-            // 
-            this.ErrorBox.AcceptsTab = true;
-            this.ErrorBox.BackColor = System.Drawing.SystemColors.MenuText;
-            this.ErrorBox.EnableAutoDragDrop = true;
-            this.ErrorBox.ForeColor = System.Drawing.SystemColors.Info;
-            this.ErrorBox.Location = new System.Drawing.Point(8, 732);
-            this.ErrorBox.Name = "ErrorBox";
-            this.ErrorBox.ReadOnly = true;
-            this.ErrorBox.ShowSelectionMargin = true;
-            this.ErrorBox.Size = new System.Drawing.Size(852, 201);
-            this.ErrorBox.TabIndex = 1;
-            this.ErrorBox.Text = "";
-            this.ErrorBox.WordWrap = false;
-            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -139,7 +123,6 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(868, 955);
-            this.Controls.Add(this.ErrorBox);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.labelFileName);
             this.Controls.Add(this.outputBox);
@@ -168,7 +151,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Label labelFileName;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.RichTextBox ErrorBox;
     }
 }
 
