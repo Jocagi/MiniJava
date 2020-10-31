@@ -37,7 +37,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             this.lookahead = new List<TokenType>(lookahead);
             this.Production = production;
             this.action = ActionType.Shift;
-            this.shiftTo = -1;
+            this.shiftTo = 0;
         }
         public LRItem(Production production, int position)
         {
@@ -45,7 +45,7 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.LR1
             this.Production = production;
             this.lookahead = new List<TokenType>{TokenType.EOF};
             this.action = ActionType.Shift;
-            this.shiftTo = -1;
+            this.shiftTo = 0;
         }
         public LRItem Copy()
         {
