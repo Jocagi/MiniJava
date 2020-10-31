@@ -6,7 +6,6 @@ namespace MiniJava.Parser.Ascendente.TableGenerator.Grammar
 {
     public class Production
     {
-        public int ID { get; set; }
         public TokenType LeftSide { get; set; }
         public List<TokenType> RightSide { get; set; }
 
