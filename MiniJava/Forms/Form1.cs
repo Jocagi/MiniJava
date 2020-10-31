@@ -119,7 +119,9 @@ namespace MiniJava.Forms
             Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue,  tab);
             List<string> listaErrores = pars.Parserr();
 
-            listaErrores.Add(  listaErrores.Count==0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n");
+
+            listaErrores.Add(  listaErrores.Count == 0 ? "Todo bien :)\n" : "Oh! No! Hay un error\n");
+
 
             foreach (var item in listaErrores)
             {
