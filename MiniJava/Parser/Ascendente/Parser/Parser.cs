@@ -18,9 +18,10 @@ namespace MiniJava.Parser.Ascendente.Parser
         public Parser(Queue<Token> tokens, Table tab)
         {
             Token eof = new Token(TokenType.EOF);
-            Entrada.Enqueue(eof);
+           
             gramatica = tab.grammar;
             Entrada = tokens;
+            Entrada.Enqueue(eof);
             Pila.Push(0);
             tabla = tab;
         }
@@ -36,7 +37,7 @@ namespace MiniJava.Parser.Ascendente.Parser
             bool clase = false;
             int opcion = 0;
             bool HacerPeek = true;
-            while (!Error & !Aceptado)
+            while (!Error & !Aceptado & Entrada.Count > 0)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
@@ -46,14 +47,14 @@ namespace MiniJava.Parser.Ascendente.Parser
                 {
                     tokenEvalua = Entrada.Peek().tokenType;
                 }
-                else if(Enfoque == 0 & HacerPeek)
+                else if (Enfoque == 1 & HacerPeek)
                 {
                     tokenEvalua = Simbolo.Peek().tokenType;
                 }
                 HacerPeek = true;
                 int cont = 0;
                 #region Asigancion de opcion
-                if (opcion!=3 & tokenEvalua == TokenType.Token_void)
+                if (opcion != 3 & tokenEvalua == TokenType.Token_void)
                 {
                     opcion = 1;
                 }
@@ -61,7 +62,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                 {
                     opcion = 1;
                 }
-                if ((opcion == 0 |opcion ==2) & (tokenEvalua == TokenType.Token_int| tokenEvalua == TokenType.Token_double| tokenEvalua == TokenType.Token_boolean| tokenEvalua == TokenType.Token_string| tokenEvalua == TokenType.Identifier))
+                if ((opcion == 0 | opcion == 2) & (tokenEvalua == TokenType.Token_int | tokenEvalua == TokenType.Token_double | tokenEvalua == TokenType.Token_boolean | tokenEvalua == TokenType.Token_string | tokenEvalua == TokenType.Identifier))
                 {
                     opcion = 4;
                 }
@@ -74,7 +75,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                     opcion = 2;
                     clase = true;
                 }
-                if (tokenEvalua == TokenType.Operator_llaveAbre & opcion ==1)
+                if (tokenEvalua == TokenType.Operator_llaveAbre & opcion == 1)
                 {
                     opcion = 5;
                 }
@@ -97,65 +98,65 @@ namespace MiniJava.Parser.Ascendente.Parser
                     }
                 }
                 //ELEGIR EL MOVIMIENTO
-                if (posibilidades.Count==1)
+                if (posibilidades.Count == 1)
                 {
                     accion = posibilidades[0].accion;
                     movEstado = posibilidades[0].estado;
                 }
                 if (posibilidades.Count > 1)
                 {
-                    accion = posibilidades[0].accion;
-                    movEstado = posibilidades[0].estado;
-                    //bool reduccion = false;
-                    //bool desplazamiento = false;
-                    //bool irA = false;
+                    //accion = posibilidades[1].accion;
+                    //movEstado = posibilidades[1].estado;
+                    bool reduccion = false;
+                    bool desplazamiento = false;
+                    bool irA = false;
 
-                    ////ELEGIR UNA OPCION
-                    //foreach (var item in posibilidades)
-                    //{
-                    //    if (item.accion == ActionType.Reduce)
-                    //    {
-                    //        reduccion = true;
-                    //    }
-                    //    if (item.accion == ActionType.Shift)
-                    //    {
-                    //        desplazamiento = true;
-                    //    }
-                    //    if (item.accion == ActionType.Ir_A)
-                    //    {
-                    //        irA = true;
-                    //    }
-                    //}
-                    ////REDUCCION CON REDUCCION
-                    //if (reduccion & !desplazamiento)
-                    //{
-                    //    accion = posibilidades[0].accion;
-                    //    movEstado = posibilidades[0].estado;
-                    //}
-                    //// DESPLAZAMIENTO CON DESPLZAMIENTO
-                    //if (!reduccion & desplazamiento)
-                    //{
-                    //    int prece = 0;
-                    //    foreach (var item in posibilidades)
-                    //    {
-                    //        if (prece < item.precedencia)
-                    //        {
-                    //            prece = item.precedencia;
-                    //            accion = item.accion;
-                    //            movEstado = item.estado;
-                    //        }
-                    //    }
-                    //}
-                    ////REDUCCION CON DESPLAZAMIENTO
-                    //if (reduccion & desplazamiento)
-                    //{
+                    //ELEGIR UNA OPCION
+                    foreach (var item in posibilidades)
+                    {
+                        if (item.accion == ActionType.Reduce)
+                        {
+                            reduccion = true;
+                        }
+                        if (item.accion == ActionType.Shift)
+                        {
+                            desplazamiento = true;
+                        }
+                        if (item.accion == ActionType.Ir_A)
+                        {
+                            irA = true;
+                        }
+                    }
+                    //REDUCCION CON REDUCCION
+                    if (reduccion & !desplazamiento)
+                    {
+                        accion = posibilidades[0].accion;
+                        movEstado = posibilidades[0].estado;
+                    }
+                    // DESPLAZAMIENTO CON DESPLZAMIENTO
+                    if (!reduccion & desplazamiento)
+                    {
+                        int prece = 0;
+                        foreach (var item in posibilidades)
+                        {
+                            if (prece < item.precedencia)
+                            {
+                                prece = item.precedencia;
+                                accion = item.accion;
+                                movEstado = item.estado;
+                            }
+                        }
+                    }
+                    //REDUCCION CON DESPLAZAMIENTO
+                    if (reduccion & desplazamiento)
+                    {
 
-                    //}
-                    ////IR_A CON IR_A
-                    //if (irA)
-                    //{
+                    }
+                    //IR_A CON IR_A
+                    if (irA)
+                    {
 
-                    //}
+                    }
                 }
                 //DESPUES DE ELEGIR EL MOVIMIENTO
                 if (accion == ActionType.Accept)
@@ -165,17 +166,17 @@ namespace MiniJava.Parser.Ascendente.Parser
                 }
                 else if (accion == ActionType.Reduce)
                 {
-                    var item1 = movEstado;
-                    for (int i = 0; i < item1.RightSide.Count; i++)
+                    var item1 = gramatica.findNumberProduction(movEstado);
+                    if (!(item1.RightSide.Count == 1 && item1.RightSide[0] == TokenType.Epsilon))
                     {
-                        Simbolo.Pop();
-                        Pila.Pop();
+                        for (int i = 0; i < item1.RightSide.Count; i++)
+                        {
+                            Simbolo.Pop();
+                            Pila.Pop();
+                        }
                     }
                     Token tokenNuevo = new Token(item1.LeftSide);
                     Simbolo.Push(tokenNuevo);
-
-
-
 
                     Enfoque = 1;
                 }
@@ -229,7 +230,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                             Simbolo.Push(Entrada.Dequeue());
                         }
                     }
-                    else 
+                    else
                     {
                         //ERROR PRESENTE EN DECLARACION DE FUNCION
                         if (opcion == 1)
@@ -275,9 +276,9 @@ namespace MiniJava.Parser.Ascendente.Parser
                         }
 
                         //ERROR PRESENTE EN DECLARACION DE CLASE
-                        if (tokenEvalua != TokenType.Operator_llaveAbre & clase==true) 
+                        if (tokenEvalua != TokenType.Operator_llaveAbre & clase == true)
                         {
-                            
+
                             string error = "Llave que cierra clase en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
                             errores.Add(error);
                             Simbolo.Clear();
@@ -290,7 +291,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         //ERROR PRESENTE EN DECLARACION DE INTERFACE
                         if (opcion == 3)
                         {
-                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra ))
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra))
                             {
                                 HacerPeek = false;
                                 Entrada.Dequeue();
@@ -355,7 +356,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         if (opcion == 6)
                         {
                             HacerPeek = false;
-                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa))
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa))
                             {
                                 Entrada.Dequeue();
                                 tokenEvalua = Entrada.Peek().tokenType;
@@ -391,6 +392,11 @@ namespace MiniJava.Parser.Ascendente.Parser
                 } //ERROR
 
             }
+            if (!Aceptado)
+            { 
+                errores.Add("error");
+            }
+
             return errores;
         }
     }
