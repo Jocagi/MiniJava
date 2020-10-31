@@ -106,7 +106,9 @@
             // 
             // button2
             // 
+
             this.button2.Location = new System.Drawing.Point(707, 10);
+
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(323, 34);
@@ -122,7 +124,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+
             this.ClientSize = new System.Drawing.Size(1042, 975);
+
             this.Controls.Add(this.button2);
             this.Controls.Add(this.labelFileName);
             this.Controls.Add(this.outputBox);

@@ -8,7 +8,10 @@ namespace MiniJava.Parser.Ascendente.Parser
         public TokenType symbol;
         public ActionType accion;
         public int estado;
-        
+
+        public int precedencia;
+        public int asociatividad;
+
         public Action()
         {
 

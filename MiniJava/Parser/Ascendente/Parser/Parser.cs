@@ -2,7 +2,9 @@
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator;
+
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
+
 
 namespace MiniJava.Parser.Ascendente.Parser
 {
@@ -13,49 +15,149 @@ namespace MiniJava.Parser.Ascendente.Parser
         Queue<Token> Entrada = new Queue<Token>();
         Table tabla = new Table();
         Grammar gramatica = new Grammar();
-        public Parser(List<Token> tokens, Table tab, Grammar g)
+        public Parser(Queue<Token> tokens, Table tab, Grammar g)
         {
+            Token eof = new Token(TokenType.EOF);
+            Entrada.Enqueue(eof);
             gramatica = g;
-            foreach (var item in tokens)
-            {
-                Entrada.Enqueue(item);
-            }
+            Entrada = tokens;
             Pila.Push(0);
             tabla = tab;
         }
 
-        List<string> Parserr()
+        public List<string> Parserr()
         {
             List<string> errores = new List<string>();
             bool Error = false;
             bool Aceptado = false;
             ActionType accion = new ActionType();
             int Enfoque = 0; //booleano que me dice si debo evaluar Entrada o Símbolo
-                        //0 SI ES A ENTRADA Y 1 SI ES A SÍMBOLO 
+                             //0 SI ES A ENTRADA Y 1 SI ES A SÍMBOLO 
+            bool clase = false;
+            int opcion = 0;
+            bool HacerPeek = true;
             while (!Error & Aceptado)
             {
                 int numEstado = Pila.Peek();
                 State estado = tabla.states[numEstado];
                 int movEstado = 0;
                 TokenType tokenEvalua = new TokenType();
-                if (Enfoque == 0)
+                if (Enfoque == 0 & HacerPeek)
                 {
                     tokenEvalua = Entrada.Peek().tokenType;
                 }
-                else 
+                else if(Enfoque == 0 & HacerPeek)
                 {
                     tokenEvalua = Simbolo.Peek().tokenType;
-                } int cont = 0;
+                }
+                HacerPeek = true;
+                int cont = 0;
+                #region Asigancion de opcion
+                if (opcion!=3 & tokenEvalua == TokenType.Token_void)
+                {
+                    opcion = 1;
+                }
+                if (opcion == 4 & tokenEvalua == TokenType.Operator_ParentesisAbre)
+                {
+                    opcion = 1;
+                }
+                if ((opcion == 0 |opcion ==2) & (tokenEvalua == TokenType.Token_int| tokenEvalua == TokenType.Token_double| tokenEvalua == TokenType.Token_boolean| tokenEvalua == TokenType.Token_string| tokenEvalua == TokenType.Identifier))
+                {
+                    opcion = 4;
+                }
+                if ((opcion == 0 | opcion == 2) & tokenEvalua == TokenType.Token_interface)
+                {
+                    opcion = 3;
+                }
+                if (tokenEvalua == TokenType.Token_class)
+                {
+                    opcion = 2;
+                    clase = true;
+                }
+                if (tokenEvalua == TokenType.Operator_llaveAbre & opcion ==1)
+                {
+                    opcion = 5;
+                }
+                if (tokenEvalua == TokenType.Token_static & (opcion == 0 | opcion == 2))
+                {
+                    opcion = 6;
+                }
+
+                #endregion
+                List<Action> posibilidades = new List<Action>();
                 foreach (var item in estado.actions)
                 {
-                    //solo los terminales
-                    cont++;
+                    if (gramatica.isTerminal(item.symbol))
+                    {
+                        cont++;
+                    }
                     if (item.symbol == tokenEvalua)
                     {
-                        accion = item.accion;
-                        movEstado = item.estado;
+                        posibilidades.Add(item);
                     }
                 }
+                //ELEGIR EL MOVIMIENTO
+                if (posibilidades.Count==1)
+                {
+                    accion = posibilidades[0].accion;
+                    movEstado = posibilidades[0].estado;
+                }
+                if (posibilidades.Count > 1)
+                {
+                    accion = posibilidades[0].accion;
+                    movEstado = posibilidades[0].estado;
+                    //bool reduccion = false;
+                    //bool desplazamiento = false;
+                    //bool irA = false;
+
+                    ////ELEGIR UNA OPCION
+                    //foreach (var item in posibilidades)
+                    //{
+                    //    if (item.accion == ActionType.Reduce)
+                    //    {
+                    //        reduccion = true;
+                    //    }
+                    //    if (item.accion == ActionType.Shift)
+                    //    {
+                    //        desplazamiento = true;
+                    //    }
+                    //    if (item.accion == ActionType.Ir_A)
+                    //    {
+                    //        irA = true;
+                    //    }
+                    //}
+                    ////REDUCCION CON REDUCCION
+                    //if (reduccion & !desplazamiento)
+                    //{
+                    //    accion = posibilidades[0].accion;
+                    //    movEstado = posibilidades[0].estado;
+                    //}
+                    //// DESPLAZAMIENTO CON DESPLZAMIENTO
+                    //if (!reduccion & desplazamiento)
+                    //{
+                    //    int prece = 0;
+                    //    foreach (var item in posibilidades)
+                    //    {
+                    //        if (prece < item.precedencia)
+                    //        {
+                    //            prece = item.precedencia;
+                    //            accion = item.accion;
+                    //            movEstado = item.estado;
+                    //        }
+                    //    }
+                    //}
+                    ////REDUCCION CON DESPLAZAMIENTO
+                    //if (reduccion & desplazamiento)
+                    //{
+
+                    //}
+                    ////IR_A CON IR_A
+                    //if (irA)
+                    //{
+
+                    //}
+                }
+                //DESPUES DE ELEGIR EL MOVIMIENTO
                 if (accion == ActionType.Accept)
                 {
                     Aceptado = true;
@@ -89,17 +191,204 @@ namespace MiniJava.Parser.Ascendente.Parser
                     Enfoque = 0;
                     Pila.Push(movEstado);
                 }
+                //ERRORES :c
                 else
                 {
+                    //Si el token que debia seguir se puede "adivinar"
                     if (cont == 1)
                     {
-                        string error = "Falta token " + estado.actions[1].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                        string error = "Falta token " + estado.actions[0].symbol.ToString() + " en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
                         errores.Add(error);
-                        Token tokenNuevo = new Token(estado.actions[1].symbol);
+                        Token tokenNuevo = new Token(estado.actions[0].symbol);
                         Simbolo.Push(tokenNuevo);
-                    } 
+                        if (estado.actions[0].accion == ActionType.Accept)
+                        {
+                            Aceptado = true;
 
-                    Error = true;
+                        }
+                        else if (estado.actions[0].accion == ActionType.Reduce)
+                        {
+                            foreach (var item in gramatica.Productions)
+                            {
+                                if (item.ID == movEstado)
+                                {
+                                    for (int i = 0; i < item.RightSide.Count; i++)
+                                    {
+                                        Simbolo.Pop();
+                                        Pila.Pop();
+                                    }
+                                    Token tokenNuevo1 = new Token(item.LeftSide);
+                                    Simbolo.Push(tokenNuevo1);
+                                }
+                            }
+                            Enfoque = 1;
+                        }
+                        else if (estado.actions[0].accion == ActionType.Shift)
+                        {
+                            Enfoque = 0;
+                            Pila.Push(movEstado);
+                            Simbolo.Push(Entrada.Dequeue());
+                        }
+                    }
+                    else 
+                    {
+                        //ERROR PRESENTE EN DECLARACION DE FUNCION
+                        if (opcion == 1)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de funcion  en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE CLASE
+                        if (opcion == 2)
+                        {
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                HacerPeek = false;
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                    clase = false;
+                                }
+                            }
+                            string error = "Error en declaracion de clase en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE CLASE
+                        if (tokenEvalua != TokenType.Operator_llaveAbre & clase==true) 
+                        {
+                            
+                            string error = "Llave que cierra clase en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                            clase = false;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE INTERFACE
+                        if (opcion == 3)
+                        {
+                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra ))
+                            {
+                                HacerPeek = false;
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveAbre)
+                                {
+                                    HacerPeek = true;
+                                    clase = false;
+                                }
+                            }
+                            string error = "Error en declaracion de interface en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE VARIABLE
+                        if (opcion == 4)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_puntoComa)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de variable  en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE StamentBlock
+                        if (opcion == 5)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && (tokenEvalua != TokenType.Token_void || tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_llaveCierra || tokenEvalua != TokenType.Token_int || tokenEvalua != TokenType.Token_double || tokenEvalua != TokenType.Token_boolean || tokenEvalua != TokenType.Token_string || tokenEvalua != TokenType.Identifier))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_llaveCierra)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de un bloque de declaracion en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //ERROR PRESENTE EN DECLARACION DE CONSTANTE
+                        if (opcion == 6)
+                        {
+                            HacerPeek = false;
+                            while (Entrada.Count > 0 && ( tokenEvalua != TokenType.Token_class || tokenEvalua != TokenType.Token_interface || tokenEvalua != TokenType.Token_static || tokenEvalua != TokenType.Operator_puntoComa))
+                            {
+                                Entrada.Dequeue();
+                                tokenEvalua = Entrada.Peek().tokenType;
+                                if (tokenEvalua == TokenType.Operator_puntoComa)
+                                {
+                                    HacerPeek = true;
+                                }
+                            }
+                            string error = "Error en declaracion de una constante de declaracion en la " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        //Error de simbolo no adecuado al inicio de un DECL
+                        if (opcion == 0)
+                        {
+                            string error = "Error inicio de declaracion incorrecto en " + Entrada.Peek().location.row.ToString() + " fila y " + Entrada.Peek().location.firstCol.ToString() + " columna";
+                            errores.Add(error);
+                            Simbolo.Clear();
+                            Pila.Clear();
+                            Pila.Push(0);
+                            opcion = 0;
+                        }
+
+                        if (Entrada.Count == 0)
+                        {
+                            Error = true;
+                        }
+                    }
                 } //ERROR
 
             }
