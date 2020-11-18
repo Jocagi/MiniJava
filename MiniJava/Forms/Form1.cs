@@ -126,9 +126,14 @@ namespace MiniJava.Forms
 
             if (!parserReport.isCorrect)
             {
+                TokenLocation location = new TokenLocation(0,0,0);
                 foreach (var item in parserReport.Errors)
                 {
-                    output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                    if (location != item.location)
+                    {
+                        output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                    }
+                    location = item.location;
                 }
             
             
