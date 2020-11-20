@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniJava.SemanticaAnalyzer
+﻿namespace MiniJava.SemanticaAnalyzer
 {
     public enum SymbolType
     {

@@ -214,10 +214,5 @@ namespace MiniJava.Forms
             TableInfo t = new TableInfo(cc);
             t.Show();
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

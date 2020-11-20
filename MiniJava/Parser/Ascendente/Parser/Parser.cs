@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiniJava.General;
 using MiniJava.Lexer;
-using MiniJava.Parser.Ascendente.TableGenerator;
-
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 
 
@@ -109,7 +107,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                     //movEstado = posibilidades[1].estado;
                     bool reduccion = false;
                     bool desplazamiento = false;
-                    bool irA = false;
+                    //bool irA = false;
 
                     //ELEGIR UNA OPCION
                     foreach (var item in posibilidades)
@@ -124,7 +122,7 @@ namespace MiniJava.Parser.Ascendente.Parser
                         }
                         if (item.accion == ActionType.Ir_A)
                         {
-                            irA = true;
+                            // irA = true;
                         }
                     }
                     //REDUCCION CON REDUCCION
