@@ -7,6 +7,7 @@
         _interface,
         parameter,
         prototype,
-        constant
+        constant,
+        classe
     }
 }
