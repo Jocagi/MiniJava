@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.SemanticAnalyzer;
@@ -1328,7 +1329,21 @@ namespace MiniJava.Parser.Descendente
                     token = token.Split('.')[0];
 
                     Symbol symbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token);
-                    symbol.value = value;
+                    TokenType dataType = getDataType(value);
+
+                    if (symbol.dataType == dataType)
+                    {
+                        symbol.value = value;
+                    }
+                    else if(symbol.dataType == TokenType.Token_double && dataType == TokenType.Token_int)
+                    {
+                        symbol.value = value;
+                    }
+                    else
+                    {
+                        result.addError(new ParserError(lookahead, $"No se puede convertir de {dataType} a {symbol.dataType}", actualLocation, ErrorType.semantico));
+                        symbol.value = "Error";
+                    }
                 }
                 else
                 {
@@ -1383,6 +1398,40 @@ namespace MiniJava.Parser.Descendente
                 return false;
             }
             return true;
+        }
+        private TokenType getDataType(string value)
+        {
+            string intRegex = "(^0x|^0X)([0-9]|[A-F]|[a-f])*";
+            string doubleRegex = @"^(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?";
+            string boolRegex = @"(^True|^False)(?![a-z]|[A-Z]|\$|[0-9])";
+            string stringRegex = "^\"(.*?)\"";
+
+            Regex regex = new Regex(intRegex);
+            var match = regex.Match(value);
+            if (match.Success)
+            {
+                return TokenType.Token_int;
+            }
+            regex = new Regex(doubleRegex);
+            match = regex.Match(value);
+            if (match.Success)
+            {
+                return TokenType.Token_double;
+            }
+            regex = new Regex(boolRegex);
+            match = regex.Match(value);
+            if (match.Success)
+            {
+                return TokenType.Token_boolean;
+            }
+            regex = new Regex(stringRegex);
+            match = regex.Match(value);
+            if (match.Success)
+            {
+                return TokenType.Token_string;
+            }
+
+            return TokenType.Default;
         }
         private string getValueFromSymbolTable(Token token)
         {
