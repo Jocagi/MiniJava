@@ -13,13 +13,17 @@ El escáner reconoce los tokens propios del lenguaje en el orden en que se leen,
 ### Fase 2 (Laboratorio): Analizador sintáctico descendente recursivo
 En la segunda fase del proceso, se valida la posición correcta de los tokens según la gramática definida para el lenguaje. 
 ### Fase 2: Analizador sintáctico ascendente
-Se valida la posición correcta de los tokens según la gramática definida para el lenguaje. En este caso, se ha utilizado el método LR(1) para obtener la tabla de análisis sintáctico con la cual se realiza el parseo. 
+Se valida la posición correcta de los tokens según la gramática definida para el lenguaje. En este caso, se ha utilizado el método LR(1) para obtener la tabla de análisis sintáctico con la cual se realiza el parseo.
+
+### Fase 3: Analizador semántico y tabla de símbolos
+Se valida la posición correcta de los tokens semánticamente hablando según la gramática definida para el lenguaje. Se aplicó una tabla de símbolos en la que se guardan los valores de las clases, funciones, variables, interfaces y prototipos. Para cada valor se guarda el nombre de la variable, el ámbito en el que se encuentra, su valor, su tipo de dato y su tipo de símbolo. Con esta tabla se validó que cualquier variable modificada haya sido declarada previamente  en la tabla para la identificación de errores.
 
 ## Cómo instalar
 Dirijase a <a href="https://github.com/Jocagi/MiniJava/releases">"Releases"</a> en este repositorio o de forma alternativa en la carpeta 'Ejecutable'. Descargue el archivo en zip y descomprimalo. Allí econtrará el EXE de la aplicación. 
 
 ## Manejo de errores
 El analizador léxico reporta tokens no válidos, sin embargo, aún así intenta llevar el código al analizador sintáctico simplemente ignorandolos. En el analizador sintáctico, cada vez que se encuentra un error la gramática se reinicia de cero y regresa a buscar declaraciones de variables, constantes, interfaces, funciones y clases, además se ignora por completo la línea donde estaba el error de léxico, por lo que es posible que si hay un error dentro de una función se reporten todas las líneas subsecuentes como inválidas, hasta encontrar una nueva declaración.
+El analizador semántico busca toda variable a la que se le hace referencia o se modifica en la tabla de símbolos. Al no ser encontrado regresa un error en la línea en la que se hizo la referencia. También verifica que las variables se escriba una vez en los ambitos correspondientes. Si ya se encuentra definida una variable con el mismo nombre, mostrará el error en el lugar en que se quizo volver a declarar. 
 
 ## Instrucciones de uso
 
@@ -34,3 +38,5 @@ Para realizar el analisis de debe seleccionar un archivo:
 
 Este se analizará y mostrará el resultado en pantalla, indicando en rojo lo errores encontrados:
 <br><a href="https://imgur.com/uIr49mG"><img src="https://i.imgur.com/uIr49mG.png" title="source: imgur.com" width="300" height="300"/></a><br>
+
+Para consultar la tabla se símbolos, se debe presionar el botón "simbolos" en la parte superior: 
