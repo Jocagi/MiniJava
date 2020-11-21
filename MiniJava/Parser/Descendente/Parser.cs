@@ -1324,20 +1324,16 @@ namespace MiniJava.Parser.Descendente
             if (token != "")
             {
                 //Evaluar si existe el simbolo
-                if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || scopes.Contains(x.scope))))
+                if (tablaSimbolos.Any(x => (x.ID == token) && (x.scope == actualScope)))
                 {
                     token = token.Split('.')[0];
 
-                    //Evaluar si existe el simbolo
-                    if (tablaSimbolos.Any(x => (x.ID == token) && (x.scope == actualScope || x.scope < actualScope)))
-                    {
-                        Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token);
-                        actualSymbol.value = value;
-                    }
-                    else
-                    {
-                        result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
-                    }
+                    Symbol symbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token);
+                    symbol.value = value;
+                }
+                else
+                {
+                    result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
                 }
             }
         }
@@ -1392,7 +1388,7 @@ namespace MiniJava.Parser.Descendente
         private string getValueFromSymbolTable(Token token)
         {
             //Evaluar si existe el simbolo
-            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || scopes.Contains(x.scope))))
+            if (tablaSimbolos.Any(x => (x.ID == token.value) && (scopes.Contains(x.scope) && x.scope == actualScope)))
             {
                 Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
                 tiposOperacion.Add(actualSymbol.dataType);
