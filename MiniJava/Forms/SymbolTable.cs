@@ -19,23 +19,46 @@ namespace MiniJava.Forms
         public SymbolTable()
         {
             InitializeComponent();
-            printTable();
         }
         public SymbolTable(ParserReport report)
         {
             this.parserReport = report;
             InitializeComponent();
+            InitilizeTable();
+        }
+
+        private void InitilizeTable()
+        {
+            page = 0;
             printTable();
+            labelActualTable.Text = (page + 1).ToString();
+            labelTotalTables.Text = parserReport.TablaSimbolos.Count.ToString();
         }
 
         private void nextButton_Click(object sender, EventArgs e)
         {
-
+            if (page + 1 < parserReport.TablaSimbolos.Count)
+            {
+                dataGridView1.Columns.Clear();
+                dataGridView1.Rows.Clear();
+                page++;
+                printTable();
+                labelActualTable.Text = (page + 1).ToString();
+                dataGridView1.Refresh();
+            }
         }
 
         private void previousButtom_Click(object sender, EventArgs e)
         {
-
+            if (page - 1 >= 0)
+            {
+                dataGridView1.Columns.Clear();
+                dataGridView1.Rows.Clear();
+                page--;
+                printTable();
+                labelActualTable.Text = (page + 1).ToString();
+                dataGridView1.Refresh();
+            }
         }
 
         private void saveButtom_Click(object sender, EventArgs e)

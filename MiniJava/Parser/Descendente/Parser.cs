@@ -1292,6 +1292,7 @@ namespace MiniJava.Parser.Descendente
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
+                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
             }
             //Evaluar declaracion repetida
             else if (tablaSimbolos.All(x => x.ID != token.value))
@@ -1299,12 +1300,14 @@ namespace MiniJava.Parser.Descendente
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
+                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
             }
             else if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
+                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
             }
             else
             {
@@ -1322,6 +1325,7 @@ namespace MiniJava.Parser.Descendente
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
                 actualParameters = new List<TokenType>();
+                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
             }
             else
             {
@@ -1363,6 +1367,8 @@ namespace MiniJava.Parser.Descendente
                                 result.addError(new ParserError(lookahead, $"No se puede convertir de {dataType} a {symbol.dataType}", actualLocation, ErrorType.semantico));
                                 symbol.value = "Error";
                             }
+
+                            tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
                         }
                     }
                 }
@@ -1381,7 +1387,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     if (tiposOperacion.Count(x => x == TokenType.Const_String || x == TokenType.Token_string) != 0)
                     {
-                        answer = $"\"{mathOperation}\"";
+                        answer = $"{mathOperation}";
                     }
                     else
                     {
