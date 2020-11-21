@@ -39,6 +39,7 @@ namespace MiniJava.Parser.Descendente
         private SymbolType actualSymbolType = SymbolType.variable;
         private string actualIdentifier = "";
         private string actualSymbolName = "";
+        private bool mathExpressionFound = false;
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -111,11 +112,11 @@ namespace MiniJava.Parser.Descendente
             expectedValue = TokenType.Constant;
             return false;
         }
-        private void ERROR(TokenType expected, ErrorType errorType)
+        private void ERROR(TokenType expected)
         {
             if ( lookahead != TokenType.Default )
             {
-                result.addError(new ParserError(lookahead, expected, actualLocation, errorType));
+                result.addError(new ParserError(lookahead, expected, actualLocation));
                 int errorRow = actualLocation.row;
                 if (repetirDECLerror)
                 {
@@ -136,7 +137,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (!Decl())
             {
-                ERROR(expectedValue, ErrorType.semantico);
+                ERROR(expectedValue);
             }
             if (tokens.Count > 0)
             {
@@ -304,6 +305,8 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Expr()
         {
+            mathExpressionFound = false;
+
             if (A(true))
             {
                 if (!Factor())
@@ -327,12 +330,16 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                //Valor en operacion matematica (Semantico)
-                mathOperation += getMathValueFromToken(actualToken);
-                string answer = evaluateExpression();
-                updateValueInSymbolTable(actualSymbolName, answer);
-                actualSymbolName = "";
 
+                if (!mathExpressionFound)
+                {
+                    //Valor en operacion matematica (Semantico)
+                    mathOperation += getMathValueFromToken(actualToken);
+                    string answer = evaluateExpression();
+                    updateValueInSymbolTable(actualSymbolName, answer);
+                    actualSymbolName = "";
+                    mathExpressionFound = true;
+                }
                 return true;
             }
             return true;
@@ -511,7 +518,7 @@ namespace MiniJava.Parser.Descendente
                 entrostmt = true;
                 if (!Stmt())
                 {
-                    ERROR(expectedValue, ErrorType.semantico);
+                    ERROR(expectedValue);
                     return false;
                 }
                 return true;
@@ -1182,14 +1189,10 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Decl()
         {
-            DeclB = false;
-            if (lookahead == TokenType.Token_class || lookahead == TokenType.Token_interface ||
-                lookahead == TokenType.Constant || lookahead == TokenType.Token_void || lookahead == TokenType.Identifier||
-                lookahead == TokenType.Token_int || lookahead == TokenType.Token_double || lookahead == TokenType.Token_boolean||
-                lookahead == TokenType.Token_string)
-            {
-                DeclB = true;
-            }                
+            DeclB =           (lookahead == TokenType.Token_class || lookahead == TokenType.Token_interface ||
+                              lookahead == TokenType.Constant || lookahead == TokenType.Token_void || lookahead == TokenType.Identifier||
+                              lookahead == TokenType.Token_int || lookahead == TokenType.Token_double || lookahead == TokenType.Token_boolean||
+                              lookahead == TokenType.Token_string);
             if (FunctionDecl1())
             {
                 DeclB = true;
