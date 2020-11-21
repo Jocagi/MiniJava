@@ -15,6 +15,14 @@ namespace MiniJava.SemanticAnalyzer
         public List<TokenType> parameters { get; set; }
 
         //Variable
+        public Symbol(string Name, int scope, string value, SymbolType symbolType, TokenType dataType)
+        {
+            this.ID = Name;
+            this.scope = scope;
+            this.value = value;
+            this.dataType = dataType;
+            this.type = symbolType;
+        }
         public Symbol(string Name, int scope, string value, TokenType dataType)
         {
             this.ID = Name;

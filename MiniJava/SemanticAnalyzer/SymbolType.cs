@@ -5,6 +5,7 @@
         variable,
         function,
         _interface,
-        parameter
+        parameter,
+        prototype
     }
 }
