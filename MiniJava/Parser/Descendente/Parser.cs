@@ -313,6 +313,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Token_System, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_punto, false))
                 {
                     return false;
@@ -353,6 +354,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Token_break, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_puntoComa, false))
                 {
                     return false;
@@ -365,6 +367,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Token_return, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Expr())
                 {
                     return false;
@@ -381,6 +384,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Token_for, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -419,8 +423,10 @@ namespace MiniJava.Parser.Descendente
         }
         private bool WhileStmt()
         {
+            
             if (Match(TokenType.Token_while, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -444,10 +450,12 @@ namespace MiniJava.Parser.Descendente
         }
         private bool ElseStmt()
         {
-            if (Match(TokenType.Token_else, true) & acertoToken)
+            if (Match(TokenType.Token_else, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Stmt())
                 {
+                    ERROR(expectedValue, ErrorType.semantico);
                     return false;
                 }
                 return true;
@@ -456,8 +464,10 @@ namespace MiniJava.Parser.Descendente
         }
         private bool IfStmt()
         {
+            
             if (Match(TokenType.Token_if, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -535,10 +545,14 @@ namespace MiniJava.Parser.Descendente
             }
             return false;
         }
+
+        bool entrostmt;
         private bool Stmt()
         {
+            entrostmt = false;
             if (Match(TokenType.Operator_puntoComa, true) & acertoToken)
             {
+                entrostmt = true;
                 return true;
             }
             if (IfStmt())
@@ -571,6 +585,7 @@ namespace MiniJava.Parser.Descendente
             }
             if (Lvalue())
             {
+                entrostmt = true;
                 if (!Stmt0())
                 {
                     return false;
@@ -579,6 +594,7 @@ namespace MiniJava.Parser.Descendente
             }
             if (Expr())
             {
+                entrostmt = true;
                 if (!Match(TokenType.Operator_puntoComa, false))
                 {
                     return false;
@@ -596,6 +612,10 @@ namespace MiniJava.Parser.Descendente
                     return false;
                 }
                 return true;
+            }
+            if (entrostmt)
+            {
+                return false;
             }
             return true;
         }
@@ -635,6 +655,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Operator_llaveAbre, true) && acertoToken)
             {
+                entrostmt = true;
                 if (!StmtBlock1())
                 {
                     return false;
@@ -1117,10 +1138,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                if (!Match(TokenType.Operator_puntoComa, false))
-                {
-                    return false;
-                }
+                
                 if (!Decl2())
                 {
                     return false;
