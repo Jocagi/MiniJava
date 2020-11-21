@@ -1145,7 +1145,7 @@ namespace MiniJava.Parser.Descendente
             //Evaluar declaracion repetida
             if (tablaSimbolos.All(x => x.scope== actualScope && x.ID != token.value))
             {
-                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType, symbolType);
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType);
                 tablaSimbolos.Add(newSymbol);
             }
             else
