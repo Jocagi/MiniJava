@@ -582,7 +582,6 @@ namespace MiniJava.Parser.Descendente
             }
             return false;
         }
-
         bool entrostmt;
         private bool Stmt()
         {
@@ -1043,6 +1042,7 @@ namespace MiniJava.Parser.Descendente
             {
                 Dequeue();
                 acertoToken = true;
+                actualDataType = actualToken.tokenType;
                 return true;
             }
             if (epsilon)
@@ -1060,14 +1060,19 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+
                 if (!Match(TokenType.Identifier, false))
                 {
                     return false;
                 }
+
+                addToSymbolTable(actualDataType, SymbolType.constant, actualToken);
+                actualSymbolType = SymbolType.variable;
+
                 if (!Match(TokenType.Operator_puntoComa, false))
                 {
                     return false;
-                }               
+                }
                 return true;
             }
             return false;
@@ -1222,6 +1227,8 @@ namespace MiniJava.Parser.Descendente
         {
             if (token != "")
             {
+                token = token.Split('.')[0];
+
                 //Evaluar si existe el simbolo
                 if (tablaSimbolos.Any(x => (x.ID == token) && (x.scope == actualScope || x.scope < actualScope)))
                 {
