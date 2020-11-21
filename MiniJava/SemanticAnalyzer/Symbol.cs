@@ -30,6 +30,7 @@ namespace MiniJava.SemanticAnalyzer
             this.value = value;
             this.dataType = dataType;
             this.type = SymbolType.function;
+            this.parameters = parameters;
         }
     }
 }

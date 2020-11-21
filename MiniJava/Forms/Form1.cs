@@ -17,6 +17,7 @@ namespace MiniJava.Forms
     public partial class Form1 : Form
     {
         string output = "";
+        private ParserReport parserRep;
 
         public Form1()
         {
@@ -153,6 +154,8 @@ namespace MiniJava.Forms
             Parser.Descendente.Parser pars1 = new Parser.Descendente.Parser(tokensQueue);
             ParserReport parserReport = pars1.getReport();
 
+            this.parserRep = parserReport;
+
             //ANALIZADOR SINTACTICO
             
             output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
@@ -212,7 +215,8 @@ namespace MiniJava.Forms
 
         private void symbolButtom_Click(object sender, EventArgs e)
         {
-
+            SymbolTable t = new SymbolTable(parserRep);
+            t.Show();
         }
     }
 }
