@@ -688,12 +688,15 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Prototype()
         {
+            Token nombreFunc;
+            Token tipo;
             if (Match(TokenType.Token_void, true) && acertoToken)
             {
                 if (!Match(TokenType.Identifier, false))
                 {
                     return false;
                 }
+                nombreFunc = actualToken;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -702,6 +705,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTableFunct(TokenType.Token_void, SymbolType.function, nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -718,6 +722,7 @@ namespace MiniJava.Parser.Descendente
             }
             if (Type())
             {
+                tipo = actualToken;
                 if (!TypeArray())
                 {
                     return false;
@@ -726,6 +731,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                nombreFunc = actualToken;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -734,6 +740,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTableFunct(tipo.tokenType, SymbolType.function, nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -798,6 +805,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Type())
             {
+                typeF = actualToken;
                 if (!Variable())
                 {
                     return false;
@@ -921,6 +929,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Type())
             {
+                actualParameters.Add(actualToken.tokenType);
                 actualSymbolType = SymbolType.parameter;
                 if (!Variable())
                 {
@@ -930,7 +939,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                //ACUA
+               
                 return true;
             }
             return false;
@@ -945,6 +954,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTableFunct(typeF.tokenType, SymbolType.function, nombreF, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -965,7 +975,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                addToSymbolTable(TokenType.Token_void, SymbolType.function, actualToken);
+                Token nombreFunc = actualToken;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -974,6 +984,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTableFunct(TokenType.Token_void, SymbolType.function, nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -1061,6 +1072,7 @@ namespace MiniJava.Parser.Descendente
                     actualSymbolType = SymbolType.variable;
                     return false;
                 }
+                nombreF = actualToken;
                 addToSymbolTable(actualDataType, actualSymbolType, actualToken);
                 actualSymbolType = SymbolType.variable;
                 return true;
@@ -1081,6 +1093,8 @@ namespace MiniJava.Parser.Descendente
             return false;
         }
         bool DeclB = false;
+        Token nombreF;
+        Token typeF;
         private bool Decl2()
         {
             if (Match(TokenType.Operator_puntoComa, true) && acertoToken)
@@ -1156,7 +1170,7 @@ namespace MiniJava.Parser.Descendente
             }
             if (Type())
             {
-
+                typeF = actualToken;
                 DeclB = true;
                 if (!Variable())
                 {
@@ -1202,6 +1216,7 @@ namespace MiniJava.Parser.Descendente
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType, parameters);
                 tablaSimbolos.Add(newSymbol);
+                parameters = new List<TokenType>();
             }
             else
             {
