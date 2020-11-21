@@ -40,3 +40,12 @@ Este se analizará y mostrará el resultado en pantalla, indicando en rojo lo er
 <br><a href="https://imgur.com/uIr49mG"><img src="https://i.imgur.com/uIr49mG.png" title="source: imgur.com" width="300" height="300"/></a><br>
 
 Para consultar la tabla se símbolos, se debe presionar el botón "simbolos" en la parte superior: 
+![image](https://user-images.githubusercontent.com/47206056/99879810-da45ca00-2bd4-11eb-9cd5-fbf8b7739ae0.png)
+
+Se mostrará la tabla de símbolos por cada cambio realizado en ella. Para ver las versiones posteriores, presione "siguiente" y para ver las versiones anteriores presione "Anterior":
+![image](https://user-images.githubusercontent.com/47206056/99879821-e9c51300-2bd4-11eb-8b17-dbf2dcfce3df.png)
+
+
+Para guardar todas las versiones de la tabla de símbolos, presione "guardar" y elija la ruta en la que desea guardarlo:
+![image](https://user-images.githubusercontent.com/47206056/99879834-05301e00-2bd5-11eb-8b59-b287582bc955.png)
+
