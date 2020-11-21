@@ -37,6 +37,7 @@ namespace MiniJava.Parser.Descendente
         private List<TokenType> actualParameters = new List<TokenType>();
         private string actualOperator = "";
         private TokenType actualDataType;
+        private SymbolType actualSymbolType = SymbolType.variable;
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -920,6 +921,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Type())
             {
+                actualSymbolType = SymbolType.parameter;
                 if (!Variable())
                 {
                     return false;
@@ -934,6 +936,8 @@ namespace MiniJava.Parser.Descendente
         }
         private bool FunctionDecl()
         {
+            actualSymbolType = SymbolType.function;
+
             if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
             { 
                 if (!Formals())
@@ -1045,15 +1049,21 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Variable()
         {
+            actualSymbolType = actualSymbolType == SymbolType.parameter? 
+                SymbolType.parameter : SymbolType.variable;
+
             if (TypeArray())
             {
                 if (!Match(TokenType.Identifier, false))
                 {
+                    actualSymbolType = SymbolType.variable;
                     return false;
                 }
-                addToSymbolTable(actualDataType, SymbolType.variable, actualToken);
+                addToSymbolTable(actualDataType, actualSymbolType, actualToken);
+                actualSymbolType = SymbolType.variable;
                 return true;
             }
+            actualSymbolType = SymbolType.variable;
             return false;
         }
         private bool VariableDecl()
@@ -1175,7 +1185,7 @@ namespace MiniJava.Parser.Descendente
             //Evaluar declaracion repetida
             if (tablaSimbolos.All(x => x.scope== actualScope && x.ID != token.value))
             {
-                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType);
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 tablaSimbolos.Add(newSymbol);
             }
             else

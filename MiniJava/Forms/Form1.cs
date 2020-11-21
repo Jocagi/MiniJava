@@ -167,7 +167,10 @@ namespace MiniJava.Forms
                 {
                     if (location != item.location)
                     {
-                        output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                        if (item.errorType != ErrorType.semantico)
+                        {
+                            output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                        }
                     }
                     location = item.location;
                 }
