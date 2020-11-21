@@ -1,4 +1,4 @@
-﻿namespace MiniJava.SemanticaAnalyzer
+﻿namespace MiniJava.SemanticAnalyzer
 {
     public enum SymbolType
     {

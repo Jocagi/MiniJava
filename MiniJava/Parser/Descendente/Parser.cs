@@ -1,10 +1,9 @@
-﻿using MiniJava.Lexer;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using MiniJava.General;
+using MiniJava.Lexer;
+using MiniJava.SemanticAnalyzer;
 
-namespace MiniJava.Parser.RecursiveDescent
+namespace MiniJava.Parser.Descendente
 {
     public class Parser
     {
@@ -12,12 +11,10 @@ namespace MiniJava.Parser.RecursiveDescent
         /// El analizador sitanctico recursivo recorre de forma recursiva la gramatica.
         /// Cada Simbolo NO TERMINAL es representado como una funcion y cada simbolo TERMINAL se evalua atraves del MATCH()
         /// El punto de partida es PROGRAM, si se hace backtracking hasta aqui se reporta el error.
-        /// Se 'Concatenan' varias expresiones a traves de un AND para validar que todo este es el lugar correcto. Sin importar si es terminal o no terminal.
+        /// Se 'Concatenan' varias expresiones a traves de un AND para validar que cada token este es el lugar correcto. Sin importar si es terminal o no terminal.
         /// </summary>
-      
         
-
-        
+        //Variables Parser
         private Queue<Token> tokens;
         private ParserReport result;
         private TokenType lookahead;
@@ -25,6 +22,10 @@ namespace MiniJava.Parser.RecursiveDescent
         private TokenLocation actualLocation;
         private bool acertoToken; // sirve para ver si un token nullable cumplio o no
         private bool repetirDECLerror;
+        //Variables Analizador semantico
+        private List<Dictionary<string, Symbol>> tablas = new List<Dictionary<string, Symbol>>();
+        private Dictionary<string, Symbol> tablaSimbolos = new Dictionary<string, Symbol>();
+        private string mathOperation = "";
 
         public Parser(Queue<Token> tokens)
         {
@@ -91,11 +92,11 @@ namespace MiniJava.Parser.RecursiveDescent
             expectedValue = TokenType.Constant;
             return false;
         }
-        private void ERROR(TokenType expected)
+        private void ERROR(TokenType expected, ErrorType errorType)
         {
-            if (lookahead != TokenType.Default )
+            if ( lookahead != TokenType.Default )
             {
-                result.addError(new ParserError(lookahead, expected, actualLocation));
+                result.addError(new ParserError(lookahead, expected, actualLocation, errorType));
                 int errorRow = actualLocation.row;
                 if (repetirDECLerror)
                 {
@@ -116,12 +117,12 @@ namespace MiniJava.Parser.RecursiveDescent
         {
             if (!Decl())
             {
-                ERROR(expectedValue);
+                ERROR(expectedValue, ErrorType.semantico);
             }
-             if (tokens.Count > 0)
-             {
+            if (tokens.Count > 0)
+            {
                 PROGRAM();
-             }
+            }
         }     
         private bool Constant()
         {
@@ -868,16 +869,15 @@ namespace MiniJava.Parser.RecursiveDescent
         }
         private bool Formals1()
         {
-            
-                if (Match(TokenType.Operator_coma, true) && acertoToken)
+            if (Match(TokenType.Operator_coma, true) && acertoToken)
+            {
+                if (!Formals())
                 {
-                    if (!Formals())
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
                 return true;
+            }
+            return true;
             
         }
         private bool Formals()
