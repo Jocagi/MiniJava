@@ -329,6 +329,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+
                 return true;
             }
             return false;
@@ -355,6 +356,9 @@ namespace MiniJava.Parser.Descendente
                 }
                 return true;
             }
+            string valoroloquesea = getMathValueFromToken(actualToken);
+            TokenType dataType = getDataType(valoroloquesea);
+            paramfunc.Add(dataType);//PAEA EVALUAR EN CALLSTMT
             return true;
         }
         private bool PrintStmt3()
@@ -588,10 +592,20 @@ namespace MiniJava.Parser.Descendente
             }
             return true;
         }
+
+        List<TokenType> paramfunc = new List<TokenType>();
         private bool CallStmt()
         {
             if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
             {
+                string[] dominios = funcion.Split(".");
+                Token temp = new Token(TokenType.Identifier);
+                temp.value = dominios[dominios.Length - 1];
+
+                List<TokenType> parametros = getParamsFromSymbolTable(temp);
+                paramfunc = new List<TokenType>();
+              
+
                 if (!Expr())
                 {
                     return false;
@@ -600,6 +614,30 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+
+                if (parametros != null)
+                {
+                    if (parametros.Count() != paramfunc.Count())
+                    {
+                        result.addError(new ParserError(lookahead, $"Cantidad de argumentos que no corresponde", actualLocation, ErrorType.semantico));
+                    }
+                    else
+                    {
+                        for (int i = 0; i < parametros.Count(); i++)
+                        {
+                            if (parametros[i] != paramfunc[i])
+                            {
+                                result.addError(new ParserError(lookahead, $"Argumento número {i + 1} inválido", actualLocation, ErrorType.semantico));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    result.addError(new ParserError(lookahead, "Identificador no declarado o no es función", actualLocation, ErrorType.semantico));
+                }
+
+
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -625,6 +663,7 @@ namespace MiniJava.Parser.Descendente
             return false;
         }
         bool entrostmt;
+        string funcion;
         private bool Stmt()
         {
             entrostmt = false;
@@ -663,6 +702,7 @@ namespace MiniJava.Parser.Descendente
             }
             if (Lvalue())
             {
+                funcion = actualIdentifier;
                 entrostmt = true;
                 if (!Stmt0())
                 {
@@ -1334,6 +1374,9 @@ namespace MiniJava.Parser.Descendente
         }
         private void updateValueInSymbolTable(string token, string value)
         {
+            TokenType dataType = getDataType(value);
+            paramfunc.Add(dataType);//PAEA EVALUAR EN CALLSTMT
+
             if (token != "")
             {
                 //Evaluar si existe el simbolo
@@ -1352,7 +1395,7 @@ namespace MiniJava.Parser.Descendente
                         if (symbols.Any(x => x.scope == actualScopes[i]))
                         {
                             Symbol symbol = symbols.FindLast(x => x.scope == actualScopes[i]);
-                            TokenType dataType = getDataType(value);
+                            
 
                             if (symbol.dataType == dataType)
                             {
@@ -1518,6 +1561,35 @@ namespace MiniJava.Parser.Descendente
 
             return numericalValue;
         }
+        private List<TokenType> getParamsFromSymbolTable(Token token)
+        {
+            //Evaluar si existe el simbolo
+            if (tablaSimbolos.Any(x => (x.ID == token.value)))
+            {
+                List<Symbol> symbols = tablaSimbolos.FindAll(x => (x.ID == token.value));
+                List<string> actualScopes = scopes.ToList();
+
+                for (int i = actualScopes.Count - 1; i >= 0; i--)
+                {
+                    if (symbols.Any(x => x.scope == actualScopes[i]))
+                    {
+                        Symbol actualSymbol = symbols.FindLast(x => x.scope == actualScopes[i]);
+                        tiposOperacion.Add(actualSymbol.dataType);
+                        return actualSymbol.parameters;
+                    }
+                }
+
+                result.addError(new ParserError(lookahead, "Identificador no accesible", actualLocation, ErrorType.semantico));
+                return null;
+            }
+            else
+            {
+                result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
+                return null;
+            }
+        }
+
+
         private List<Symbol> CloneList(List<Symbol> simbolos)
         {
             List<Symbol> copia = new List<Symbol>();
