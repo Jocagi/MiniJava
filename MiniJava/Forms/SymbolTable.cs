@@ -63,7 +63,6 @@ namespace MiniJava.Forms
                 dataGridView1.Rows[i].Cells[4].Value = value.value;
                 i++;
             }
-
         }
     }
 }

@@ -32,10 +32,9 @@ namespace MiniJava.Parser.Descendente
         //Variables Analizador semantico
         private List<List<Symbol>> tablas = new List<List<Symbol>>();
         private List<Symbol> tablaSimbolos = new List<Symbol>();
-        private string mathOperation = "";
+        private string mathOperation;
         private int actualScope = 0;
         private List<TokenType> actualParameters = new List<TokenType>();
-        private string actualOperator = "";
         private TokenType actualDataType;
         private SymbolType actualSymbolType = SymbolType.variable;
         private string actualIdentifier = "";
@@ -311,7 +310,7 @@ namespace MiniJava.Parser.Descendente
                 }
                 //Valor en operacion matematica (Semantico)
                 mathOperation += getMathValueFromToken(actualToken);
-                string answer = evaluateMathExpression();
+                string answer = evaluateExpression();
                 updateValueInSymbolTable(actualSymbolName, answer);
                 actualSymbolName = "";
 
@@ -1235,15 +1234,14 @@ namespace MiniJava.Parser.Descendente
                 }
             }
         }
-        private string evaluateMathExpression()
+        private string evaluateExpression()
         {
             string answer;
-
             try
             {
                 answer = new DataTable().Compute(mathOperation, null).ToString();
             }
-            catch (Exception e)
+            catch
             {
                 result.addError(new ParserError(lookahead, "Error en operacion", actualLocation, ErrorType.semantico));
                 answer = "Error";
