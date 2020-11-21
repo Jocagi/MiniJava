@@ -64,6 +64,8 @@ namespace MiniJava.Forms
         private void saveButtom_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.DefaultExt = ".txt";
+
             saveFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
