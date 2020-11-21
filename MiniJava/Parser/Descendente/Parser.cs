@@ -1285,13 +1285,13 @@ namespace MiniJava.Parser.Descendente
         //ANALIZADOR SEMANTICO
         private void addToSymbolTable(TokenType dataType, SymbolType symbolType, Token token)
         {
-            if (tablaSimbolos.Count()==0)
+            if (tablaSimbolos.Count == 0)
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 tablaSimbolos.Add(newSymbol);
             }
             //Evaluar declaracion repetida
-            if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
+            else if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 tablaSimbolos.Add(newSymbol);
@@ -1307,7 +1307,6 @@ namespace MiniJava.Parser.Descendente
             if (!tablaSimbolos.Any(x => x.scope == actualScope && x.ID == token.value))
             {
                 scopes.Pop();
-
 
                 Symbol newSymbol = new Symbol(token.value, scopes.Peek(), "0", dataType, symbolType,parameters);
                 scopes.Push(actualScope);
