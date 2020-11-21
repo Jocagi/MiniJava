@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using MiniJava.Parser.Ascendente.Parser;
@@ -39,8 +40,44 @@ namespace MiniJava.Forms
 
         private void saveButtom_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                FillOutput();
+                File.WriteAllText(saveFileDialog1.FileName, output);
+                MessageBox.Show(@"Archivo guardado exitosamente");
+            }
+            else
+            {
+                MessageBox.Show(@"No se ha especificado ninguna ruta");
+            }
         }
+        string output;
+        void FillOutput()
+        {
+            foreach (var item in parserReport.TablaSimbolos)
+            {
+                foreach (var item2 in item)
+                {
+                    output += item2.ID.ToString();
+                    output += "          --        ";
+                    output += item2.dataType.ToString();
+                    output += "         --        ";
+                    output += item2.type.ToString();
+                    output += "         --      ";
+                    output += item2.scope.ToString();
+                    output += "          --          ";
+                    output += item2.value.ToString();
+                    output += "\r\n";
+                }
+                output += "\r\n";
+                output += "\r\n";
+                output += "\r\n";
+            }
+        }
+
 
         private void printTable()
         {
