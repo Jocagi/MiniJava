@@ -928,6 +928,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                //ACUA
                 return true;
             }
             return false;
@@ -960,6 +961,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTable(TokenType.Token_void, SymbolType.function, actualToken);
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
@@ -1176,6 +1178,19 @@ namespace MiniJava.Parser.Descendente
             if (tablaSimbolos.All(x => x.scope== actualScope && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType);
+                tablaSimbolos.Add(newSymbol);
+            }
+            else
+            {
+                result.addError(new ParserError(lookahead, "Identificador ya existe", actualLocation, ErrorType.semantico));
+            }
+        }
+        private void addToSymbolTableFunct(TokenType dataType, SymbolType symbolType, Token token, List<TokenType> parameters)
+        {
+            //Evaluar declaracion repetida
+            if (tablaSimbolos.All(x => x.scope == actualScope && x.ID != token.value))
+            {
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType, parameters);
                 tablaSimbolos.Add(newSymbol);
             }
             else
