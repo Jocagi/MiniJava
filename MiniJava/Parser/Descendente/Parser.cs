@@ -40,6 +40,7 @@ namespace MiniJava.Parser.Descendente
         private string actualIdentifier = "";
         private string actualSymbolName = "";
         private bool mathExpressionFound = false;
+        private bool inicioParentesis = false;
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -207,6 +208,8 @@ namespace MiniJava.Parser.Descendente
             }
             if (Match(TokenType.Operator_ParentesisAbre, true) & acertoToken)
             {
+                inicioParentesis = true;
+                mathOperation += "(";
                 if (!Expr())
                 {
                     return false;
@@ -335,10 +338,12 @@ namespace MiniJava.Parser.Descendente
                 {
                     //Valor en operacion matematica (Semantico)
                     mathOperation += getMathValueFromToken(actualToken);
+                    mathOperation += inicioParentesis? ")" : "";
                     string answer = evaluateExpression();
                     updateValueInSymbolTable(actualSymbolName, answer);
                     actualSymbolName = "";
                     mathExpressionFound = true;
+                    inicioParentesis = false;
                 }
                 return true;
             }
