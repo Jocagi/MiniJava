@@ -601,21 +601,45 @@ namespace MiniJava.Parser.Descendente
         }
         private bool StmtBlock1()
         {
-            if (VariableDecl())
+            if (Type())
             {
-                if (!StmtBlock1())
+                if (Operacion())
                 {
-                    return false;
+                    if (!Expr())
+                    {
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
-            }
+                if (VariableDecl())
+                {
+                    if (!StmtBlock1())
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }           
             return true;
         }
+
+        private bool StmtBlock3()
+        {
+            ConstDecl();
+            
+            return true;
+        }
+
         private bool StmtBlock()
         {
             if (Match(TokenType.Operator_llaveAbre, true) && acertoToken)
             {
                 if (!StmtBlock1())
+                {
+                    return false;
+                }
+                if (!StmtBlock3())
                 {
                     return false;
                 }
@@ -741,8 +765,13 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Field()
         {
-            if (Variable())
+            if (Type())
             {
+                if (!Variable())
+                {
+                    return false;
+                }
+                
                 if (!Field2())
                 {
                     return false;
@@ -859,8 +888,12 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Formals()
         {
-            if (Variable())
+            if (Type())
             {
+                if (!Variable())
+                {
+                    return false;
+                }
                 if (!Formals1())
                 {
                     return false;
@@ -931,14 +964,14 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Type()
         {
-            if (ConstType(true))
-            {
-                return true;
-            }
             if (Match(TokenType.Identifier, true) && acertoToken)
             {
                 return true;
             }
+            if (ConstType(false))
+            {
+                return true;
+            }            
             return false;
         }
         private bool ConstType(bool epsilon)
@@ -980,12 +1013,8 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Variable()
         {
-            if (Type())
+            if (TypeArray())
             {
-                if (!TypeArray())
-                {
-                    return false;
-                }
                 if (!Match(TokenType.Identifier, false))
                 {
                     return false;
@@ -1080,9 +1109,18 @@ namespace MiniJava.Parser.Descendente
                 }
                 return true;
             }
-            if (Variable())
+            if (Type())
             {
-                DeclB = true;                
+
+                DeclB = true;
+                if (!Variable())
+                {
+                    return false;
+                }
+                if (!Match(TokenType.Operator_puntoComa, false))
+                {
+                    return false;
+                }
                 if (!Decl2())
                 {
                     return false;
