@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -8,7 +9,7 @@ using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 using MiniJava.Parser.Ascendente.TableGenerator.LR1;
-using MiniJava.Parser.RecursiveDescent;
+using MiniJava.Parser.Descendente;
 using ScintillaNET;
 
 namespace MiniJava.Forms
@@ -149,7 +150,7 @@ namespace MiniJava.Forms
                 output += line;
             }
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
-            Parser.RecursiveDescent.Parser pars1 = new Parser.RecursiveDescent.Parser(tokensQueue);
+            Parser.Descendente.Parser pars1 = new Parser.Descendente.Parser(tokensQueue);
             ParserReport parserReport = pars1.getReport();
 
             //ANALIZADOR SINTACTICO

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
 using MiniJava.General;
 using MiniJava.Lexer;
 using MiniJava.SemanticAnalyzer;
@@ -23,10 +27,12 @@ namespace MiniJava.Parser.Descendente
         private bool acertoToken; // sirve para ver si un token nullable cumplio o no
         private bool repetirDECLerror;
         //Variables Analizador semantico
-        private List<Dictionary<string, Symbol>> tablas = new List<Dictionary<string, Symbol>>();
-        private Dictionary<string, Symbol> tablaSimbolos = new Dictionary<string, Symbol>();
+        private List<List<Symbol>> tablas = new List<List<Symbol>>();
+        private List<Symbol> tablaSimbolos = new List<Symbol>();
         private string mathOperation = "";
+        private int actualScope = 0;
 
+        //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
         {
             this.tokens = tokens;
@@ -1093,6 +1099,61 @@ namespace MiniJava.Parser.Descendente
                 return true;
             }                        
             return false;
+        }
+
+        //ANALIZADOR SEMANTICO
+        private void addToSymbolTable(TokenType dataType, SymbolType symbolType, Token token)
+        {
+            //Evaluar declaracion repetida
+            if (tablaSimbolos.All(x => x.scope== actualScope && x.ID != token.value))
+            {
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType, symbolType);
+                tablaSimbolos.Add(newSymbol);
+            }
+            else
+            {
+                result.addError(new ParserError(lookahead, "Identificador ya existe", actualLocation, ErrorType.semantico));
+            }
+        }
+        private void updateValueInSymbolTable(Token token, string value)
+        {
+            //Evaluar si existe el simbolo
+            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || x.scope < actualScope)))
+            {
+                Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
+                actualSymbol.value = value;
+            }
+            else
+            {
+                result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
+            }
+        }
+        private string evaluateExpression(string mathExpression)
+        {
+            try
+            {
+                mathExpression = "-100 > (5.3 - 2)";
+                return new DataTable().Compute(mathExpression, null).ToString();
+            }
+            catch (Exception e)
+            {
+                result.addError(new ParserError(lookahead, "Error en operacion", actualLocation, ErrorType.semantico));
+                return "Error";
+            }
+        }
+        private string getValueFromSymbolTable(Token token)
+        {
+            //Evaluar si existe el simbolo
+            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || x.scope < actualScope)))
+            {
+                Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
+                return actualSymbol.value;
+            }
+            else
+            {
+                result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
+                return "Error";
+            }
         }
     }
 }
