@@ -14,6 +14,8 @@ namespace MiniJava.SemanticAnalyzer
         public SymbolType type { get; set; }
         public List<TokenType> parameters { get; set; }
 
+        public Stack<string> scopesB { get; set; }
+
         //Variable
         public Symbol(string Name, string scope, string value, SymbolType symbolType, TokenType dataType)
         {
