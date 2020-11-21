@@ -230,6 +230,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                mathOperation = "New";
                 return true;
             }
             return false;
@@ -257,8 +258,27 @@ namespace MiniJava.Parser.Descendente
                 Dequeue();
                 
                 //Simbolo en operacion matematica (Semantico)
-                mathOperation += actualToken.tokenType != TokenType.Operator_igual?
-                    actualToken.value : "";
+                switch (actualToken.tokenType)
+                {
+                    //Validar '='
+                    case TokenType.Operator_igual:
+                        break;
+                    //Validar 'OR'
+                    case TokenType.Operator_dobleOr:
+                        mathOperation += " OR ";
+                        break;
+                    //Validar 'AND'
+                    case TokenType.Operator_dobleAnd:
+                        mathOperation += " AND ";
+                        break;
+                    //Validar '!='
+                    case TokenType.Operator_diferente:
+                        mathOperation += " <> ";
+                        break;
+                    default:
+                        mathOperation += actualToken.value;
+                        break;
+                }
 
                 acertoToken = true;
                 return true;
@@ -284,7 +304,6 @@ namespace MiniJava.Parser.Descendente
         }
         private bool Expr()
         {
-            //OpTerm BoolSymb OP1
             if (A(true))
             {
                 if (!Factor())
@@ -1250,8 +1269,15 @@ namespace MiniJava.Parser.Descendente
             }
             catch
             {
-                result.addError(new ParserError(lookahead, "Error en operacion", actualLocation, ErrorType.semantico));
-                answer = "Error";
+                if (!mathOperation.Contains("New"))
+                {
+                    result.addError(new ParserError(lookahead, "Error en operacion", actualLocation, ErrorType.semantico));
+                    answer = "Error";
+                }
+                else
+                {
+                    answer = "0";
+                }
             }
 
             mathOperation = "";
@@ -1273,13 +1299,21 @@ namespace MiniJava.Parser.Descendente
         }
         private string getMathValueFromToken(Token value)
         {
-            if (value.tokenType == TokenType.Identifier)
+            if (mathOperation != "New")
             {
-                return getValueFromSymbolTable(value);
+                if (value.tokenType == TokenType.Identifier)
+                {
+                    return getValueFromSymbolTable(value);
+                }
+                else
+                {
+                    return value.value;
+                }
             }
             else
             {
-                return value.value;
+                mathOperation = "0";
+                return "";
             }
         }
     }
