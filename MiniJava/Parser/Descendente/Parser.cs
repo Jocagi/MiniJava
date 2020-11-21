@@ -1288,12 +1288,14 @@ namespace MiniJava.Parser.Descendente
             if (tablaSimbolos.Count == 0)
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
+                newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
             }
             //Evaluar declaracion repetida
             else if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
+                newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
             }
             else
@@ -1307,9 +1309,9 @@ namespace MiniJava.Parser.Descendente
             if (!tablaSimbolos.Any(x => x.scope == actualScope && x.ID == token.value))
             {
                 scopes.Pop();
-
                 Symbol newSymbol = new Symbol(token.value, scopes.Peek(), "0", dataType, symbolType,parameters);
                 scopes.Push(actualScope);
+                newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
                 actualParameters = new List<TokenType>();
             }
