@@ -13,7 +13,6 @@ namespace MiniJava.SemanticAnalyzer
         public TokenType dataType { get; set; }
         public SymbolType type { get; set; }
         public List<TokenType> parameters { get; set; }
-
         public Stack<string> scopesB { get; set; }
 
         //Variable
@@ -41,6 +40,11 @@ namespace MiniJava.SemanticAnalyzer
             this.dataType = dataType;
             this.type = symbolType;
             this.parameters = parameters;
+        }
+        public Symbol Copy()
+        {
+            Symbol temp = (Symbol)this.MemberwiseClone();
+            return temp;
         }
     }
 }

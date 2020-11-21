@@ -1292,7 +1292,7 @@ namespace MiniJava.Parser.Descendente
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
-                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
+                tablas.Add(CloneList(tablaSimbolos));
             }
             //Evaluar declaracion repetida
             else if (tablaSimbolos.All(x => x.ID != token.value))
@@ -1300,14 +1300,14 @@ namespace MiniJava.Parser.Descendente
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
-                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
+                tablas.Add(CloneList(tablaSimbolos));
             }
             else if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
-                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
+                tablas.Add(CloneList(tablaSimbolos));
             }
             else
             {
@@ -1324,8 +1324,8 @@ namespace MiniJava.Parser.Descendente
                 scopes.Push(actualScope);
                 newSymbol.scopesB = scopes;
                 tablaSimbolos.Add(newSymbol);
-                actualParameters = new List<TokenType>();
-                tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
+                actualParameters = new List<TokenType>(); 
+                tablas.Add(CloneList(tablaSimbolos));
             }
             else
             {
@@ -1368,7 +1368,7 @@ namespace MiniJava.Parser.Descendente
                                 symbol.value = "Error";
                             }
 
-                            tablas.Add(new List<Symbol>(tablaSimbolos.ToArray()));
+                            tablas.Add(CloneList(tablaSimbolos));
                         }
                     }
                 }
@@ -1517,6 +1517,17 @@ namespace MiniJava.Parser.Descendente
             }
 
             return numericalValue;
+        }
+        private List<Symbol> CloneList(List<Symbol> simbolos)
+        {
+            List<Symbol> copia = new List<Symbol>();
+
+            foreach (var item in simbolos)
+            {
+                copia.Add(item.Copy());
+            }
+
+            return copia;
         }
     }
 }
