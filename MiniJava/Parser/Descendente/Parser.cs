@@ -301,7 +301,9 @@ namespace MiniJava.Parser.Descendente
             acertoToken = false;
             if (lookahead == TokenType.Operator_negacion || lookahead == TokenType.Operator_menos)
             {
-                mathOperation += "-";
+                mathOperation += lookahead == TokenType.Operator_negacion? " NOT " : "";
+                mathOperation += lookahead == TokenType.Operator_menos ? "-" : "";
+
                 Dequeue();
                 acertoToken = true;
                 return true;
@@ -1292,6 +1294,12 @@ namespace MiniJava.Parser.Descendente
                 tablaSimbolos.Add(newSymbol);
             }
             //Evaluar declaracion repetida
+            else if (tablaSimbolos.All(x => x.ID != token.value))
+            {
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
+                newSymbol.scopesB = scopes;
+                tablaSimbolos.Add(newSymbol);
+            }
             else if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
