@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -33,11 +34,12 @@ namespace MiniJava.Parser.Descendente
         private List<Symbol> tablaSimbolos = new List<Symbol>();
         private string mathOperation = "";
         private int actualScope = 0;
-        private Token actualSymbol;
         private List<TokenType> actualParameters = new List<TokenType>();
         private string actualOperator = "";
         private TokenType actualDataType;
         private SymbolType actualSymbolType = SymbolType.variable;
+        private string actualIdentifier = "";
+        private string actualSymbolName = "";
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -55,6 +57,9 @@ namespace MiniJava.Parser.Descendente
                 Dequeue();
                 //Start grammar path
                 PROGRAM();
+                //Tablas de simbolos
+                tablas.Add(tablaSimbolos);
+                result.TablaSimbolos = tablas;
             }
             return result;
         }
@@ -138,9 +143,6 @@ namespace MiniJava.Parser.Descendente
             {
                 PROGRAM();
             }
-
-            tablas.Add(tablaSimbolos);
-            result.TablaSimbolos = tablas;
         }     
         private bool Constant()
         {
@@ -171,6 +173,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Identifier, true) && acertoToken)
             {
+                actualIdentifier = actualToken.value;
                 if (!Lvalue1())
                 {
                     return false;
@@ -187,6 +190,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                actualIdentifier = actualToken.value;
                 return true;
             }
             return false;
@@ -239,7 +243,24 @@ namespace MiniJava.Parser.Descendente
                 lookahead == TokenType.Operator_dobleOr || lookahead == TokenType.Operator_porcentaje || 
                 lookahead == TokenType.Operator_div || lookahead == TokenType.Operator_menos)
             {
+                //Analisis Semantico
+                if (lookahead == TokenType.Operator_igual)
+                {
+                    //Recordar el valor del lado izquierdo "x" (x = 1)
+                    actualSymbolName = actualIdentifier;
+                }
+                else
+                {
+                    //Valor en operacion matematica (Semantico)
+                    mathOperation += getMathValueFromToken(actualToken);
+                }
+
                 Dequeue();
+                
+                //Simbolo en operacion matematica (Semantico)
+                mathOperation += actualToken.tokenType != TokenType.Operator_igual?
+                    actualToken.value : "";
+
                 acertoToken = true;
                 return true;
             }
@@ -288,9 +309,14 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                //Valor en operacion matematica (Semantico)
+                mathOperation += getMathValueFromToken(actualToken);
+                string answer = evaluateMathExpression();
+                updateValueInSymbolTable(actualSymbolName, answer);
+                actualSymbolName = "";
+
                 return true;
             }
-
             return true;
         }
         private bool PrintStmt3()
@@ -1193,31 +1219,38 @@ namespace MiniJava.Parser.Descendente
                 result.addError(new ParserError(lookahead, "Identificador ya existe", actualLocation, ErrorType.semantico));
             }
         }
-        private void updateValueInSymbolTable(Token token, string value)
+        private void updateValueInSymbolTable(string token, string value)
         {
-            //Evaluar si existe el simbolo
-            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || x.scope < actualScope)))
+            if (token != "")
             {
-                Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
-                actualSymbol.value = value;
-            }
-            else
-            {
-                result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
+                //Evaluar si existe el simbolo
+                if (tablaSimbolos.Any(x => (x.ID == token) && (x.scope == actualScope || x.scope < actualScope)))
+                {
+                    Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token);
+                    actualSymbol.value = value;
+                }
+                else
+                {
+                    result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
+                }
             }
         }
-        private string evaluateExpression(string mathExpression)
+        private string evaluateMathExpression()
         {
+            string answer;
+
             try
             {
-                mathExpression = "-100 > (5.3 - 2)";
-                return new DataTable().Compute(mathExpression, null).ToString();
+                answer = new DataTable().Compute(mathOperation, null).ToString();
             }
             catch (Exception e)
             {
                 result.addError(new ParserError(lookahead, "Error en operacion", actualLocation, ErrorType.semantico));
-                return "Error";
+                answer = "Error";
             }
+
+            mathOperation = "";
+            return answer;
         }
         private string getValueFromSymbolTable(Token token)
         {
@@ -1231,6 +1264,17 @@ namespace MiniJava.Parser.Descendente
             {
                 result.addError(new ParserError(lookahead, "Identificador no declarado", actualLocation, ErrorType.semantico));
                 return "Error";
+            }
+        }
+        private string getMathValueFromToken(Token value)
+        {
+            if (value.tokenType == TokenType.Identifier)
+            {
+                return getValueFromSymbolTable(value);
+            }
+            else
+            {
+                return value.value;
             }
         }
     }
