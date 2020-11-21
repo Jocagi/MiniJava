@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MiniJava.SemanticaAnalyzer
+namespace MiniJava.SemanticAnalyzer
 {
     public class Symbol
     {
