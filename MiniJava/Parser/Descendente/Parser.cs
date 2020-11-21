@@ -1337,7 +1337,6 @@ namespace MiniJava.Parser.Descendente
                 {
                     token = token.Substring(0, token.IndexOf(".", StringComparison.Ordinal));
                 }
-
                 if (tablaSimbolos.Any(x => (x.ID == token)))
                 {
                     List<string> actualScopes = scopes.ToList();
@@ -1380,7 +1379,14 @@ namespace MiniJava.Parser.Descendente
             {
                 try
                 {
-                    answer = new DataTable().Compute(mathOperation, null).ToString();
+                    if (tiposOperacion.Count(x => x == TokenType.Const_String || x == TokenType.Token_string) != 0)
+                    {
+                        answer = $"\"{mathOperation}\"";
+                    }
+                    else
+                    {
+                        answer = new DataTable().Compute(mathOperation, null).ToString();
+                    }
                 }
                 catch
                 {
@@ -1400,7 +1406,7 @@ namespace MiniJava.Parser.Descendente
             {
                 answer = "Error";
             }
-
+            tiposOperacion = new List<TokenType>();
             return answer;
         }
         private bool dataTypesAreCorrect()
