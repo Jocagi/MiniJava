@@ -22,6 +22,8 @@ namespace MiniJava.Parser.Descendente
         private Queue<Token> tokens;
         private ParserReport result;
         private TokenType lookahead;
+        private Token lookaheadValue;
+        private Token actualToken;
         private TokenType expectedValue;
         private TokenLocation actualLocation;
         private bool acertoToken; // sirve para ver si un token nullable cumplio o no
@@ -34,6 +36,7 @@ namespace MiniJava.Parser.Descendente
         private Token actualSymbol;
         private List<TokenType> actualParameters = new List<TokenType>();
         private string actualOperator = "";
+        private TokenType actualDataType;
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -58,9 +61,11 @@ namespace MiniJava.Parser.Descendente
         {
             if (tokens.Count > 0)
             {
+                actualToken = lookaheadValue;
                 Token t = tokens.Dequeue();
                 lookahead = t.tokenType;
                 actualLocation = t.location;
+                lookaheadValue = t;
             }
             else
             {
@@ -83,7 +88,7 @@ namespace MiniJava.Parser.Descendente
 
             expectedValue = token;
             return false;
-        }       
+        }
         private bool MatchConstant(bool epsilon)
         {
             acertoToken = false;
@@ -132,6 +137,9 @@ namespace MiniJava.Parser.Descendente
             {
                 PROGRAM();
             }
+
+            tablas.Add(tablaSimbolos);
+            result.TablaSimbolos = tablas;
         }     
         private bool Constant()
         {
@@ -904,7 +912,7 @@ namespace MiniJava.Parser.Descendente
             return false;
         }
         private bool FunctionDecl()
-        {    
+        {
             if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
             { 
                 if (!Formals())
@@ -967,10 +975,12 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Identifier, true) && acertoToken)
             {
+                actualDataType = actualToken.tokenType;
                 return true;
             }
             if (ConstType(false))
             {
+                actualDataType = actualToken.tokenType;
                 return true;
             }            
             return false;
@@ -1019,7 +1029,8 @@ namespace MiniJava.Parser.Descendente
                 if (!Match(TokenType.Identifier, false))
                 {
                     return false;
-                }                
+                }
+                addToSymbolTable(actualDataType, SymbolType.variable, actualToken);
                 return true;
             }
             return false;

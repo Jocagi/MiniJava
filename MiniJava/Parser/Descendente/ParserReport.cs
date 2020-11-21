@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiniJava.SemanticAnalyzer;
 
 namespace MiniJava.Parser.Descendente
 {
@@ -6,6 +7,7 @@ namespace MiniJava.Parser.Descendente
     {
         public bool isCorrect;
         public List<ParserError> Errors;
+        public List<List<Symbol>> TablaSimbolos;
 
         public ParserReport() 
         {
