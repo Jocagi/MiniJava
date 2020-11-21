@@ -1,16 +1,15 @@
-﻿using MiniJava.Lexer;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using MiniJava.General;
+﻿using MiniJava.General;
+using MiniJava.Lexer;
 
-namespace MiniJava.Parser.RecursiveDescent
+namespace MiniJava.Parser.Descendente
 {
     public class ParserError
     {
+        public ErrorType errorType;
         public TokenType value;
         public TokenType expected;
         public TokenLocation location;
+
         public ParserError(TokenType value, TokenType expected) 
         {
             this.value = value;
@@ -21,6 +20,13 @@ namespace MiniJava.Parser.RecursiveDescent
             this.value = value;
             this.expected = expected;
             this.location = location;
+        }
+        public ParserError(TokenType value, TokenType expected, TokenLocation location, ErrorType errorType)
+        {
+            this.value = value;
+            this.expected = expected;
+            this.location = location;
+            this.errorType = errorType;
         }
     }
 }

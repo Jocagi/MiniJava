@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiniJava.General;
 using MiniJava.Lexer;
-using MiniJava.Parser.RecursiveDescent;
 using MiniJava.SemanticAnalyzer;
 
 namespace MiniJava.Parser.Descendente
@@ -26,6 +25,7 @@ namespace MiniJava.Parser.Descendente
         //Variables Analizador semantico
         private List<Dictionary<string, Symbol>> tablas = new List<Dictionary<string, Symbol>>();
         private Dictionary<string, Symbol> tablaSimbolos = new Dictionary<string, Symbol>();
+        private string mathOperation = "";
 
         public Parser(Queue<Token> tokens)
         {
@@ -92,11 +92,11 @@ namespace MiniJava.Parser.Descendente
             expectedValue = TokenType.Constant;
             return false;
         }
-        private void ERROR(TokenType expected)
+        private void ERROR(TokenType expected, ErrorType errorType)
         {
-            if (lookahead != TokenType.Default )
+            if ( lookahead != TokenType.Default )
             {
-                result.addError(new ParserError(lookahead, expected, actualLocation));
+                result.addError(new ParserError(lookahead, expected, actualLocation, errorType));
                 int errorRow = actualLocation.row;
                 if (repetirDECLerror)
                 {
@@ -117,7 +117,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (!Decl())
             {
-                ERROR(expectedValue);
+                ERROR(expectedValue, ErrorType.semantico);
             }
             if (tokens.Count > 0)
             {
