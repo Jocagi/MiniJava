@@ -33,7 +33,6 @@ namespace MiniJava.Parser.Descendente
         //Variables Analizador semantico
         private List<List<Symbol>> tablas = new List<List<Symbol>>();
         private List<Symbol> tablaSimbolos = new List<Symbol>();
-
         private string mathOperation;
         private Stack<string> scopes = new Stack<string>();
         private string actualScope = "";
@@ -1326,25 +1325,38 @@ namespace MiniJava.Parser.Descendente
             if (token != "")
             {
                 //Evaluar si existe el simbolo
-                if (tablaSimbolos.Any(x => (x.ID == token) && (x.scope == actualScope)))
+                if (token.Contains('.'))
                 {
-                    token = token.Split('.')[0];
+                    token = token.Substring(0, token.IndexOf(".", StringComparison.Ordinal));
+                }
 
-                    Symbol symbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token);
-                    TokenType dataType = getDataType(value);
+                if (tablaSimbolos.Any(x => (x.ID == token)))
+                {
+                    List<string> actualScopes = scopes.ToList();
+                    List<Symbol> symbols = tablaSimbolos.FindAll(x => (x.ID == token));
 
-                    if (symbol.dataType == dataType)
+                    //Evaluar en cada ambito
+                    for (int i = actualScopes.Count; i < 0; i++)
                     {
-                        symbol.value = value;
-                    }
-                    else if(symbol.dataType == TokenType.Token_double && dataType == TokenType.Token_int)
-                    {
-                        symbol.value = value;
-                    }
-                    else
-                    {
-                        result.addError(new ParserError(lookahead, $"No se puede convertir de {dataType} a {symbol.dataType}", actualLocation, ErrorType.semantico));
-                        symbol.value = "Error";
+                        if (symbols.Any(x => x.scope == actualScopes[i]))
+                        {
+                            Symbol symbol = symbols.FindLast(x => x.scope == actualScopes[i]);
+                            TokenType dataType = getDataType(value);
+
+                            if (symbol.dataType == dataType)
+                            {
+                                symbol.value = value;
+                            }
+                            else if (symbol.dataType == TokenType.Token_double && dataType == TokenType.Token_int)
+                            {
+                                symbol.value = value;
+                            }
+                            else
+                            {
+                                result.addError(new ParserError(lookahead, $"No se puede convertir de {dataType} a {symbol.dataType}", actualLocation, ErrorType.semantico));
+                                symbol.value = "Error";
+                            }
+                        }
                     }
                 }
                 else
