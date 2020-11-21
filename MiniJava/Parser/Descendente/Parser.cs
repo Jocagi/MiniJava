@@ -31,6 +31,9 @@ namespace MiniJava.Parser.Descendente
         private List<Symbol> tablaSimbolos = new List<Symbol>();
         private string mathOperation = "";
         private int actualScope = 0;
+        private Token actualSymbol;
+        private List<TokenType> actualParameters = new List<TokenType>();
+        private string actualOperator = "";
 
         //ANALIZADOR SINTACTICO
         public Parser(Queue<Token> tokens)
@@ -643,14 +646,12 @@ namespace MiniJava.Parser.Descendente
             }           
             return true;
         }
-
         private bool StmtBlock3()
         {
             ConstDecl();
             
             return true;
         }
-
         private bool StmtBlock()
         {
             if (Match(TokenType.Operator_llaveAbre, true) && acertoToken)
