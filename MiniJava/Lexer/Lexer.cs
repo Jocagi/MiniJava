@@ -90,7 +90,7 @@ namespace MiniJava.Lexer
                 new TokenDescription(TokenType.Error_EOFstring, "^\"(\0|.)*" + @"\Z"),
                 new TokenDescription(TokenType.Error_String, "^(\"){1}(.)(.(?!\"))*"),
                 //IDENTIFICADORES
-                new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|[A-Z]|\$|[0-9])){0,30}")
+                new TokenDescription(TokenType.Identifier, @"^([a-z]|[A-Z]|\$)(([a-z]|\.|[A-Z]|\$|[0-9])){0,30}")
             };
         }
 

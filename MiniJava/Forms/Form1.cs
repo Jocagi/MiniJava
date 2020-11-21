@@ -1,28 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using MiniJava.General;
 using MiniJava.Lexer;
-using MiniJava.Parser.Ascendente.TableGenerator;
-using MiniJava.Parser.Ascendente.TableGenerator.Gramatica;
 using MiniJava.Parser.Ascendente.TableGenerator.Grammar;
 using MiniJava.Parser.Ascendente.TableGenerator.LR1;
-using MiniJava.Parser.RecursiveDescent;
+using MiniJava.Parser.Descendente;
+using ScintillaNET;
 
 namespace MiniJava.Forms
 {
     public partial class Form1 : Form
     {
         string output = "";
+        private ParserReport parserRep;
 
         public Form1()
         {
             InitializeComponent();
+            InitializeTextBox();
             this.AllowDrop = true;
             Debug.WriteLine("Program Started");
+        }
+
+        private void InitializeTextBox()
+        {
+            sourceCodeBox.StyleClearAll();
+
+            sourceCodeBox.Styles[Style.Default].BackColor = Color.Black;
+            sourceCodeBox.Margins[0].Width = 25;
+            sourceCodeBox.Margins[1].Width = 16;
+
+            sourceCodeBox.Styles[Style.Cpp.Default].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.Character].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.Identifier].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.Comment].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.CommentLine].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.EscapeSequence].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.Number].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.Operator].BackColor = Color.Black;
+            sourceCodeBox.Styles[Style.Cpp.String].BackColor = Color.Black;
+
+            sourceCodeBox.Styles[Style.Cpp.Default].ForeColor = Color.AliceBlue;
+            sourceCodeBox.Styles[Style.Cpp.Character].ForeColor = Color.Coral;
+            sourceCodeBox.Styles[Style.Cpp.Identifier].ForeColor = Color.White;
+            sourceCodeBox.Styles[Style.Cpp.Comment].ForeColor = Color.Green;
+            sourceCodeBox.Styles[Style.Cpp.CommentLine].ForeColor = Color.Green;
+            sourceCodeBox.Styles[Style.Cpp.EscapeSequence].ForeColor = Color.Brown;
+            sourceCodeBox.Styles[Style.Cpp.Number].ForeColor = Color.BurlyWood; 
+            sourceCodeBox.Styles[Style.Cpp.Operator].ForeColor = Color.Brown;
+            sourceCodeBox.Styles[Style.Cpp.String].ForeColor = Color.BurlyWood; 
+            
+            sourceCodeBox.Lexer = ScintillaNET.Lexer.Cpp;
+            sourceCodeBox.CaretLineBackColor = Color.DarkGray;
+            sourceCodeBox.CaretLineVisible = true;
+
+            sourceCodeBox.SetSelectionForeColor(true, Color.AliceBlue);
+            sourceCodeBox.SetSelectionBackColor(true, Color.Black);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -113,32 +151,40 @@ namespace MiniJava.Forms
                 output += line;
             }
             Queue<Token> tokensQueue = lex.ListToQueue(tokens);
-            Parser.RecursiveDescent.Parser pars1 = new Parser.RecursiveDescent.Parser(tokensQueue);
+            Parser.Descendente.Parser pars1 = new Parser.Descendente.Parser(tokensQueue);
             ParserReport parserReport = pars1.getReport();
 
-
-
+            this.parserRep = parserReport;
 
             //ANALIZADOR SINTACTICO
-            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue);
-
+            
             output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
 
             if (!parserReport.isCorrect)
             {
+                TokenLocation location = new TokenLocation(0,0,0);
                 foreach (var item in parserReport.Errors)
                 {
-                    output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                    if (location != item.location)
+                    {
+                        if (item.errorType == ErrorType.semantico)
+                        {
+                            output += $"*** Error semántico en linea {item.location.row}: {item.errorMessage} ***\n";
+                        }
+                        else
+                        {
+                            output += $"*** Error sintáctico en linea {item.location.row}: Token inesperado {item.value} ***\n";
+                        }
+                    }
+                    location = item.location;
                 }
-            
-            
-            
             }
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.outputBox.Visible = true;
-            
+            this.symbolButtom.Visible = true;
+
             //Color errors
             for (int i = 0; i < outputBox.Lines.Length; i++)
             {
@@ -174,9 +220,10 @@ namespace MiniJava.Forms
             t.Show();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void symbolButtom_Click(object sender, EventArgs e)
         {
-
+            SymbolTable t = new SymbolTable(parserRep);
+            t.Show();
         }
     }
 }
