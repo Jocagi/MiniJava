@@ -1336,7 +1336,7 @@ namespace MiniJava.Parser.Descendente
                     List<Symbol> symbols = tablaSimbolos.FindAll(x => (x.ID == token));
 
                     //Evaluar en cada ambito
-                    for (int i = actualScopes.Count; i < 0; i++)
+                    for (int i = actualScopes.Count - 1; i >= 0; i--)
                     {
                         if (symbols.Any(x => x.scope == actualScopes[i]))
                         {
@@ -1415,7 +1415,7 @@ namespace MiniJava.Parser.Descendente
         }
         private TokenType getDataType(string value)
         {
-            string intRegex = "(^0x|^0X)([0-9]|[A-F]|[a-f])*";
+            string intRegex = "^[0-9]+";
             string doubleRegex = @"^(([0-9]+)\.[0-9]*)(E(\+|-)?[0-9]+)?";
             string boolRegex = @"(^True|^False)(?![a-z]|[A-Z]|\$|[0-9])";
             string stringRegex = "^\"(.*?)\"";
@@ -1450,11 +1450,23 @@ namespace MiniJava.Parser.Descendente
         private string getValueFromSymbolTable(Token token)
         {
             //Evaluar si existe el simbolo
-            if (tablaSimbolos.Any(x => (x.ID == token.value) && (scopes.Contains(x.scope) && x.scope == actualScope)))
+            if (tablaSimbolos.Any(x => (x.ID == token.value)))
             {
-                Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
-                tiposOperacion.Add(actualSymbol.dataType);
-                return actualSymbol.value;
+                List<Symbol> symbols = tablaSimbolos.FindAll(x => (x.ID == token.value));
+                List<string> actualScopes = scopes.ToList();
+
+                for (int i = actualScopes.Count - 1; i >= 0; i--)
+                {
+                    if (symbols.Any(x => x.scope == actualScopes[i]))
+                    {
+                        Symbol actualSymbol = symbols.FindLast(x => x.scope == actualScopes[i]);
+                        tiposOperacion.Add(actualSymbol.dataType);
+                        return actualSymbol.value;
+                    }       
+                }
+
+                result.addError(new ParserError(lookahead, "Identificador no accesible", actualLocation, ErrorType.semantico));
+                return "Error";
             }
             else
             {
