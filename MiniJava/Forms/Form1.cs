@@ -152,12 +152,8 @@ namespace MiniJava.Forms
             Parser.RecursiveDescent.Parser pars1 = new Parser.RecursiveDescent.Parser(tokensQueue);
             ParserReport parserReport = pars1.getReport();
 
-
-
-
             //ANALIZADOR SINTACTICO
-            Parser.Ascendente.Parser.Parser pars = new Parser.Ascendente.Parser.Parser(tokensQueue);
-
+            
             output += parserReport.isCorrect ? "Todo bien :)\n" : "Oh! No! Hay un error\n";
 
             if (!parserReport.isCorrect)
@@ -171,15 +167,13 @@ namespace MiniJava.Forms
                     }
                     location = item.location;
                 }
-            
-            
-            
             }
 
             //Show output
             this.outputBox.Text = output.Replace("\0", "<null>"); //Prevenir que el null corte el texto
             this.outputBox.Visible = true;
-            
+            this.symbolButtom.Visible = true;
+
             //Color errors
             for (int i = 0; i < outputBox.Lines.Length; i++)
             {
@@ -213,6 +207,11 @@ namespace MiniJava.Forms
             CanonicalCollection cc = new CanonicalCollection(new Grammar());
             TableInfo t = new TableInfo(cc);
             t.Show();
+        }
+
+        private void symbolButtom_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
