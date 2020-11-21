@@ -32,7 +32,8 @@ namespace MiniJava.Parser.Descendente
         private List<List<Symbol>> tablas = new List<List<Symbol>>();
         private List<Symbol> tablaSimbolos = new List<Symbol>();
         private string mathOperation = "";
-        private int actualScope = 0;
+        private Stack<string> scopes = new Stack<string>();
+        private string actualScope = "";
         private Token actualSymbol;
         private List<TokenType> actualParameters = new List<TokenType>();
         private string actualOperator = "";
@@ -130,6 +131,8 @@ namespace MiniJava.Parser.Descendente
         }
         private void PROGRAM()
         {
+            actualScope = "PROGRAM";
+            scopes.Push(actualScope);
             if (!Decl())
             {
                 ERROR(expectedValue, ErrorType.semantico);
@@ -396,11 +399,14 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Token_for, true) && acertoToken)
             {
+                actualScope = "for_" + Convert.ToString(scopes.LongCount());
+                scopes.Push(actualScope);
                 entrostmt = true;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
                     return false;
                 }
+
                 if (!Expr())
                 {
                     return false;
@@ -705,7 +711,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                addToSymbolTableFunct(TokenType.Token_void, SymbolType.function, nombreFunc, actualParameters);
+                addToSymbolTableFunct(TokenType.Token_void, SymbolType.prototype, nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -740,7 +746,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
-                addToSymbolTableFunct(tipo.tokenType, SymbolType.function, nombreFunc, actualParameters);
+                addToSymbolTableFunct(tipo.tokenType, SymbolType.prototype , nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -765,6 +771,9 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTable(TokenType.Token_interface, SymbolType._interface, actualToken);
+                actualScope = actualToken.value;
+                scopes.Push(actualScope);
                 if (!Match(TokenType.Operator_llaveAbre, false))
                 {
                     return false;
@@ -777,6 +786,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                scopes.Pop();
                 return true;
             }
             return false;
@@ -888,6 +898,9 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                addToSymbolTable(TokenType.Token_class, SymbolType.classe, actualToken);
+                actualScope = actualToken.value;
+                scopes.Push(actualScope);
                 if (!ClassDecl1())
                 {
                     return false;
@@ -907,7 +920,8 @@ namespace MiniJava.Parser.Descendente
                 if (!Match(TokenType.Operator_llaveCierra, false))
                 {
                     return false;
-                }                
+                }
+                scopes.Pop();
                 return true;
             }
             return false;
@@ -947,14 +961,17 @@ namespace MiniJava.Parser.Descendente
         private bool FunctionDecl()
         {
             actualSymbolType = SymbolType.function;
-
+            actualScope = nombreF.value;
+            scopes.Push(actualScope);
             if (Match(TokenType.Operator_ParentesisAbre, true) && acertoToken)
             { 
                 if (!Formals())
                 {
                     return false;
                 }
-                addToSymbolTableFunct(typeF.tokenType, SymbolType.function, nombreF, actualParameters);
+                Token No = new Token(TokenType.NT_FunctionDecl);
+                No.value = actualScope;
+                addToSymbolTableFunct(typeF.tokenType, SymbolType.function, No, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
                     return false;
@@ -963,18 +980,22 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                scopes.Pop();
                 return true;
             }
             return false;
         }
         private bool FunctionDecl1()
-        {            
+        {
+            
             if (Match(TokenType.Token_void, true) && acertoToken)
             {
                 if (!Match(TokenType.Identifier, false))
                 {
                     return false;
                 }
+                actualScope = actualToken.value;
+                scopes.Push(actualScope);
                 Token nombreFunc = actualToken;
                 if (!Match(TokenType.Operator_ParentesisAbre, false))
                 {
@@ -984,6 +1005,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                nombreFunc.value = actualScope;
                 addToSymbolTableFunct(TokenType.Token_void, SymbolType.function, nombreFunc, actualParameters);
                 if (!Match(TokenType.Operator_ParentesisCierra, false))
                 {
@@ -993,6 +1015,7 @@ namespace MiniJava.Parser.Descendente
                 {
                     return false;
                 }
+                scopes.Pop();
                 return true;
             }
             return false;
@@ -1013,6 +1036,7 @@ namespace MiniJava.Parser.Descendente
         {
             if (Match(TokenType.Identifier, true) && acertoToken)
             {
+                nombreF = actualToken;
                 actualDataType = actualToken.tokenType;
                 return true;
             }
@@ -1073,7 +1097,10 @@ namespace MiniJava.Parser.Descendente
                     return false;
                 }
                 nombreF = actualToken;
-                addToSymbolTable(actualDataType, actualSymbolType, actualToken);
+                if (lookahead != TokenType.Operator_ParentesisAbre)
+                {
+                    addToSymbolTable(actualDataType, actualSymbolType, actualToken);
+                }                
                 actualSymbolType = SymbolType.variable;
                 return true;
             }
@@ -1198,8 +1225,13 @@ namespace MiniJava.Parser.Descendente
         //ANALIZADOR SEMANTICO
         private void addToSymbolTable(TokenType dataType, SymbolType symbolType, Token token)
         {
+            if (tablaSimbolos.Count()==0)
+            {
+                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
+                tablaSimbolos.Add(newSymbol);
+            }
             //Evaluar declaracion repetida
-            if (tablaSimbolos.All(x => x.scope== actualScope && x.ID != token.value))
+            if (tablaSimbolos.All(x => scopes.Contains(actualScope) && x.ID != token.value))
             {
                 Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", symbolType, dataType);
                 tablaSimbolos.Add(newSymbol);
@@ -1212,11 +1244,15 @@ namespace MiniJava.Parser.Descendente
         private void addToSymbolTableFunct(TokenType dataType, SymbolType symbolType, Token token, List<TokenType> parameters)
         {
             //Evaluar declaracion repetida
-            if (tablaSimbolos.All(x => x.scope == actualScope && x.ID != token.value))
+            if (!tablaSimbolos.Any(x => x.scope == actualScope && x.ID == token.value))
             {
-                Symbol newSymbol = new Symbol(token.value, this.actualScope, "0", dataType, parameters);
+                scopes.Pop();
+
+
+                Symbol newSymbol = new Symbol(token.value, scopes.Peek(), "0", dataType, symbolType,parameters);
+                scopes.Push(actualScope);
                 tablaSimbolos.Add(newSymbol);
-                parameters = new List<TokenType>();
+                actualParameters = new List<TokenType>();
             }
             else
             {
@@ -1226,7 +1262,7 @@ namespace MiniJava.Parser.Descendente
         private void updateValueInSymbolTable(Token token, string value)
         {
             //Evaluar si existe el simbolo
-            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || x.scope < actualScope)))
+            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || scopes.Contains(x.scope))))
             {
                 Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
                 actualSymbol.value = value;
@@ -1252,7 +1288,7 @@ namespace MiniJava.Parser.Descendente
         private string getValueFromSymbolTable(Token token)
         {
             //Evaluar si existe el simbolo
-            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || x.scope < actualScope)))
+            if (tablaSimbolos.Any(x => (x.ID == token.value) && (x.scope == actualScope || scopes.Contains(x.scope))))
             {
                 Symbol actualSymbol = tablaSimbolos.FindLast(x => x.scope == actualScope && x.ID == token.value);
                 return actualSymbol.value;

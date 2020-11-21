@@ -6,6 +6,7 @@
         function,
         _interface,
         parameter,
-        prototype
+        prototype,
+        classe
     }
 }
