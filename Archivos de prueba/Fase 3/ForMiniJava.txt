@@ -1,0 +1,101 @@
+class Rectangule
+  {
+    double perimeter; // Global
+
+    void CalculatePerimeter(int sideA, int sideB)
+    {
+	    double perimeter; // Local     	
+	    perimeter = 2 / (sideA - sideB); // Same ID name, different scope, Ok	    
+    }
+
+   double CalculateArea(int sideA, int sideB)
+	{
+		double area;
+		double sideA; // Error1: ID sideA already defined in this scope
+		{ area = sideA / sideB; } // should use the same from previous scope
+		return (area);
+	}
+
+	int ReturnSumSides(int sideA, int sideB)
+	{
+		int sum;
+		sum = sideA % sideB;
+		
+		return sum;
+	}
+ }
+
+class Circle
+{
+	static double pi;
+	double area;
+	
+	void CalculateArea(double radio)
+	{
+		pi = 3.1416;		
+		area = pi - (radio / radio);	
+		numberB = area / 2.5; 
+	}
+
+	double CalculateCircumference(double radio)
+	{
+		double circun;
+
+		circun = 2 / pi / radio;
+		return circun;
+	}	
+}
+
+class Program
+{
+	int global1;
+	int global2;
+	double global3;
+	int number1;
+	int number2;
+	int number3;
+	double numberA;
+	double numberB;
+	double numberC;
+	string MyString;
+	string AnotherString;
+	bool x;
+	bool y;
+	bool z;
+	Circle c1;
+	Rectangule r1;
+
+void main(int args)
+{	
+
+	number1 = 10;
+	numberA = number1 / 3.23; // Type cast (number1 is int and 2 is int constant), should be 10.13008
+	MyString = "Hello World!";
+	x = number1 > 5; // Should be true in ST
+
+	number2 = number1 / (number1 - 2); // Error2: can't assign double value to int variable
+	number3 = number1 - (number1 % 3); // Should be 0
+	numberB = "numberA" - numberA; // Error3: can't operate string and double types
+	AnotherString = " This is another string";
+	global1 = (number3 / number1) - 2; // Should be -2    
+	global2 = (number1 / number1) - 3; // Should be -2
+		
+
+	/* MyString = MyString - AnotherString; // Error: invalid operation between strings types */
+	MyString = MyOtherString; // Error4: MyOtherString doesn't exist
+
+	c1.CalculateArea("global3"); //  Error5: An argument for c1.CalculateCircumference is invalid
+	c1.ReturnSumSides(number1,number2); //  Error6: method does not exist for class Circle
+	r1.CalculateArea(number1,number2); //  OK
+	r1.CalculatePerimeter(number1,numberC); //  Error7: An argument is invalid (numberC is double, int type expected)
+	c1.CalculateCircumference(number3); //  It should do a cast to double on argument but IS NOT AN ERROR
+	r1.CalculateArea(number1); //  Error8: expected sideB argument
+
+	x = (number1 > number3) || true; // Should be true
+	y = number1 >= number3; // Should be true 
+	z = global1 > global2 || !y; // Should be false
+}
+
+}	
+
+
